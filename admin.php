@@ -7,24 +7,27 @@ if (!$user->is_logged_in()) {
     $user->redirect('index.php');
 }
 
-if(isset($_GET["updateUser"])) {
-    $id = json_decode($_POST['id']);
-    $user_name = json_decode($_POST['name']);
-    $user_email = json_decode($_POST['email']);
-    $role = json_decode($_POST['role']);
-    // Check for empty and invalid inputs
-    try{
-        checkEmpty($id);
-        checkEmpty($user_name);
-        checkEmpty($user_email);
-        checkEmpty($role);
-        checkValidEmail($user_email);
+if(isset($_POST["ukol"])) {
+    var_dump($_POST);
 
-
-
-    } catch(Exception $e) {
-        echo 'Message'.$e->getMessage();
-    }
+    $data = json_decode($_POST['data']);
+//    $id = json_decode($_POST['id']);
+//    $user_name = json_decode($_POST['name']);
+//    $user_email = json_decode($_POST['email']);
+//    $role = json_decode($_POST['role']);
+//    // Check for empty and invalid inputs
+//    try{
+//        checkEmpty($id);
+//        checkEmpty($user_name);
+//        checkEmpty($user_email);
+//        checkEmpty($role);
+//        checkValidEmail($user_email);
+//    } catch(Exception $ex) {
+//        echo json_encode(array(
+//            'success' => false,
+//            'reason'  => $ex->getMessage(),
+//        ));
+//    }
 }
 
 function checkEmpty($value)
@@ -40,7 +43,7 @@ function checkValidEmail($email)
     //check if
     if(filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
         //throw exception if email is not valid
-        throw new customException($email);
+        throw new Exception($email);
     }
     return true;
 }
@@ -231,8 +234,19 @@ include_once('includes/src/scripts.php')
         $.ajax({
             type: 'POST', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
             dataType: 'json', // Set datatype - affects Accept header
-            url: "/admin.php?updateUser", // A valid URL
-            data: prepData // Some data e.g. Valid JSON as a string
+            url: "/admin.php", // A valid URL
+            data: {
+                ukol: 'dwadwadwa',
+                data: JSON.stringify(prepData)
+            } , // Some data e.g. Valid JSON as a string
+            success: function(returnData){
+                var res = JSON.parse(returnData);
+                console.log(res);
+            },
+            error: function(xhr, status, error){
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                console.log(errorMessage);
+            }
         });
        }
 </script>
