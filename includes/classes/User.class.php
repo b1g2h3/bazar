@@ -1,118 +1,141 @@
 <?php
+
 class User
 {
-    // Refer to database connection
-    private $db;
 
-    // Instantiate object with database connection
-    public function __construct($db_conn)
+    private $_db,
+        $_data,
+        $_sessionName,
+        $_cookieName,
+        $_isLoggedIn;
+
+    public function __construct($user = null)
     {
-        $this->db = $db_conn;
-    }
+        $this->_db = DB::getInstance();
 
-    // Register new users
-    public function register($user_name, $user_email, $user_password, $user_role)
-    {
-        try {
-            // Hash password
-            $user_hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
+        $this->_sessionName = Config::get('session/session_name');
+        $this->_cookieName = Config::get('remember/cookie_name');
 
-            // Define query to insert values into the users table
-            $sql = "INSERT INTO users(name, email, password, roles_id) VALUES(:name, :email, :password, :roles_id)";
-
-            // Prepare the statement
-            $query = $this->db->prepare($sql);
-
-            // Bind parameters
-            $query->bindParam(":name", $user_name);
-            $query->bindParam(":email", $user_email);
-            $query->bindParam(":password", $user_hashed_password);
-            $query->bindParam(":roles_id", $user_role);
-
-            // Execute the query
-            $query->execute();
-        } catch (PDOException $e) {
-            array_push($errors, $e->getMessage());
-        }
-    }
-
-    // Log in registered users with either their username or email and their password
-    public function login($user_name, $user_email, $user_password)
-    {
-        try {
-            // Define query to insert values into the users table
-            $sql = "SELECT * FROM users WHERE name=:name OR email=:email LIMIT 1";
-
-            // Prepare the statement
-            $query = $this->db->prepare($sql);
-
-            // Bind parameters
-            $query->bindParam(":name", $user_name);
-            $query->bindParam(":email", $user_email);
-
-            // Execute the query
-            $query->execute();
-
-            // Return row as an array indexed by both column name
-            $returned_row = $query->fetch(PDO::FETCH_ASSOC);
-            // Check if row is actually returned
-            if ($query->rowCount() > 0) {
-                // Verify hashed password against entered password
-                if (password_verify($user_password, $returned_row['password'])) {
-                    // Define session on successful login
-                    $_SESSION['user_session'] = $returned_row['id'];
-                    return true;
+        if (!$user) {
+            if (Session::exists($this->_sessionName)) {
+                $user = Session::get($this->_sessionName);
+                // echo $user;
+                if ($this->find($user)) {
+                    $this->_isLoggedIn = true;
                 } else {
-                    // Define failure
-                    return false;
+                    // process logout
                 }
             }
-        } catch (PDOException $e) {
-            array_push($errors, $e->getMessage());
+        } else {
+            $this->find($user);
         }
     }
 
-    public function getAllUsers()
+    public function create($fields = array())
     {
-        try {
-            // Define query to insert values into the users table
-            $sql = "SELECT * FROM users";
+        if (!$this->_db->insert('users', $fields)) {
+            throw new Exception('There was a problem creating this account.');
+        }
+    }
 
-            // Prepare the statement
-            $query = $this->db->prepare($sql);
+    public function update($fields = array(), $id = null)
+    {
 
+        if (!$id && $this->isLoggedIn()) {
+            $id = $this->data()->id;
+        }
 
-            // Execute the query
-            $query->execute();
+        if (!$this->_db->update('users', $id, $fields)) {
+            throw new Exception('There was a problem updating.');
+        }
+    }
 
-            $returned_row = $query->fetchAll(PDO::FETCH_ASSOC);
-            // Check if row is actually returned
-            if ($query->rowCount() > 0) {
-              return $returned_row;
+    public function find($user = null)
+    {
+        if ($user) {
+            // if user had a numeric username this FAILS...
+            $field = (is_numeric($user)) ? 'id' : 'username';
+            $data = $this->_db->get('users', array($field, '=', $user));
+
+            if ($data->count()) {
+                $this->_data = $data->first();
+                return true;
             }
-        } catch (PDOException $e) {
-            array_push($errors, $e->getMessage());
         }
+        return false;
     }
 
-    // Check if the user is already logged in
-    public function is_logged_in() {
-        // Check if user session has been set
-        if (isset($_SESSION['user_session'])) {
-            return true;
+    public function login($username = null, $password = null, $remember = false)
+    {
+
+        // print_r($this->_data);
+
+        // check if username has been defined 
+        if (!$username && !$password && $this->exists()) {
+            Session::put($this->_sessionName, $this->data()->id);
+        } else {
+            $user = $this->find($username);
+
+            if ($user) {
+                if ($this->data()->password === Hash::make($password, $this->data()->salt)) {
+                    Session::put($this->_sessionName, $this->data()->id);
+
+                    if ($remember) {
+                        $hash = Hash::unique();
+                        $hashCheck = $this->_db->get('users_session', array('user_id', '=', $this->data()->id));
+
+                        if (!$hashCheck->count()) {
+                            $this->_db->insert('users_session', array(
+                                'user_id' => $this->data()->id,
+                                'hash' => $hash
+                            ));
+                        } else {
+                            $hash = $hashCheck->first()->hash;
+                        }
+
+                        Cookie::put($this->_cookieName, $hash, Config::get('remember/cookie_expiry'));
+                    }
+                    return true;
+                }
+            }
         }
+
+        return false;
     }
 
-    // Redirect user
-    public function redirect($url) {
-        header("Location: $url");
+    public function hasPermission($key)
+    {
+        $group = $this->_db->get('groups', array('id', '=', $this->data()->group));
+        if ($group->count()) {
+            $permissions = json_decode($group->first()->permissions, true);
+            if ($permissions[$key] == true) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    // Log out user
-    public function log_out() {
-        // Destroy and unset active session
-        session_destroy();
-        unset($_SESSION['user_session']);
-        return true;
+    public function exists()
+    {
+        return (!empty($this->_data)) ? true : false;
+    }
+
+    public function logout()
+    {
+
+        $this->_db->delete('user_session', array('user_id', '=', $this->data()->id));
+
+        Session::delete($this->_sessionName);
+        Cookie::delete($this->_cookieName);
+    }
+
+    public function data()
+    {
+        return $this->_data;
+    }
+
+    public function isLoggedIn()
+    {
+        return $this->_isLoggedIn;
     }
 }

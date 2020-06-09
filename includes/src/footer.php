@@ -3,3 +3,9 @@
         <span class="text-muted">Footer Bazar</span>
     </div>
 </footer>
+<?php
+include_once('includes/src/scripts.php')
+?>
+</body>
+
+</html>
