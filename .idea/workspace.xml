@@ -20,21 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bb85a4d-43f2-4ca7-8cbd-99ece17e1251" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/includes/classes/Controller/AuthController.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/bazar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bazar.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Database/DB.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Database/DB.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/models/User.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/models/User.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Validate.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Validate.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/View.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/View.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/Users/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/routes/views/Users/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/routes/views/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/src/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/src/scripts.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/scripts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Controller/AuthController.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Controller/AuthController.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Services/Token.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Services/Token.class.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +103,7 @@
       <workItem from="1591768450216" duration="101000" />
       <workItem from="1591768561323" duration="190000" />
       <workItem from="1591768893409" duration="12347000" />
-      <workItem from="1591781891943" duration="13800000" />
+      <workItem from="1591781891943" duration="14447000" />
     </task>
     <servers />
   </component>

@@ -21,15 +21,11 @@ class AuthController
 
     public static function handleLogin($data)
     {
-
-
         $validate = new Validate();
 
-        var_dump(Token::check($data['token']));
-        var_dump($data['token']);
-        die;
         if (Token::check($data['token'])) {
 
+            var_dump('whatsaap');
             $validate = new Validate();
             $validation = $validate->check($data, array(
                 'name' => array('required' => true),
