@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Database\DB;
 use App\Services\Config;
 use App\Services\Hash;
+use App\Services\Cookie;
 use App\Services\Session;
 use Exception;
 
@@ -41,7 +42,8 @@ class User
 
     public function create($fields = array())
     {
-        if (!$this->_db->insert('users', $fields)) {
+        $sql = "insert users(name, email, password, role_id) values (?, ?, ?, ?, ?)";
+        if (!$this->_db->insert($sql, $fields)) {
             throw new Exception('There was a problem creating this account.');
         }
     }
@@ -60,9 +62,8 @@ class User
 
     public function getAllUsers()
     {
-        $data = $this->_db->get('users', null);
-
-        return $data->results();
+        $data = $this->_db->getAll('users');
+        return $this->_db->results();
 
     }
 
@@ -71,12 +72,13 @@ class User
         if ($user) {
             // if user had a numeric username this FAILS...
             $field = (is_numeric($user)) ? 'id' : 'email';
-            $data = $this->_db->get('users', array($field, '=', $user));
 
-            if ($data->count()) {
-                $this->_data = $data->first();
-                return true;
-            }
+             $this->_db->get('users', $field, $user);
+
+             if($this->_db->result())
+             {
+                 return true;
+             }
         }
         return false;
     }
@@ -138,7 +140,7 @@ class User
     public function logout()
     {
 
-        $this->_db->delete('user_session', array('id', '=', $this->data()->id));
+        $this->_db->deleteSession('user_session', $this->data()->id);
 
         Session::delete($this->_sessionName);
         Cookie::delete($this->_cookieName);

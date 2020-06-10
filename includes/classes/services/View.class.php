@@ -24,7 +24,7 @@ class View implements ViewInterface
     }
 
     public function setTemplate($template) {
-        $template = 'includes/routes/views/users/index.php';
+        $template = 'includes/routes/views/'.$template.'.php';
 
 //        var_dump($template);
 //        var_dump(is_file($template));

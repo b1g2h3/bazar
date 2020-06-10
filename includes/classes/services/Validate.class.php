@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Database\DB;
+
 class Validate
 {
 
@@ -24,6 +26,9 @@ class Validate
 
     public function check($source, $items = array())
     {
+
+        var_dump($source);
+        die;
         foreach ($items as $item => $rules) {
             foreach ($rules as $rule => $rule_value) {
 

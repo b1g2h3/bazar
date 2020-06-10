@@ -1,15 +1,18 @@
 <?php
 
 
-require('./vendor/autoload.php');
+    $loader = require __DIR__ . '/vendor/autoload.php';
 
 
 include './includes/routes/Route.php';
 include './includes/core.inc.php';
 
+use App\Controller\AuthController;
 use App\Controller\UserController;
 use App\Routes\Route;
 
+\Tracy\Debugger::enable();
+\Tracy\Debugger::barDump('dawdada');
 
 // Define a global basepath
 define('BASEPATH','/');
@@ -41,15 +44,26 @@ Route::add('/inzeraty', function() {
 });
 
 // Add base route
-Route::add('/inzeraty', function() {
+Route::add('/uzivatele', function () {
+    navi();
     UserController::index();
+    footer();
 });
 
-// Post route example
 Route::add('/prihlasit', function() {
     navi();
-    echo '<form method="post"><input type="text" name="test"><input type="submit" value="send"></form>';
-}, 'get');
+    AuthController::login();
+    footer();
+    if (isset($_POST)) {
+        AuthController::handleLogin($_POST);
+    }
+}, ['get','post']);
+
+Route::add('/odhlasit', function() {
+    AuthController::logout();
+});
+
+
 
 // Get and Post route example
 Route::add('/get-post-sample', function() {
