@@ -25,7 +25,6 @@ class AuthController
 
         if (Token::check($data['token'])) {
 
-            var_dump('whatsaap');
             $validate = new Validate();
             $validation = $validate->check($data, array(
                 'name' => array('required' => true),
