@@ -46,7 +46,7 @@ $(document).ready(function () {
     $(".edit #email").val(data[2]);
     $(`.edit #role option[value=${data[3]}]`).attr("selected", "selected");
     $(".edit_user").click(function () {
-      updateUser(data[0]);
+      validateUser(data);
     });
   });
 });
@@ -61,7 +61,7 @@ function updateUser(id) {
   $.ajax({
     type: "POST", // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
     dataType: "json", // Set datatype - affects Accept header
-    url: "/admin.php", // A valid URL
+    url: "/edituser", // A valid URL
     data: {
       method: "_POST",
       data: JSON.stringify(prepData),

@@ -79,6 +79,10 @@ Route::add('/adduser', function () {
     UserController::store($_POST);
 }, ['post']);
 
+Route::add('/edituser', function () {
+    UserController::edit($_POST);
+}, ['post']);
+
 Route::add('/prihlasit', function () {
     navi();
     AuthController::login();

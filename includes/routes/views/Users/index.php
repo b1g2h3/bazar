@@ -47,18 +47,12 @@
                 <form>
                     <div class="modal-body edit">
                         <h2>Upravit uživatele</h2>
-                        <div class="form-group">
-                            <label for="name">Jméno:</label>
-                            <input type="text" name="user_name" class="form-control" placeholder="Jméno" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" name="user_name" class="form-control" placeholder="Email" id="email">
-                        </div>
-                        <!--                                <div class="form-group">-->
-                        <!--                                    <label for="pwd">Heslo:</label>-->
-                        <!--                                    <input type="password" name="user_password" class="form-control" placeholder="Heslo" id="pwd">-->
-                        <!--                                </div>-->
+                        <?php
+                        \App\Services\Input::create('Jméno', 'text');
+                        \App\Services\Input::create('Email', 'text');
+                        \App\Services\Input::create('Heslo', 'password')
+                        ?>
+                        <input type="hidden" name="token" value="<?php echo \App\Services\Token::generate(); ?>" />
                         <div class="form-group">
                             <label for="role">Role:</label>
                             <select name="user_role" class="form-control" placeholder="Role" id="role">
