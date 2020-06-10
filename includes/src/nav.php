@@ -13,10 +13,10 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Uživatelé<span class="sr-only">(current)</span></a>
                 </li>
-                <?php if ($user->is_logged_in()): ?>
+
                 <li class="nav-item">
                     <form action="/index.php" method="POST">
-                        <button style="background: transparent; border: none" name="logout" type="submit"  class="nav-link" >Odhlásit</button>
+                        <button style="background: transparent; border: none" name="logout" type="submit" class="nav-link">Odhlásit</button>
                     </form>
                 </li>
 
@@ -25,7 +25,6 @@
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Vyhledat</button>
             </form>
-            <?php endif ?>
         </div>
     </nav>
 </header>

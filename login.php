@@ -31,9 +31,10 @@ if (Input::exists()) {
         }
     }
 }
-
 ?>
+
 <?php include_once('./includes/src/header.php') ?>
+<?php include_once('./includes/src/nav.php')    ?>
 
 <main role="main" class="flex-shrink-0">
     <div class="container">

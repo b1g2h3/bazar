@@ -10,10 +10,6 @@
 </head>
 
 <body>
-    <?php
-    // include_once('./nav.php');
-    ?>
-
     <?php if (count($errors) > 0) : ?>
         <p>Error(s):</p>
         <ul>
