@@ -13,7 +13,7 @@ class User
     {
         $this->_db = DB::getInstance();
 
-        $this->_sessionName = Config::get('session/session_name');
+        $this->_sessionName = Config::get('sessions/session_name');
         $this->_cookieName = Config::get('remember/cookie_name');
 
         if (!$user) {
@@ -54,8 +54,9 @@ class User
     {
         if ($user) {
             // if user had a numeric username this FAILS...
-            $field = (is_numeric($user)) ? 'id' : 'username';
+            $field = (is_numeric($user)) ? 'id' : 'email';
             $data = $this->_db->get('users', array($field, '=', $user));
+
 
             if ($data->count()) {
                 $this->_data = $data->first();
@@ -65,19 +66,19 @@ class User
         return false;
     }
 
-    public function login($username = null, $password = null, $remember = false)
+    public function login($email = null, $password = null, $remember = false)
     {
 
-        // print_r($this->_data);
-
         // check if username has been defined 
-        if (!$username && !$password && $this->exists()) {
+        if (!$email && !$password && $this->exists()) {
             Session::put($this->_sessionName, $this->data()->id);
         } else {
-            $user = $this->find($username);
+
+            $user = $this->find($email);
 
             if ($user) {
-                if ($this->data()->password === Hash::make($password, $this->data()->salt)) {
+
+                if (Hash::verify($this->data()->password) === Hash::verify($password)) {
                     Session::put($this->_sessionName, $this->data()->id);
 
                     if ($remember) {
@@ -123,7 +124,7 @@ class User
     public function logout()
     {
 
-        $this->_db->delete('user_session', array('user_id', '=', $this->data()->id));
+        $this->_db->delete('user_session', array('id', '=', $this->data()->id));
 
         Session::delete($this->_sessionName);
         Cookie::delete($this->_cookieName);

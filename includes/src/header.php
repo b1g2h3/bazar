@@ -11,7 +11,7 @@
 
 <body>
     <?php
-    include_once('includes/src/nav.php')
+    // include_once('./nav.php');
     ?>
 
     <?php if (count($errors) > 0) : ?>

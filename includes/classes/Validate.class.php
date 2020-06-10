@@ -7,6 +7,14 @@ class Validate
         $_errors = array(),
         $_db = null;
 
+    private $customAttr = [
+        'name' => 'Jméno',
+        'email' => 'Email',
+        'roles_id' => 'Role',
+        'password' => 'Heslo',
+        'password_again' => 'Potvrdit heslo',
+    ];
+
     public function __construct()
     {
         $this->_db = DB::getInstance();
@@ -21,28 +29,34 @@ class Validate
                 $item = escape($item);
 
                 if ($rule === 'required' && empty($value)) {
-                    $this->addError("{$item} is required");
+                    $this->addError("{$this->customAttr[$item]} je nutné vyplnit");
                 } else if (!empty($value)) {
                     switch ($rule) {
                         case 'min':
                             if (strlen($value) < $rule_value) {
-                                $this->addError("{$item} must be a minimum of {$rule_value} characters.");
+                                $this->addError("{$this->customAttr[$item]} musí obsahovat minimálně {$rule_value} znaků.");
                             }
                             break;
                         case 'max':
                             if (strlen($value) > $rule_value) {
-                                $this->addError("{$item} can only be a maximum of {$rule_value} characters.");
+                                $this->addError("{$this->customAttr[$item]} musí obsahovat maximálně {$rule_value} znaků.");
                             }
                             break;
                         case 'matches':
                             if ($value != $source[$rule_value]) {
-                                $this->addError("{$rule_value} must match {$item}.");
+                                $attrToLowerCase = strtolower($this->customAttr[$item]);
+                                $this->addError("{$this->customAttr[$rule_value]} se musí shodovat s {$attrToLowerCase}.");
                             }
                             break;
                         case 'unique':
                             $check = $this->_db->get($rule_value, array($item, '=', $value));
                             if ($check->count()) {
-                                $this->addError("{$item} already exists.");
+                                $this->addError("{$this->customAttr[$item]} již existuje.");
+                            }
+                            break;
+                        case 'email':
+                            if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                                $this->addError("{$this->customAttr[$item]} je neplatný.");
                             }
                             break;
                     }

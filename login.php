@@ -1,6 +1,7 @@
 <?php
 
 require_once 'includes/db.inc.php';
+$validate = new Validate();
 
 if (Input::exists()) {
 
@@ -8,14 +9,14 @@ if (Input::exists()) {
 
         $validate = new Validate();
         $validation = $validate->check($_POST, array(
-            'username' => array('required' => true),
+            'name' => array('required' => true),
             'password' => array('required' => true)
         ));
         if ($validation->passed()) {
             // Login user
             $user = new User();
 
-            $login = $user->login(Input::get('username'), Input::get('password'));
+            $login = $user->login(Input::get('name'), Input::get('password'), false);
 
             if ($login) {
                 // echo 'Success';
@@ -32,16 +33,30 @@ if (Input::exists()) {
 }
 
 ?>
+<?php include_once('./includes/src/header.php') ?>
 
-<form action="" method="post">
-    <div class="field">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" autocomplete="off" />
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <!-- Log in -->
+            <div class="mt-5 col-6">
+                <h2>Přihlásit se</h2>
+
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" name="name" class="form-control" placeholder="Email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Heslo:</label>
+                        <input type="password" name="password" class="form-control" placeholder="Heslo" id="pwd">
+                    </div>
+                    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>" />
+                    <button name="login" type="submit" class="btn btn-primary">Přihlásit</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="field">
-        <label for="password">Password</label>
-        <input type="passowrd" name="password" id="password" autocomplete="off" />
-    </div>
-    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>" />
-    <input type="submit" value="login" />
-</form>
+</main>
+
+<?php include_once('./includes/src/footer.php') ?>
