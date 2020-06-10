@@ -1,7 +1,7 @@
 <!-- Log in -->
 <div class="col-6">
     <h2>Přihlásit se</h2>
-    <form action="/index.php" method="POST">
+    <form action="/indexx.php" method="POST">
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" name="user_name_email" class="form-control" placeholder="Email" id="email">

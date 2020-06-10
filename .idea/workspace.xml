@@ -20,16 +20,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bb85a4d-43f2-4ca7-8cbd-99ece17e1251" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/includes/js/admin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/classes/services/View.class.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/Route.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/Users/edit.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/Users/index.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/Users/show.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/admin.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/articles.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/home.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/logout.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/routes/views/register.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/indexx.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/bazar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bazar.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/articles.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Interfaces/ViewInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/home.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Article.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/models/Article.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Config.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Config.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Cookie.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Cookie.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/DB.class.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Hash.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Hash.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Input.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Input.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Redirect.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Redirect.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Session.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Session.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Token.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Token.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/User.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/models/User.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/classes/Validate.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Validate.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/db.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/core.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/js/dropzone.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/js/dropzone.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/src/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/src/loginForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/loginForm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/src/nav.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/nav.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/routes/views/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/register.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -44,6 +81,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
+  </component>
   <component name="ProjectId" id="1d1xMzEfMbYmYhF1aQi9nroYq4M" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -55,7 +97,9 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/includes/classes/Templates/Users" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -67,11 +111,15 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\bazar\core" />
-      <recent name="C:\xampp\htdocs\bazar\includes\js" />
-      <recent name="C:\xampp\htdocs\bazar\includes\class" />
-      <recent name="C:\xampp\htdocs\bazar\includes" />
-      <recent name="C:\xampp\htdocs\bazar" />
+      <recent name="C:\xampp\htdocs\bazarnew\includes\routes\views" />
+      <recent name="C:\xampp\htdocs\bazarnew\includes\classes\controller" />
+      <recent name="C:\xampp\htdocs\bazarnew\includes\classes\services" />
+      <recent name="C:\xampp\htdocs\bazarnew\includes\classes\model" />
+      <recent name="C:\xampp\htdocs\bazarnew\includes\classes\db" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\bazarnew\includes\classes\Templates\Users" />
+      <recent name="C:\xampp\htdocs\bazarnew" />
     </key>
   </component>
   <component name="SvnConfiguration">
@@ -87,6 +135,10 @@
       <workItem from="1591606358895" duration="23908000" />
       <workItem from="1591692561091" duration="72000" />
       <workItem from="1591710805154" duration="2206000" />
+      <workItem from="1591768450216" duration="101000" />
+      <workItem from="1591768561323" duration="190000" />
+      <workItem from="1591768893409" duration="12347000" />
+      <workItem from="1591781891943" duration="5279000" />
     </task>
     <servers />
   </component>
@@ -106,18 +158,30 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1591606684689">
+    <state x="736" y="432" key="ComposerInitDialogKey" timestamp="1591781924361">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591606684689" />
-    <state x="794" y="443" key="NewPhpFileDialog" timestamp="1591685890618">
+    <state x="736" y="432" key="ComposerInitDialogKey/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591781924361" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1591768933998">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="794" y="443" key="NewPhpFileDialog/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591685890618" />
-    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1591682167538">
+    <state x="740" y="275" key="FileChooserDialogImpl/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591768933998" />
+    <state x="712" y="243" key="NewPhpClassDialog" timestamp="1591783129854">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591682167538" />
+    <state x="712" y="243" key="NewPhpClassDialog/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591783129854" />
+    <state x="794" y="443" key="NewPhpFileDialog" timestamp="1591788020925">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="794" y="443" key="NewPhpFileDialog/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591788020925" />
+    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591787814650">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591787814650" />
+    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1591783517296">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591783517296" />
   </component>
   <component name="hg4idea.settings">
     <option name="CHECK_INCOMING_OUTGOING" value="true" />

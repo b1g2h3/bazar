@@ -1,10 +1,13 @@
 <?php
+declare(strict_types=1);
+
 // Include necessary file
-include_once './includes/db.inc.php';
+require_once('./includes/core.inc.php');
+
 
 // Check if user is not logged in
 if (!$user->is_logged_in()) {
-    $user->redirect('index.php');
+    $user->redirect('indexx.php');
 }
 
 try {
@@ -28,7 +31,7 @@ try {
 
 if (isset($_GET['logout']) && ($_GET['logout'] == 'true')) {
     $user->log_out();
-    $user->redirect('index.php');
+    $user->redirect('indexx.php');
 }
 
 ?>
@@ -43,7 +46,7 @@ if (isset($_GET['logout']) && ($_GET['logout'] == 'true')) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="includes/css/app.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/app.css" crossorigin="anonymous">
 
 </head>
 

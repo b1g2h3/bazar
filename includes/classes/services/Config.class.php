@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services;
+
 class Config
 {
     public static function get($path = null)

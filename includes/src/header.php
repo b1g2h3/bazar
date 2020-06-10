@@ -10,11 +10,3 @@
 </head>
 
 <body>
-    <?php if (count($errors) > 0) : ?>
-        <p>Error(s):</p>
-        <ul>
-            <?php foreach ($errors as $error) : ?>
-                <li><?= $error ?></li>
-            <?php endforeach ?>
-        </ul>
-    <?php endif ?>

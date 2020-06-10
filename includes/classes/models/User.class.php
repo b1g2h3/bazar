@@ -1,5 +1,13 @@
 <?php
 
+namespace App\Models;
+
+use App\Database\DB;
+use App\Services\Config;
+use App\Services\Hash;
+use App\Services\Session;
+use Exception;
+
 class User
 {
 
@@ -50,13 +58,20 @@ class User
         }
     }
 
+    public function getAllUsers()
+    {
+        $data = $this->_db->get('users', null);
+
+        return $data->results();
+
+    }
+
     public function find($user = null)
     {
         if ($user) {
             // if user had a numeric username this FAILS...
             $field = (is_numeric($user)) ? 'id' : 'email';
             $data = $this->_db->get('users', array($field, '=', $user));
-
 
             if ($data->count()) {
                 $this->_data = $data->first();
@@ -80,7 +95,6 @@ class User
 
                 if (Hash::verify($this->data()->password) === Hash::verify($password)) {
                     Session::put($this->_sessionName, $this->data()->id);
-
                     if ($remember) {
                         $hash = Hash::unique();
                         $hashCheck = $this->_db->get('users_session', array('user_id', '=', $this->data()->id));

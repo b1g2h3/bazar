@@ -1,14 +1,16 @@
 <?php
 // Include necessary file
-include_once './includes/db.inc.php';
+include_once './includes/core.inc.php';
 
 // Check if user is not logged in
-if (!$user->is_logged_in()) {
-    $user->redirect('index.php');
+$user = new User(); // current user
+
+if (!$user->isLoggedIn()) {
+    Redirect::to('login.php');
 }
 
+
 if(isset($_POST["ukol"])) {
-    var_dump($_POST);
 
     $data = json_decode($_POST['data']);
 //    $id = json_decode($_POST['id']);
@@ -68,12 +70,12 @@ function checkValidEmail($email)
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Administrace</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="includes/css/app.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/app.css" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.css"/>
 </head>
 <body>
 <?php
-include_once('includes/src/nav.php');
+//include_once('includes/src/nav.php');
 
 ?>
 
@@ -106,7 +108,7 @@ include_once('includes/src/nav.php');
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
-                        <form action="/index.php" method="POST">
+                        <form action="/indexx.php" method="POST">
                             <div class="modal-body">
                                 <h2>Vytvořit uživatele</h2>
                                 <div class="form-group">
@@ -207,6 +209,6 @@ include_once('includes/src/nav.php');
 <?php
 include_once('includes/src/scripts.php')
 ?>
-<script src="includes/js/admin.js"></script>
+<script src="../../js/admin.js"></script>
 </body>
 </html>

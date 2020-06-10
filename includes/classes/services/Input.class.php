@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Services;
 
 class Input {
     public static function exists($type = 'post') {

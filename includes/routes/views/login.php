@@ -1,6 +1,6 @@
 <?php
 
-require_once 'includes/db.inc.php';
+require_once 'includes/core.inc.php';
 $validate = new Validate();
 
 if (Input::exists()) {
@@ -16,11 +16,11 @@ if (Input::exists()) {
             // Login user
             $user = new User();
 
-            $login = $user->login(Input::get('name'), Input::get('password'), false);
+            $login = $user->login(Input::get('name'), Input::get('password'));
 
             if ($login) {
                 // echo 'Success';
-                Redirect::to('index.php');
+                Redirect::to('indexx.php');
             } else {
                 echo '<p>Sorry, logging in failed';
             }
@@ -34,7 +34,7 @@ if (Input::exists()) {
 ?>
 
 <?php include_once('./includes/src/header.php') ?>
-<?php include_once('./includes/src/nav.php')    ?>
+<?php include_once('./includes/src/nav.php') ?>
 
 <main role="main" class="flex-shrink-0">
     <div class="container">

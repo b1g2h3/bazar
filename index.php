@@ -1,119 +1,108 @@
 <?php
-// Include necessary file
-require_once('./includes/db.inc.php');
 
-// Check if user is already logged in
-if ($user->is_logged_in()) {
-    // Redirect logged in user to their home page
-    $user->redirect('home.php');
+
+require('./vendor/autoload.php');
+
+
+include './includes/routes/Route.php';
+include './includes/core.inc.php';
+
+use App\Controller\UserController;
+use App\Routes\Route;
+
+
+// Define a global basepath
+define('BASEPATH','/');
+
+function navi() {
+  include('./includes/src/header.php');
+  include('./includes/src/nav.php');
 }
 
-// Check if log-in form is submitted
-if (isset($_POST['log_in'])) {
-    // Retrieve form input
-    $user_name = trim($_POST['user_name_email']);
-    $user_email = trim($_POST['user_name_email']);
-    $user_password = trim($_POST['user_password']);
+function footer() {
+    include('./includes/src/footer.php');
+}
 
-    // Check for empty and invalid inputs
-    if (empty($user_name) || empty($user_email)) {
-        array_push($errors, "Please enter a valid username or e-mail address");
-    } elseif (empty($user_password)) {
-        array_push($errors, "Please enter a valid password.");
-    } else {
-        // Check if the user may be logged in
-        if ($user->login($user_name, $user_email, $user_password)) {
-            // Redirect if logged in successfully
-            $user->redirect('home.php');
-        } else {
-            array_push($errors, "Incorrect log-in credentials.");
-        }
+
+
+// Add base route
+Route::add('/', function() {
+    navi();
+
+    footer();
+});
+
+
+// Add base route
+Route::add('/inzeraty', function() {
+    navi();
+
+    footer();
+});
+
+// Add base route
+Route::add('/inzeraty', function() {
+    UserController::index();
+});
+
+// Post route example
+Route::add('/prihlasit', function() {
+    navi();
+    echo '<form method="post"><input type="text" name="test"><input type="submit" value="send"></form>';
+}, 'get');
+
+// Get and Post route example
+Route::add('/get-post-sample', function() {
+    navi();
+    echo 'You can GET this page and also POST this form back to it';
+    echo '<form method="post"><input type="text" name="input"><input type="submit" value="send"></form>';
+    if (isset($_POST['input'])) {
+        echo 'I also received a POST with this data:<br>';
+        print_r($_POST);
     }
-}
+}, ['get','post']);
 
-// Check if register form is submitted
-if (isset($_POST['register'])) {
-    // Retrieve form input
-    $user_name = trim($_POST['user_name']);
-    $user_email = trim($_POST['user_email']);
-    $user_password = trim($_POST['user_password']);
-    $user_role = trim($_POST['user_role']);
+// Route with regexp parameter
+// Be aware that (.*) will match / (slash) too. For example: /user/foo/bar/edit
+// Also users could inject SQL statements or other untrusted data if you use (.*)
+// You should better use a saver expression like /user/([0-9]*)/edit or /user/([A-Za-z]*)/edit
+Route::add('/user/(.*)/edit', function($id) {
+    navi();
+    echo 'Edit user with id '.$id.'<br>';
+});
 
-    // Check for empty and invalid inputs
-    if (empty($user_name)) {
-        array_push($errors, "Prosím vyplňte jméno.");
-    } elseif (empty($user_email)) {
-        array_push($errors, "Prosím vyplňte email.");
-    } elseif (empty($user_password)) {
-        array_push($errors, "Prosím vyplňte heslo.");
-    } elseif (empty($user_role)) {
+// Accept only numbers as parameter. Other characters will result in a 404 error
+Route::add('/foo/([0-9]*)/bar', function($var1) {
+    navi();
+    echo $var1.' is a great number!';
+});
 
-        array_push($errors, "Prosím zadejte roli uživatele.");
-    } else {
-        try {
-            // Define query to select matching values
-            $sql = "SELECT name, email FROM users WHERE name=:name OR email=:email";
 
-            // Prepare the statement
-            $query = $db_conn->prepare($sql);
 
-            // Bind parameters
-            $query->bindParam(':name', $user_name);
-            $query->bindParam(':email', $user_email);
+// Add a 404 not found route
+Route::pathNotFound(function($path) {
+    // Do not forget to send a status header back to the client
+    // The router will not send any headers by default
+    // So you will have the full flexibility to handle this case
+    header('HTTP/1.0 404 Not Found');
+    navi();
+    echo 'Error 404 :-(<br>';
+    echo 'The requested path "'.$path.'" was not found!';
+});
 
-            // Execute the query
-            $query->execute();
+// Add a 405 method not allowed route
+Route::methodNotAllowed(function($path, $method) {
+    // Do not forget to send a status header back to the client
+    // The router will not send any headers by default
+    // So you will have the full flexibility to handle this case
+    header('HTTP/1.0 405 Method Not Allowed');
+    navi();
+    echo 'Error 405 :-(<br>';
+    echo 'The requested path "'.$path.'" exists. But the request method "'.$method.'" is not allowed on this path!';
+});
 
-            // Return clashes row as an array indexed by both column name
-            $returned_clashes_row = $query->fetch(PDO::FETCH_ASSOC);
+// Run the Router with the given Basepath
+Route::run(BASEPATH);
 
-            // Check for usernames or e-mail addresses that have already been used
-            if ($returned_clashes_row['name'] == $user_name) {
-                array_push($errors, "That username is taken. Please choose something different.");
-            } elseif ($returned_clashes_row['email'] == $user_email) {
-                array_push($errors, "That e-mail address is taken. Please choose something different.");
-            } else {
-                // Check if the user may be registered
-                if ($user->register($user_name, $user_email, $user_password, $user_role)) {
-                    echo "Registered";
-                }
-            }
-        } catch (PDOException $e) {
-            array_push($errors, $e->getMessage());
-        }
-    }
-}
-
-if (isset($_POST['logout'])) {
-    session_destroy();
-    unset($_SESSION['user_session']);
-}
-?>
-<?php include_once('./includes/src/header.php') ?>
-
-<main role="main" class="flex-shrink-0">
-    <div class="container">
-        <div class="row">
-            <!-- Log in -->
-            <div class="mt-5 col-6">
-                <h2>Přihlásit se</h2>
-                <form action="/index.php" method="POST">
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" name="user_name_email" class="form-control" placeholder="Email" id="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="pwd">Heslo:</label>
-                        <input type="password" name="user_password" class="form-control" placeholder="Heslo" id="pwd">
-                    </div>
-                    <button name="log_in" type="submit" class="btn btn-primary">Přihlásit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</main>
-
-<?php include_once('./includes/src/footer.php') ?>
-</body>
-
-</html>
+// Enable case sensitive mode, trailing slashes and multi match mode by setting the params to true
+// Route::run(BASEPATH, true, true, true);

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Services;
+
 class Redirect {
     public static function to($location = null) {
         if($location) {

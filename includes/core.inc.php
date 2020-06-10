@@ -4,10 +4,10 @@ session_start();
 
 $GLOBALS['config'] = array(
     'mysql' => array(
-        'host' => '127.0.0.1',
-        'username' => 'admin',
-        'password' => '123456',
-        'db' => 'bazar'
+        'host' => 'srv-insodev.ccv.cz',
+        'username' => 'insodev',
+        'password' => 'isis',
+        'db' => 'toku_adaptacniprojekt'
     ),
     'remember' => array(
         'cookie_name' => 'hash',
@@ -19,13 +19,4 @@ $GLOBALS['config'] = array(
     )
 );
 
-
-spl_autoload_register(function ($class) {
-    include 'classes/' . $class . '.class.php';
-});
-
 require_once 'functions/sanitize.php';
-
-
-// Define variable for custom error messages
-$errors = [];

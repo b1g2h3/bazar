@@ -1,5 +1,6 @@
 <?php
-require_once 'includes/db.inc.php';
+declare(strict_types=1);
+require_once 'includes/core.inc.php';
 
 
 if (Input::exists()) {
@@ -43,8 +44,8 @@ if (Input::exists()) {
                     'roles_id'        => Input::get('roles_id'),
                 ));
                 // Session::flash('home', 'You have been registered and can now log in!');
-                header('Location: index.php');
-                // Redirect::to('index.php');
+                header('Location: indexx.php');
+                // Redirect::to('indexx.php');
             } catch (Exception $e) {
                 die($e->getMessage());
             }
@@ -60,7 +61,7 @@ if (Input::exists()) {
 ?>
 
 <?php include_once('./includes/src/header.php') ?>
-<?php include_once('./includes/src/nav.php')    ?>
+<?php include_once('./includes/src/nav.php') ?>
 
 <main role="main" class="flex-shrink-0">
     <div class="container">
