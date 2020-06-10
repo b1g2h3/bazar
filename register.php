@@ -32,12 +32,9 @@ if (Input::exists()) {
         ));
 
         if ($validation->passed()) {
-            // echo 'Passed';
+
             $user = new User();
 
-            // $salt = Hash::salt(32);
-
-            // var_dump($salt);
             try {
                 $user->create(array(
                     'name'        => Input::get('name'),
@@ -45,9 +42,9 @@ if (Input::exists()) {
                     'password'    => Hash::make(Input::get('password')),
                     'roles_id'        => Input::get('roles_id'),
                 ));
-                Session::flash('home', 'You have been registered and can now log in!');
-                // header('Location: index.php');
-                Redirect::to('index.php');
+                // Session::flash('home', 'You have been registered and can now log in!');
+                header('Location: index.php');
+                // Redirect::to('index.php');
             } catch (Exception $e) {
                 die($e->getMessage());
             }
