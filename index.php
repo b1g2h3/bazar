@@ -1,7 +1,7 @@
 <?php
 
 
-    $loader = require __DIR__ . '/vendor/autoload.php';
+$loader = require __DIR__ . '/vendor/autoload.php';
 
 
 include './includes/routes/Route.php';
@@ -15,21 +15,46 @@ use App\Routes\Route;
 \Tracy\Debugger::barDump('dawdada');
 
 // Define a global basepath
-define('BASEPATH','/');
+define('BASEPATH', '/');
 
-function navi() {
-  include('./includes/src/header.php');
-  include('./includes/src/nav.php');
+function navi()
+{
+    require('./includes/src/header.php');
+    require('./includes/src/nav.php');
 }
 
-function footer() {
+function footer()
+{
     include('./includes/src/footer.php');
 }
 
 
+// function setMethod($method, $function)
+// {
+//     switch ($method) {
+//         case $method == 'GET':
+//             navi();
+//             $function;
+//             footer();
+//             break;
+//         case $method == 'POST':
+//             $function;
+//             break;
+//         case $method == 'PUT':
+//             $function;
+//             break;
+//         case $method == 'DESTROY':
+//             $function;
+//             break;
+//         default:
+//             $function;
+//             break;
+//     }
+// }
+
 
 // Add base route
-Route::add('/', function() {
+Route::add('/', function () {
     navi();
 
     footer();
@@ -37,7 +62,7 @@ Route::add('/', function() {
 
 
 // Add base route
-Route::add('/inzeraty', function() {
+Route::add('/inzeraty', function () {
     navi();
 
     footer();
@@ -50,23 +75,26 @@ Route::add('/uzivatele', function () {
     footer();
 });
 
-Route::add('/prihlasit', function() {
+Route::add('/adduser', function () {
+    UserController::store($_POST);
+}, ['post']);
+
+Route::add('/prihlasit', function () {
     navi();
     AuthController::login();
     footer();
-    if (isset($_POST)) {
-        AuthController::handleLogin($_POST);
-    }
-}, ['get','post']);
-
-Route::add('/odhlasit', function() {
+}, ['get']);
+Route::add('/prihlasit', function () {
+    AuthController::handleLogin($_POST);
+}, ['post']);
+Route::add('/odhlasit', function () {
     AuthController::logout();
 });
 
 
 
 // Get and Post route example
-Route::add('/get-post-sample', function() {
+Route::add('/get-post-sample', function () {
     navi();
     echo 'You can GET this page and also POST this form back to it';
     echo '<form method="post"><input type="text" name="input"><input type="submit" value="send"></form>';
@@ -74,49 +102,37 @@ Route::add('/get-post-sample', function() {
         echo 'I also received a POST with this data:<br>';
         print_r($_POST);
     }
-}, ['get','post']);
+}, ['get', 'post']);
 
 // Route with regexp parameter
-// Be aware that (.*) will match / (slash) too. For example: /user/foo/bar/edit
-// Also users could inject SQL statements or other untrusted data if you use (.*)
-// You should better use a saver expression like /user/([0-9]*)/edit or /user/([A-Za-z]*)/edit
-Route::add('/user/(.*)/edit', function($id) {
+Route::add('/user/(.*)/edit', function ($id) {
     navi();
-    echo 'Edit user with id '.$id.'<br>';
+    echo 'Edit user with id ' . $id . '<br>';
 });
 
 // Accept only numbers as parameter. Other characters will result in a 404 error
-Route::add('/foo/([0-9]*)/bar', function($var1) {
+Route::add('/foo/([0-9]*)/bar', function ($var1) {
     navi();
-    echo $var1.' is a great number!';
+    echo $var1 . ' is a great number!';
 });
 
 
 
 // Add a 404 not found route
-Route::pathNotFound(function($path) {
-    // Do not forget to send a status header back to the client
-    // The router will not send any headers by default
-    // So you will have the full flexibility to handle this case
+Route::pathNotFound(function ($path) {
     header('HTTP/1.0 404 Not Found');
     navi();
     echo 'Error 404 :-(<br>';
-    echo 'The requested path "'.$path.'" was not found!';
+    echo 'The requested path "' . $path . '" was not found!';
 });
 
 // Add a 405 method not allowed route
-Route::methodNotAllowed(function($path, $method) {
-    // Do not forget to send a status header back to the client
-    // The router will not send any headers by default
-    // So you will have the full flexibility to handle this case
+Route::methodNotAllowed(function ($path, $method) {
     header('HTTP/1.0 405 Method Not Allowed');
     navi();
     echo 'Error 405 :-(<br>';
-    echo 'The requested path "'.$path.'" exists. But the request method "'.$method.'" is not allowed on this path!';
+    echo 'The requested path "' . $path . '" exists. But the request method "' . $method . '" is not allowed on this path!';
 });
 
 // Run the Router with the given Basepath
 Route::run(BASEPATH);
-
-// Enable case sensitive mode, trailing slashes and multi match mode by setting the params to true
-// Route::run(BASEPATH, true, true, true);

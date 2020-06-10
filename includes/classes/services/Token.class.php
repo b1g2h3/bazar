@@ -14,7 +14,7 @@ class Token
     {
         $tokenName = Config::get('sessions/token_name');
 
-        if (Session::exists($tokenName) && Session::get($tokenName)) {
+        if (Session::exists($tokenName) && $token === Session::get($tokenName)) {
             Session::delete($tokenName);
             return true;
         }

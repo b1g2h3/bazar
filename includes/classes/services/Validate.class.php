@@ -3,19 +3,21 @@
 namespace App\Services;
 
 use App\Database\DB;
+use App\Services\Session;
+use App\Services\Redirect;
 
 class Validate
 {
 
     private $_passed = false,
-        $_errors = array(),
+        $_errors = false,
         $_db = null;
 
     private $customAttr = [
         'name' => 'Jméno',
-        'email' => 'Email',
+        'Email' => 'Email',
         'roles_id' => 'Role',
-        'password' => 'Heslo',
+        'Heslo' => 'Heslo',
         'password_again' => 'Potvrdit heslo',
     ];
 
@@ -26,9 +28,6 @@ class Validate
 
     public function check($source, $items = array())
     {
-
-        var_dump($source);
-        die;
         foreach ($items as $item => $rules) {
             foreach ($rules as $rule => $rule_value) {
 
@@ -36,56 +35,55 @@ class Validate
                 $item = escape($item);
 
                 if ($rule === 'required' && empty($value)) {
-                    $this->addError("{$this->customAttr[$item]} je nutné vyplnit");
+                    $this->addError($item, "{$this->customAttr[$item]} je nutné vyplnit");
                 } else if (!empty($value)) {
                     switch ($rule) {
                         case 'min':
                             if (strlen($value) < $rule_value) {
-                                $this->addError("{$this->customAttr[$item]} musí obsahovat minimálně {$rule_value} znaků.");
+                                $this->addError($item, "{$this->customAttr[$item]} musí obsahovat minimálně {$rule_value} znaků.");
                             }
                             break;
                         case 'max':
                             if (strlen($value) > $rule_value) {
-                                $this->addError("{$this->customAttr[$item]} musí obsahovat maximálně {$rule_value} znaků.");
+                                $this->addError($item, "{$this->customAttr[$item]} musí obsahovat maximálně {$rule_value} znaků.");
                             }
                             break;
                         case 'matches':
                             if ($value != $source[$rule_value]) {
                                 $attrToLowerCase = strtolower($this->customAttr[$item]);
-                                $this->addError("{$this->customAttr[$rule_value]} se musí shodovat s {$attrToLowerCase}.");
+                                $this->addError($item, "{$this->customAttr[$rule_value]} se musí shodovat s {$attrToLowerCase}.");
                             }
                             break;
                         case 'unique':
                             $check = $this->_db->get($rule_value, array($item, '=', $value));
                             if ($check->count()) {
-                                $this->addError("{$this->customAttr[$item]} již existuje.");
+                                $this->addError($item, "{$this->customAttr[$item]} již existuje.");
                             }
                             break;
                         case 'email':
                             if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                                $this->addError("{$this->customAttr[$item]} je neplatný.");
+                                $this->addError($item, "{$this->customAttr[$item]} je neplatný.");
                             }
                             break;
                     }
                 }
             }
         }
-
-        if (empty($this->_errors)) {
-            $this->_passed = true;
+        if ($this->_errors) {
+            foreach ($items as $item => $rules) {
+                if (Session::exists(escape($item))) {
+                    Redirect::to($_SERVER['REQUEST_URI']);
+                }
+            }
         }
-
+        $this->_passed = true;
         return $this;
     }
 
-    private function addError($error)
+    private function addError($error, $msg)
     {
-        $this->_errors[] = $error;
-    }
-
-    public function errors()
-    {
-        return $this->_errors;
+        Session::flash($error, $msg);
+        $this->_errors = true;
     }
 
     public function passed()

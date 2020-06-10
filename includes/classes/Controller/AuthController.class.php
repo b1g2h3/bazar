@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Input;
 use App\Services\Redirect;
 use App\Services\Token;
+use App\Services\Session;
 use App\Services\Validate;
 use App\Services\View;
 
@@ -27,35 +28,30 @@ class AuthController
 
             $validate = new Validate();
             $validation = $validate->check($data, array(
-                'name' => array('required' => true),
-                'password' => array('required' => true)
+                'Email' => array('required' => true),
+                'Heslo' => array('required' => true)
             ));
             if ($validation->passed()) {
                 // Login user
                 $user = new User();
 
-                $login = $user->login(Input::get('name'), Input::get('password'));
+                $login = $user->login(Input::get('name'), Input::get('Heslo'));
 
                 if ($login) {
                     // echo 'Success';
-                    Redirect::to('indexx.php');
+                    Redirect::to('admin');
                 } else {
-                    echo '<p>Sorry, logging in failed';
-                }
-            } else {
-                foreach ($validation->errors() as $error) {
-                    echo $error, '<br>';
+                    Session::flash('email', 'Nesprávné iniciály.');
+                    Redirect::back();
                 }
             }
         }
-
     }
 
     public static function logout()
     {
-        $user= new User();
+        $user = new User();
         $user->logout();
         Redirect::to('/');
     }
-
 }

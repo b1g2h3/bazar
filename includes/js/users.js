@@ -1,3 +1,40 @@
+const { validationMessages, printErrors } = require("./func/validation");
+
+function saveUser(user) {
+  if (user.id == null) {
+    createUser(user);
+  } else {
+    updateUser(user);
+  }
+}
+
+function validateUser(user) {
+  const validations = {
+    Jméno: {
+      required: true,
+      length: 3,
+    },
+    Heslo: {
+      required: true,
+      length: 8,
+    },
+  };
+
+  const errors = validationMessages(validations, user);
+
+  return {
+    valid: Object.values(errors).every((messages) => messages.length === 0),
+    errors: errors,
+  };
+}
+
+const { errors, valid } = validateUser(user);
+if (valid) {
+  saveUser(user);
+} else {
+  printErrors(errors);
+}
+
 $(document).ready(function () {
   var table = $("#example").DataTable();
 
