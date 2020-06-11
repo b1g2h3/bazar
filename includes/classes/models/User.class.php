@@ -48,14 +48,12 @@ class User
         }
     }
 
-    public function update($fields = array(), $id = null)
+    public function  update($data)
     {
-
-        if (!$id && $this->isLoggedIn()) {
-            $id = $this->data()->id;
-        }
-
-        if (!$this->_db->update('users', $id, $fields)) {
+        $sql = "UPDATE users
+                SET email = :email, name = :name, password = :password, role_id = :role_id
+                WHERE id = :id;";
+        if (!$this->_db->updateUser($sql, $data)) {
             throw new Exception('There was a problem updating.');
         }
     }
@@ -120,17 +118,17 @@ class User
         return false;
     }
 
-    public function hasPermission($key)
-    {
-        $group = $this->_db->get('groups', array('id', '=', $this->data()->group));
-        if ($group->count()) {
-            $permissions = json_decode($group->first()->permissions, true);
-            if ($permissions[$key] == true) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public function hasPermission($key)
+//    {
+//        $group = $this->_db->get('groups', array('id', '=', $this->data()->group));
+//        if ($group->count()) {
+//            $permissions = json_decode($group->first()->permissions, true);
+//            if ($permissions[$key] == true) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public function exists()
     {

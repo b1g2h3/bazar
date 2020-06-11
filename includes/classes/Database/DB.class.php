@@ -5,6 +5,7 @@ namespace App\Database;
 use App\Services\Config;
 use PDO;
 use PDOException;
+use Tracy\Debugger;
 
 class DB{
     private static $_instance = null;
@@ -35,9 +36,11 @@ class DB{
 
     protected function actionOne($sql, $param)
     {
-        $this->_query = $this->_pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $this->_query->execute(array(':id' => $param));
-        $this->_result = $this->_query->fetch();
+        $item = is_numeric($param) ? 'id' : 'email';
+        $this->_query = $this->_pdo->prepare($sql);
+        $this->_query->execute(array(':'.$item   => $param));
+        return $this->_query->fetch();;
+
     }
 
     protected function actionDeleteSession($sql, $id)
@@ -58,9 +61,19 @@ class DB{
 
     public function get($table, $field, $param)
     {
-        $sql = 'SELECT * FROM '.$table.' WHERE '.$field .' = :id';
+        $sql = 'SELECT * FROM '.$table.' WHERE '.$field .' = :'.$field;
         return $this->actionOne($sql, $param);
 
+    }
+
+    public function updateUser($sql, $data)
+    {
+        \Tracy\Debugger::barDump($data);
+        $this->_query = $this->_pdo->prepare($sql);
+        if($this->_query->execute($data))
+        {
+         return true;
+        }
     }
 
     public function deleteSession($table, $id)

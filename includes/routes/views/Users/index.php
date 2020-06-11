@@ -9,13 +9,16 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="/adduser" method="POST">
-                    <div class="modal-body">
+                <form>
+                    <div class="modal-body create">
                         <h2>Vytvořit uživatele</h2>
                         <?php
                         \App\Services\Input::create('Jméno', 'text');
+                        \App\Services\Input::createErrorMsg('Jméno');
                         \App\Services\Input::create('Email', 'text');
-                        \App\Services\Input::create('Heslo', 'password')
+                        \App\Services\Input::createErrorMsg('Email');
+                        \App\Services\Input::create('Heslo', 'password');
+                        \App\Services\Input::createErrorMsg('Heslo');
                         ?>
                         <input type="hidden" name="token" value="<?php echo \App\Services\Token::generate(); ?>" />
                         <div class="form-group">
@@ -28,7 +31,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                        <button name="register" type="submit" class="btn btn-primary">Vytvořit uživatele</button>
+                        <button type="button" class="btn btn-primary createUser">Vytvořit uživatele</button>
                     </div>
                 </form>
 
@@ -49,8 +52,10 @@
                         <h2>Upravit uživatele</h2>
                         <?php
                         \App\Services\Input::create('Jméno', 'text');
+                        \App\Services\Input::createErrorMsg('Jméno');
                         \App\Services\Input::create('Email', 'text');
-                        \App\Services\Input::create('Heslo', 'password')
+                        \App\Services\Input::createErrorMsg('Email');
+//                        \App\Services\Input::create('Heslo', 'password')
                         ?>
                         <input type="hidden" name="token" value="<?php echo \App\Services\Token::generate(); ?>" />
                         <div class="form-group">
@@ -71,7 +76,7 @@
 
         </div>
     </div>
-    <table id="example" class="table table-striped table-bordered" style="width:100%">
+    <table id="users" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -86,7 +91,7 @@
                     <td><?php echo $user['id'] ?></td>
                     <td><?php echo $user['name'] ?></td>
                     <td><?php echo $user['email'] ?></td>
-                    <td><?php echo $user['roles_id'] == 1 ? 'Admin' : 'Editor' ?></td>
+                    <td><?php echo $user['role_id'] == 1 ? 'Admin' : 'Editor' ?></td>
                 </tr>
             <?php } ?>
             </tfoot>

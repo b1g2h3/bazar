@@ -12,6 +12,10 @@ h1 {
   margin-right: auto;
 }
 
+.hidden {
+  display: none;
+}
+
 .errorBorder {
   border: 1px solid red;
 }

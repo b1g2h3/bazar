@@ -25,19 +25,26 @@ function validateLengthMessage(value, length) {
   if (value == null) return;
   if (value.length >= length) return;
 
-  return `musí být alespoň ${length} znaků`;
+  return ` musí být alespoň ${length} znaků`;
 }
 
 function validateRequiredMessage(value) {
   if (value) return;
 
-  return "je nutné vyplnit";
+  return " je nutné vyplnit";
 }
-
-function printErrors(errors) {
+const customValidationMessage = {
+    name: 'Jméno',
+    email: 'Email',
+    role_id: 'Roli',
+    password: 'Heslo',
+}
+function printErrors(errors, type) {
   Object.entries(errors).forEach(([property, messages]) => {
     messages.forEach((message) => {
-      console.error(`${property} ${message}`);
+        let name =customValidationMessage[property];
+        $('.error').show();
+        $(`#err${name}`).text(name + message);
     });
   });
 }

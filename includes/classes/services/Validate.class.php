@@ -16,9 +16,11 @@ class Validate
     private $customAttr = [
         'name' => 'Jméno',
         'Email' => 'Email',
-        'roles_id' => 'Role',
+        'role_id' => 'Role',
         'Heslo' => 'Heslo',
         'password_again' => 'Potvrdit heslo',
+        'email' => 'Email',
+        'password' => 'Heslo',
     ];
 
     public function __construct()
@@ -30,10 +32,8 @@ class Validate
     {
         foreach ($items as $item => $rules) {
             foreach ($rules as $rule => $rule_value) {
-
                 $value = trim($source[$item]);
                 $item = escape($item);
-
                 if ($rule === 'required' && empty($value)) {
                     $this->addError($item, "{$this->customAttr[$item]} je nutné vyplnit");
                 } else if (!empty($value)) {
@@ -55,8 +55,8 @@ class Validate
                             }
                             break;
                         case 'unique':
-                            $check = $this->_db->get($rule_value, array($item, '=', $value));
-                            if ($check->count()) {
+                            $check = $this->_db->get($rule_value, $item, $value);
+                            if (!is_null($check)) {
                                 $this->addError($item, "{$this->customAttr[$item]} již existuje.");
                             }
                             break;
@@ -82,6 +82,7 @@ class Validate
 
     private function addError($error, $msg)
     {
+        \Tracy\Debugger::barDump($error);
         Session::flash($error, $msg);
         $this->_errors = true;
     }

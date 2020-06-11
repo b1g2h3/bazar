@@ -12,7 +12,7 @@ use App\Controller\UserController;
 use App\Routes\Route;
 
 \Tracy\Debugger::enable();
-\Tracy\Debugger::barDump('dawdada');
+
 
 // Define a global basepath
 define('BASEPATH', '/');
@@ -80,7 +80,7 @@ Route::add('/adduser', function () {
 }, ['post']);
 
 Route::add('/edituser', function () {
-    UserController::edit($_POST);
+    UserController::update($_POST);
 }, ['post']);
 
 Route::add('/prihlasit', function () {
@@ -96,38 +96,12 @@ Route::add('/odhlasit', function () {
 });
 
 
-
-// Get and Post route example
-Route::add('/get-post-sample', function () {
-    navi();
-    echo 'You can GET this page and also POST this form back to it';
-    echo '<form method="post"><input type="text" name="input"><input type="submit" value="send"></form>';
-    if (isset($_POST['input'])) {
-        echo 'I also received a POST with this data:<br>';
-        print_r($_POST);
-    }
-}, ['get', 'post']);
-
-// Route with regexp parameter
-Route::add('/user/(.*)/edit', function ($id) {
-    navi();
-    echo 'Edit user with id ' . $id . '<br>';
-});
-
-// Accept only numbers as parameter. Other characters will result in a 404 error
-Route::add('/foo/([0-9]*)/bar', function ($var1) {
-    navi();
-    echo $var1 . ' is a great number!';
-});
-
-
-
 // Add a 404 not found route
 Route::pathNotFound(function ($path) {
     header('HTTP/1.0 404 Not Found');
     navi();
     echo 'Error 404 :-(<br>';
-    echo 'The requested path "' . $path . '" was not found!';
+    echo 'Cesta "' . $path . '" nebyla nalezena!';
 });
 
 // Add a 405 method not allowed route
@@ -135,7 +109,7 @@ Route::methodNotAllowed(function ($path, $method) {
     header('HTTP/1.0 405 Method Not Allowed');
     navi();
     echo 'Error 405 :-(<br>';
-    echo 'The requested path "' . $path . '" exists. But the request method "' . $method . '" is not allowed on this path!';
+//    echo 'Tato cesta "' . $path . '" existuje. Ale cesta je dostupna pro metodu "' . $method . '" is not allowed on this path!';
 });
 
 // Run the Router with the given Basepath

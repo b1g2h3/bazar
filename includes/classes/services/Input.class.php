@@ -32,7 +32,7 @@ class Input
         return '';
     }
 
-    public static function create($name, $type)
+    public static function create($name, $type )
     {
         echo '
             <div class="form-group">
@@ -51,5 +51,10 @@ class Input
                     </div>';
             \App\Services\Session::delete($name);
         }
+    }
+
+    public static function createErrorMsg($name)
+    {
+            echo '<div id="err'.$name.'" class="hidden error text-danger"></div>';
     }
 }
