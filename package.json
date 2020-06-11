@@ -1,0 +1,36 @@
+{
+  "name": "oopauth",
+  "version": "1.0.0",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b1g2h3/bazar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/b1g2h3/bazar/issues"
+  },
+  "homepage": "https://github.com/b1g2h3/bazar#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.3",
+    "postcss-loader": "^3.0.0",
+    "sass": "^1.26.8",
+    "sass-loader": "^8.0.2",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "dropzone": "^5.7.1",
+    "lodash": "^4.17.15"
+  },
+  "keywords": [],
+  "description": ""
+}

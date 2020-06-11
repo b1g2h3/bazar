@@ -6,3 +6,4 @@
 <script type="text/javascript" src="/includes/js/dropzonesettings.js"></script>
 <script src="/includes/js/admin.js"></script>
 <script src="/includes/js/users.js"></script>
+<script src="/includes/js/func/validation.js"></script>
