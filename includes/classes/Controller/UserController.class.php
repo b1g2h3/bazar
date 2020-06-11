@@ -8,7 +8,6 @@ use App\Services\Hash;
 use App\Services\Validate;
 use App\Services\View;
 use App\Services\Redirect;
-use Tracy\Debugger;
 
 class UserController
 {
@@ -35,7 +34,6 @@ class UserController
     {
         $data = json_decode($data['data'], true);
 
-        \Tracy\Debugger::barDump($data);
         $validate = new Validate();
         $validation = $validate->check($data, array(
             'email' => array(
@@ -59,21 +57,18 @@ class UserController
             )
         ));
 
-        if ($validation->passed()) {
+        if ($validation->hasntError()) {
 
             $user = new User();
 
             try {
                 $user->create($data);
+                $data['password'] = Hash::make($data['password']);
                 // Session::flash('home', 'You have been registered and can now log in!');
                 return json_decode('true');
                 // Redirect::to('indexx.php');
             } catch (Exception $e) {
                 die($e->getMessage());
-            }
-        } else {
-            foreach ($validation->errors() as $error) {
-                echo $error, '<br>';
             }
         }
     }
@@ -83,7 +78,6 @@ class UserController
 //        if($user->isAdmin())
 //        {
             $data = json_decode($data['data'], true);
-
             $validate = new Validate();
             $validation = $validate->check($data, array(
                 'email' => array(
@@ -93,7 +87,7 @@ class UserController
                     // 'email' => true,
                 ),
                 'password' => array(
-                    'required' => true,
+                    'required' => false,
                     'min' => 6
                 ),
                 'name' => array(
@@ -106,10 +100,10 @@ class UserController
                 )
             ));
 
-            if ($validation->passed()) {
+            if ($validation->hasntError()) {
 
                 $user = new User();
-
+                $data['password'] = Hash::make($data['password']);
                 try {
                     $user->update($data);
                     return json_encode('true');

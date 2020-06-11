@@ -55,7 +55,8 @@
                         \App\Services\Input::createErrorMsg('Jméno');
                         \App\Services\Input::create('Email', 'text');
                         \App\Services\Input::createErrorMsg('Email');
-//                        \App\Services\Input::create('Heslo', 'password')
+                        \App\Services\Input::create('Heslo', 'password');
+                        \App\Services\Input::createErrorMsg('Heslo');
                         ?>
                         <input type="hidden" name="token" value="<?php echo \App\Services\Token::generate(); ?>" />
                         <div class="form-group">

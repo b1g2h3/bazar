@@ -20,29 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bb85a4d-43f2-4ca7-8cbd-99ece17e1251" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/includes/js/api/users.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/includes/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/Database/DB.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Database/DB.class.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/models/User.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/models/User.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Input.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Input.class.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/services/Validate.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Validate.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/core.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/core.inc.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/func/validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/js/func/validation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/users.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/Users/edit.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/routes/views/Users/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/routes/views/Users/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/Users/show.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/src/scripts.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/scripts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/dist/bundle.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +112,7 @@
       <workItem from="1591768893409" duration="12347000" />
       <workItem from="1591781891943" duration="14480000" />
       <workItem from="1591854650624" duration="205000" />
-      <workItem from="1591854867178" duration="18253000" />
+      <workItem from="1591854867178" duration="20396000" />
     </task>
     <servers />
   </component>

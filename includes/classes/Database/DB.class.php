@@ -5,7 +5,6 @@ namespace App\Database;
 use App\Services\Config;
 use PDO;
 use PDOException;
-use Tracy\Debugger;
 
 class DB{
     private static $_instance = null;
@@ -66,11 +65,21 @@ class DB{
 
     }
 
-    public function updateUser($sql, $data)
+    public function createUser($sql, $data)
     {
-        \Tracy\Debugger::barDump($data);
         $this->_query = $this->_pdo->prepare($sql);
         if($this->_query->execute($data))
+        {
+            return true;
+        }
+    }
+
+    public function updateUser($sql, $data)
+    {
+        \Tracy\Debugger::barDump($sql);
+        \Tracy\Debugger::barDump($data);
+        $this->_query = $this->_pdo->prepare($sql);
+        if($this->_query->execute(array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id'],)))
         {
          return true;
         }

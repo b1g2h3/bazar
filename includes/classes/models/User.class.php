@@ -40,19 +40,17 @@ class User
         }
     }
 
-    public function create($fields = array())
+    public function create($data)
     {
-        $sql = "insert users(name, email, password, role_id) values (?, ?, ?, ?, ?)";
-        if (!$this->_db->insert($sql, $fields)) {
-            throw new Exception('There was a problem creating this account.');
+        $sql = "insert users(name, email, password, role_id) values (:name, :email, :password, :role_id)";
+        if (!$this->_db->createUser($sql, $data)) {
+            throw new Exception('There was a problem updating.');
         }
     }
 
-    public function  update($data)
+    public function update($data)
     {
-        $sql = "UPDATE users
-                SET email = :email, name = :name, password = :password, role_id = :role_id
-                WHERE id = :id;";
+        $sql = "UPDATE users SET email = :email, name = :name, password = :password, role_id = :role_id WHERE id = :id";
         if (!$this->_db->updateUser($sql, $data)) {
             throw new Exception('There was a problem updating.');
         }
@@ -84,7 +82,7 @@ class User
     public function login($email = null, $password = null, $remember = false)
     {
 
-        // check if username has been defined 
+        // check if username has been defined
         if (!$email && !$password && $this->exists()) {
             Session::put($this->_sessionName, $this->data()->id);
         } else {

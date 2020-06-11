@@ -22,7 +22,7 @@ function validateUser(user) {
             required: true,
         },
         password: {
-            required: true,
+            required: false,
         },
     };
 

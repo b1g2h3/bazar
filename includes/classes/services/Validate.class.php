@@ -76,19 +76,17 @@ class Validate
                 }
             }
         }
-        $this->_passed = true;
         return $this;
     }
 
     private function addError($error, $msg)
     {
-        \Tracy\Debugger::barDump($error);
         Session::flash($error, $msg);
         $this->_errors = true;
     }
 
-    public function passed()
+    public function hasntError()
     {
-        return $this->_passed;
+        return $this->_errors;
     }
 }
