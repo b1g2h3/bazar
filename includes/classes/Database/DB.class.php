@@ -6,7 +6,8 @@ use App\Services\Config;
 use PDO;
 use PDOException;
 
-class DB{
+class DB
+{
     private static $_instance = null;
     protected $_pdo,
         $_results,
@@ -15,19 +16,20 @@ class DB{
         $_count = 0;
     private function __construct()
     {
-        try{
+        try {
             $this->_pdo = new PDO(
-                                'mysql:host='.Config::get('mysql/host').';
-                                     dbname='. Config::get('mysql/db'),
-                                    Config::get('mysql/username'),
-                                    Config::get('mysql/password'));
-        }catch(PDOException $e){
+                'mysql:host=' . Config::get('mysql/host') . ';
+                                     dbname=' . Config::get('mysql/db'),
+                Config::get('mysql/username'),
+                Config::get('mysql/password')
+            );
+        } catch (PDOException $e) {
             die($e->getMessage());
         }
     }
     public static function getInstance()
     {
-        if(!isset(self::$_instance)){
+        if (!isset(self::$_instance)) {
             self::$_instance = new DB();
         }
         return self::$_instance;
@@ -37,9 +39,9 @@ class DB{
     {
         $item = is_numeric($param) ? 'id' : 'email';
         $this->_query = $this->_pdo->prepare($sql);
-        $this->_query->execute(array(':'.$item   => $param));
-        return $this->_query->fetch();;
-
+        $this->_query->execute(array(':' . $item   => $param));
+        $this->_result = $this->_query->fetch();
+        return $this->_result;
     }
 
     protected function actionDeleteSession($sql, $id)
@@ -60,40 +62,36 @@ class DB{
 
     public function get($table, $field, $param)
     {
-        $sql = 'SELECT * FROM '.$table.' WHERE '.$field .' = :'.$field;
-        return $this->actionOne($sql, $param);
+        $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $field . ' = :' . $field;
 
+        return $this->actionOne($sql, $param);
     }
 
     public function createUser($sql, $data)
     {
         $this->_query = $this->_pdo->prepare($sql);
-        if($this->_query->execute($data))
-        {
+        if ($this->_query->execute($data)) {
             return true;
         }
     }
 
     public function updateUser($sql, $data)
     {
-        \Tracy\Debugger::barDump($sql);
-        \Tracy\Debugger::barDump($data);
         $this->_query = $this->_pdo->prepare($sql);
-        if($this->_query->execute(array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id'],)))
-        {
-         return true;
+        if ($this->_query->execute(array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id'],))) {
+            return true;
         }
     }
 
     public function deleteSession($table, $id)
     {
-        $sql = 'SELECT * FROM '.$table.' WHERE id = :id';
+        $sql = 'SELECT * FROM ' . $table . ' WHERE id = :id';
         $this->actionDeleteSession($sql, $id);
     }
 
     public function getAll($table)
     {
-        $sql = 'SELECT * FROM '.$table;
+        $sql = 'SELECT * FROM ' . $table;
         $this->actionAll($sql);
     }
 
@@ -106,6 +104,4 @@ class DB{
     {
         return $this->_results;
     }
-
 }
-?>

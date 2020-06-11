@@ -33,7 +33,7 @@ class UserController
     public static function store($data)
     {
         $data = json_decode($data['data'], true);
-        \Tracy\Debugger::barDump($data);
+
         $validate = new Validate();
         $validation = $validate->check($data, array(
             'email' => array(
@@ -41,7 +41,6 @@ class UserController
                 'min' => 2,
                 'max' => 30,
                 'unique' => 'users',
-                 'email' => true,
             ),
             'password' => array(
                 'required' => true,
@@ -56,63 +55,53 @@ class UserController
                 'required' => true,
             )
         ));
-        if ($validation->hasntError()) {
+        $errors = $validation->errors();
+        echo json_encode($validation->errors());
+        if ($validation->passed()) {
 
             $user = new User();
 
-            try {
-                $user->create($data);
-                $data['password'] = Hash::make($data['password']);
-                // Session::flash('home', 'You have been registered and can now log in!');
-                return json_decode('true');
-                // Redirect::to('indexx.php');
-            } catch (Exception $e) {
-                die($e->getMessage());
-            }
+            // try {
+            //     $user->create($data);
+            //     $data['password'] = Hash::make($data['password']);
+            //     // Session::flash('home', 'You have been registered and can now log in!');
+            //     return json_decode('true');
+            //     // Redirect::to('indexx.php');
+            // } catch (Exception $e) {
+            //     \Tracy\Debugger::barDump($e);
+            // }
         }
     }
 
     public static function update($data)
     {
-//        if($user->isAdmin())
-//        {
-            $data = json_decode($data['data'], true);
-            $validate = new Validate();
-            $validation = $validate->check($data, array(
-                'email' => array(
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 30,
-                    // 'email' => true,
-                ),
-                'password' => array(
-                    'required' => false,
-                ),
-                'name' => array(
-                    'required' => true,
-                    'min' => 2,
-                    'max' => 50
-                ),
-                'role_id' => array(
-                    'required' => true,
-                )
-            ));
+        $data = json_decode($data['data'], true);
+        $validate = new Validate();
+        $validation = $validate->check($data, array(
+            'email' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 30,
+                // 'email' => true,
+            ),
+            'password' => array(
+                'required' => false,
+            ),
+            'name' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 50
+            ),
+            'role_id' => array(
+                'required' => true,
+            )
+        ));
 
-            if ($validation->hasntError()) {
+        if ($validation->passed()) {
 
-                $user = new User();
-                try {
-                    $user->update($data);
-                    return json_encode('true');
-                } catch (Exception $e) {
-                    die($e->getMessage());
-                }
-            }
-//        }
+            $user = new User();
+            $user->update($data);
+            return json_encode('true');
+        }
     }
-
-    public function destroy()
-    {
-    }
-
 }

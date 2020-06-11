@@ -56,7 +56,7 @@ class Validate
                             break;
                         case 'unique':
                             $check = $this->_db->get($rule_value, $item, $value);
-                            if (!is_null($check)) {
+                            if ($check != false) {
                                 $this->addError($item, "{$this->customAttr[$item]} již existuje.");
                             }
                             break;
@@ -69,24 +69,23 @@ class Validate
                 }
             }
         }
-        if ($this->_errors) {
-            foreach ($items as $item => $rules) {
-                if (Session::exists(escape($item))) {
-                    Redirect::to($_SERVER['REQUEST_URI']);
-                }
-            }
-        }
         return $this;
     }
 
     private function addError($error, $msg)
     {
-        Session::flash($error, $msg);
-        $this->_errors = true;
+        $err = array($error => $msg);
+        $this->_errors[] =  $err;
     }
 
-    public function hasntError()
+    public function errors()
     {
-        return $this->_errors;
+        return array('errors' => $this->_errors);
+        die;
+    }
+
+    public function passed()
+    {
+        return $this->_errors != false;
     }
 }

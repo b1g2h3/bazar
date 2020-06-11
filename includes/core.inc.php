@@ -4,10 +4,10 @@ session_start();
 
 $GLOBALS['config'] = array(
     'mysql' => array(
-        'host' => 'srv-insodev.ccv.cz',
-        'username' => 'insodev',
-        'password' => 'isis',
-        'db' => 'toku_adaptacniprojekt'
+        'host' => '127.0.0.1',
+        'username' => 'admin',
+        'password' => '123456',
+        'db' => 'bazar2',
     ),
     'remember' => array(
         'cookie_name' => 'hash',

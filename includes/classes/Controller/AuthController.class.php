@@ -31,7 +31,7 @@ class AuthController
                 'Email' => array('required' => true),
                 'Heslo' => array('required' => true)
             ));
-            if ($validation->passed()) {
+            if ($validation->hasntError()) {
                 // Login user
                 $user = new User();
 

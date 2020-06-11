@@ -88,9 +88,11 @@ Route::add('/prihlasit', function () {
     AuthController::login();
     footer();
 }, ['get']);
+
 Route::add('/prihlasit', function () {
     AuthController::handleLogin($_POST);
 }, ['post']);
+
 Route::add('/odhlasit', function () {
     AuthController::logout();
 });
@@ -109,7 +111,7 @@ Route::methodNotAllowed(function ($path, $method) {
     header('HTTP/1.0 405 Method Not Allowed');
     navi();
     echo 'Error 405 :-(<br>';
-//    echo 'Tato cesta "' . $path . '" existuje. Ale cesta je dostupna pro metodu "' . $method . '" is not allowed on this path!';
+    //    echo 'Tato cesta "' . $path . '" existuje. Ale cesta je dostupna pro metodu "' . $method . '" is not allowed on this path!';
 });
 
 // Run the Router with the given Basepath
