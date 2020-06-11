@@ -88,7 +88,6 @@ class UserController
                 ),
                 'password' => array(
                     'required' => false,
-                    'min' => 6
                 ),
                 'name' => array(
                     'required' => true,
@@ -103,7 +102,6 @@ class UserController
             if ($validation->hasntError()) {
 
                 $user = new User();
-                $data['password'] = Hash::make($data['password']);
                 try {
                     $user->update($data);
                     return json_encode('true');
