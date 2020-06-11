@@ -1,4 +1,5 @@
 function createUser(user) {
+    console.log(user);
     $.ajax({
         type: "POST", // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
         dataType: "json", // Set datatype - affects Accept header

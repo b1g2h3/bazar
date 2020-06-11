@@ -33,7 +33,7 @@ class UserController
     public static function store($data)
     {
         $data = json_decode($data['data'], true);
-
+        \Tracy\Debugger::barDump($data);
         $validate = new Validate();
         $validation = $validate->check($data, array(
             'email' => array(
@@ -56,7 +56,6 @@ class UserController
                 'required' => true,
             )
         ));
-
         if ($validation->hasntError()) {
 
             $user = new User();
