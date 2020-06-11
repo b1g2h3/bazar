@@ -9,8 +9,7 @@ use App\Services\Redirect;
 class Validate
 {
 
-    private $_passed = false,
-        $_errors = false,
+    private $_errors = false,
         $_db = null;
 
     private $customAttr = [

@@ -1,3 +1,10 @@
+const customValidationMessage = {
+  name: "Jméno",
+  email: "Email",
+  role_id: "Roli",
+  password: "Heslo",
+};
+
 function createUser(user) {
   console.log(user);
   $.ajax({
@@ -9,7 +16,18 @@ function createUser(user) {
       data: JSON.stringify(user),
     }, // Some data e.g. Valid JSON as a string
     success: function (res) {
-      console.log(res);
+      $(".error").hide();
+      if (res["errors"]) {
+        const errors = res["errors"];
+        errors.map((error) => {
+          for (let [input, msg] of Object.entries(error)) {
+            let name = customValidationMessage[input];
+            $(".error").show();
+            $(`#err${name}`).text(msg);
+          }
+        });
+      }
+      console.log("true");
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
@@ -29,10 +47,7 @@ function updateUser(user) {
       data: JSON.stringify(user),
     }, // Some data e.g. Valid JSON as a string
     success: function (res) {
-      if (res["errors"]) {
-        console.log(res);
-      }
-      console.log("true");
+      console.log(res);
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
