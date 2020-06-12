@@ -4,24 +4,14 @@ namespace App\Services;
 
 class Hash
 {
-
     public static function make($string)
     {
         return password_hash($string, PASSWORD_DEFAULT);
     }
 
-    public static function verify($string)
+    public static function verify($password1, $password2)
     {
-        return password_verify($string, PASSWORD_DEFAULT);
+        return password_verify($password1, $password2);
     }
 
-    public static function salt($length)
-    {
-        return random_bytes($length);
-    }
-
-    public static function unique()
-    {
-        return self::make(uniqid());
-    }
 }

@@ -1,5 +1,4 @@
-const { updateUser, createUser } = require('./api/users')
-const { validationMessages, printErrors } = require("./func/validation");
+const { updateUser, createUser, handleLogin } = require('./ajax/users')
 
 function saveUser(user) {
     if (user.id == null) {
@@ -8,34 +7,10 @@ function saveUser(user) {
         updateUser(user);
     }
 }
-function validateUser(user) {
-    const validations = {
-        name: {
-            required: true,
-            length: 3,
-        },
-        email: {
-            required: true,
-            length: 8,
-        },
-        role_id: {
-            required: true,
-        },
-        password: {
-            required: false,
-        },
-    };
 
-    const errors = validationMessages(validations, user);
-    $('.error').hide();
-
-    return {
-        valid: Object.values(errors).every((messages) => messages.length === 0),
-        errors: errors,
-    };
-}
 $(document).ready(function () {
     var table = $("#users").DataTable();
+    $('.alert').hide()
     $("#users tbody").on("click", "tr", function () {
         var data = table.row(this).data();
         $(".edit_user").unbind("click");
@@ -52,29 +27,33 @@ $(document).ready(function () {
                 password: $(".edit #Heslo").val(),
                 role_id: $(".edit #role").val(),
             };
-            const { errors, valid } = validateUser(user);
-            if (valid) {
-                saveUser(user);
-            } else {
-                printErrors(errors);
-            }
+            saveUser(user);
         });
     });
 });
 
 $(".createUser").click(function () {
     $('.error').hide();
+    $('.alert').hide()
     let user = {
         name: $(".create #Jméno").val(),
         email: $(".create #Email").val(),
         role_id: $(".create #role").val(),
         password: $(".create #Heslo").val(),
     };
-    const { errors, valid } = validateUser(user);
-    if (valid) {
-        saveUser(user);
-    } else {
-        printErrors(errors);
-    }
+    saveUser(user);
+});
+
+
+$(".loginSubmit").click(function () {
+    $('.error').hide();
+    $('.alert').hide()
+
+    let user = {
+        email: $(".loginUser #Email").val(),
+        password: $(".loginUser #Heslo").val(),
+        token: $(".loginUser #token").val(),
+    };;
+    handleLogin(user);
 });
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Models\User;
+use App\Services\Hash;
 use App\Services\Input;
 use App\Services\Redirect;
 use App\Services\Token;
@@ -14,40 +15,58 @@ use App\Services\View;
 class AuthController
 {
 
+    /**
+     *
+     */
     public static function login()
     {
-        $view = new View('login');
+        $view = new View('auth/login');
         echo $view->render();
     }
 
+    /**
+     * @param $data
+     */
     public static function handleLogin($data)
     {
+        $data = json_decode($data['data'], true);
+        unset($data['token']);
         $validate = new Validate();
-
-        if (Token::check($data['token'])) {
-
-            $validate = new Validate();
-            $validation = $validate->check($data, array(
-                'Email' => array('required' => true),
-                'Heslo' => array('required' => true)
-            ));
-            if ($validation->hasntError()) {
-                // Login user
-                $user = new User();
-
-                $login = $user->login(Input::get('name'), Input::get('Heslo'));
-
-                if ($login) {
-                    // echo 'Success';
-                    Redirect::to('admin');
+        $validation = $validate->check($data, array(
+            'email' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 30,
+                // 'email' => true,
+            ),
+            'password' => array(
+                'required' => true,
+                'min' => 2,
+                'max' => 50
+            ),
+        ));
+        echo json_encode($validation->errors());
+        if ($validation->passed()) {
+            $user = new User();
+            try {
+                $id =$user->login($data);
+                \Tracy\Debugger::barDump($id);
+                if($id)
+                {
+                    echo json_encode(array('success' => 'Uživatel byl zaregistrován.', 'id' => $id));
                 } else {
-                    Session::flash('email', 'Nesprávné iniciály.');
-                    Redirect::back();
+                    echo json_encode(array('errors' => array('email' => 'Nesprávné přihlašovací údaje')));
                 }
+
+            } catch (Exception $e) {
+                \Tracy\Debugger::barDump($e);
             }
         }
     }
 
+    /**
+     *
+     */
     public static function logout()
     {
         $user = new User();

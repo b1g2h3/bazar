@@ -37,6 +37,7 @@ class DB
 
     protected function actionOne($sql, $param)
     {
+
         $item = is_numeric($param) ? 'id' : 'email';
         $this->_query = $this->_pdo->prepare($sql);
         $this->_query->execute(array(':' . $item   => $param));
@@ -77,14 +78,21 @@ class DB
 
     public function updateUser($sql, $data)
     {
-
-        if(array_key_exists('password', $data){
-            $array = array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']));
+        if(array_key_exists('password', $data)){
+            $array = array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
         } else {
-
+            $array = array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], ':role_id' => $data['role_id']);
         }
         $this->_query = $this->_pdo->prepare($sql);
-        if ($this->_query->execute(array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id'],))) {
+        if ($this->_query->execute($array)) {
+            return true;
+        }
+    }
+
+    public function insertSession($sql, $data)
+    {
+        $this->_query = $this->_pdo->prepare($sql);
+        if ($this->_query->execute($data)) {
             return true;
         }
     }

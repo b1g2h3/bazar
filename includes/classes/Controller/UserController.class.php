@@ -11,85 +11,81 @@ use App\Services\Redirect;
 
 class UserController
 {
-    public $user;
-    private function __construct()
-    {
-        $user = new User(); // current user
+    /**
+     * @var
+     */
+    public
+        $user,
+        $errors;
+    private static
+        $customAttr = array(
+        'name' => 'Jméno',
+        'role_id' => 'Role',
+        'password' => 'Heslo',
+        'password_again' => 'Potvrdit heslo',
+        'email' => 'Email',
+        'password' => 'Heslo',
+    );
 
-        if (!$user->isLoggedIn()) {
-            Redirect::to('prihlasit');
-        }
-    }
-
+    /**
+     *
+     */
     public static function index()
     {
-        // Check if user is not logged in
-        $user = new User;
-        $view = new View('users/index');
-        $view->allUsers = $user->getAllUsers();
-        echo $view->render();
+       return User::getAllUsers();
     }
 
+    /**
+     * @param $data
+     * @throws \Exception
+     */
     public static function store($data)
     {
-        $data = json_decode($data['data'], true);
-
-        $validate = new Validate();
-        $validation = $validate->check($data, array(
-            'email' => array(
-                'required' => true,
-                'min' => 2,
-                'max' => 30,
-                'unique' => 'users',
-            ),
-            'password' => array(
-                'required' => true,
-                'min' => 6
-            ),
-            'name' => array(
-                'required' => true,
-                'min' => 2,
-                'max' => 50
-            ),
-            'role_id' => array(
-                'required' => true,
-            )
-        ));
-        $errors = $validation->errors();
-        echo json_encode($validation->errors());
-        if ($validation->passed()) {
-
-            $user = new User();
-            try {
-                $data['password'] = Hash::make($data['password']);
-                $user->create($data);
-                echo json_encode(array('success' => 'Uživatel byl zaregistrován.'));
-            } catch (Exception $e) {
-                \Tracy\Debugger::barDump($e);
-            }
+        $data = json_decode($data, true);
+        $errors = null;
+        $role_id = $data['role_id'];
+        unset($data['role_id']);
+       foreach($data as $name => $param) {
+           if(empty($param)){
+               $errors[$name] = self::$customAttr[$name]." je nutné vyplnit";
+           } elseif(strlen($param ) < 4) {
+               $error[$name] = self::$customAttr[$name]." musí obsahovat minimálně 4 znaky.";
+           } elseif(strlen($param ) > 50) {
+               $errors[$name] = self::$customAttr[$name]." musí obsahovat maximálně 50 znaků.";
+           }
+       }
+       if(empty($role_id)) {
+           $errors['role_id'] = "Musíte vybrat roli uživatele.";
+       }
+        if(User::find($data['email'])) {
+            $errors['email'] = "Email již existuje.";
         }
+       if(!is_null($errors))
+       {
+           echo json_encode(array('errors' => $errors));
+           return;
+       }
+       $data['password'] = Hash::make($data['password']);
+       $data['role_id'] = $role_id;
+       User::create($data);
+       $user = User::find($data['email']);
+       unset($user['password']);
+       if($user){
+           echo json_encode(array('success' => 'Uživatel byl zaregistrován.', 'user' => $user));
+       } else {
+           echo json_encode(array('errors' => 'Uživatel nebyl vytvořen.'));
+       }
+
     }
 
+    /**
+     * @param $data
+     * @throws \Exception
+     */
     public static function update($data)
     {
         $data = json_decode($data['data'], true);
-        $validate = new Validate();
-        $validation = $validate->check($data, array(
-            'email' => array(
-                'required' => true,
-                'min' => 2,
-                'max' => 30,
-                // 'email' => true,
-            ),
-            'name' => array(
-                'required' => true,
-                'min' => 2,
-                'max' => 50
-            ),
-            'role_id' => array(
-                'required' => true,
-            )
-        ));
+
         echo json_encode($validation->errors());
         if ($validation->passed()) {
             if ($data['password'] != null) {

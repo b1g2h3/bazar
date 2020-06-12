@@ -12,17 +12,17 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/uzivatele">Uživatelé</a>
                 </li>
-                <?php
-                $user = new \App\Models\User();
-                if ($user->isLoggedIn()) : ?>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/odhlasit">Odhlásit se</a>
-                    </li>
-                <?php else : ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/prihlasit">Přihlásit se</a>
-                    </li>
-                <?php endif ?>
+<!--                --><?php
+//                $user = new \App\Models\User();
+//                if ($user->isLoggedIn()) : ?>
+<!--                    <li class="nav-item active">-->
+<!--                        <a class="nav-link" href="/odhlasit">Odhlásit se</a>-->
+<!--                    </li>-->
+<!--                --><?php //else : ?>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" href="/prihlasit">Přihlásit se</a>-->
+<!--                    </li>-->
+<!--                --><?php //endif ?>
 
             </ul>
             <!--            <form class="form-inline mt-2 mt-md-0">-->
