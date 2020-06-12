@@ -1,7 +1,6 @@
-
 <div class="col-6 mt-5">
-    <div class="hidden alert alert-success" role="alert">
-    </div>
+    <div class="hidden alert alert-success font-weight-bold" role="alert"></div>
+    <div class="hidden alert  alert-danger font-weight-bold" role="alert"></div>
     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUser">Vytvořit uživatele</button>
     <div id="addUser" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -13,9 +12,9 @@
                     <div class="modal-body create">
                         <h2>Vytvořit uživatele</h2>
                         <?php
-                        \App\Services\Input::create('Jméno', 'text');
-                        \App\Services\Input::create('Email', 'text');
-                        \App\Services\Input::create('Heslo', 'password');
+                        \App\Services\Input::create('Jméno', 'text', true);
+                        \App\Services\Input::create('Email', 'email', true);
+                        \App\Services\Input::create('Heslo', 'password', true);
                         ?>
                         <div class="form-group">
                             <label for="role">Role:</label>
@@ -47,9 +46,9 @@
                     <div class="modal-body edit">
                         <h2>Upravit uživatele</h2>
                         <?php
-                        \App\Services\Input::create('Jméno', 'text');
-                        \App\Services\Input::create('Email', 'text');
-                        \App\Services\Input::create('Heslo', 'password');
+                        \App\Services\Input::create('Jméno', 'text', true);
+                        \App\Services\Input::create('Email', 'email', true);
+                        \App\Services\Input::create('Heslo', 'password', false);
                         ?>
                         <div class="form-group">
                             <label for="role">Role:</label>
@@ -60,8 +59,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                        <button type="button" class="btn btn-primary edit_user">Upravit uživatele</button>
+                        <button type="button" class="btn btn-danger deleteUser">Smazat uživatele</button>
+                        <button type="button" class="btn btn-primary editUser">Upravit uživatele</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Zavřít</button>
                     </div>
                 </form>
 
@@ -76,8 +76,6 @@
                 <th>Jméno</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Upravit </th>
-                <th>Smazat</th>
             </tr>
         </thead>
         <tbody>
@@ -87,12 +85,6 @@
                     <td><?php echo $user['name'] ?></td>
                     <td><?php echo $user['email'] ?></td>
                     <td><?php echo $user['role_id'] == 1 ? 'Admin' : 'Editor' ?></td>
-                    <td>
-                        <button type="button" class="btn btn-primary editUser">Upravit</button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-primary deleteUser">Smazat</button>
-                    </td>
                 </tr>
             <?php } ?>
             </tfoot>

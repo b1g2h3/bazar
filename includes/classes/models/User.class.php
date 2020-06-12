@@ -13,10 +13,10 @@ class User
 {
     public static function getAllUsers()
     {
-        $servername = "srv-insodev.ccv.cz";
-        $username = "insodev";
-        $password = "isis";
-        $conn = new PDO("mysql:host=$servername;dbname=toku_adaptacniprojekt", $username, $password);
+        $servername = "127.0.0.1";
+        $username = "admin";
+        $password = "123456";
+        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = 'SELECT * FROM users';
         $sth = $conn->prepare($sql);
@@ -27,20 +27,20 @@ class User
     public static function create($data)
     {
         $sql = "insert users(name, email, password, role_id) values (:name, :email, :password, :role_id)";
-        $servername = "srv-insodev.ccv.cz";
-        $username = "insodev";
-        $password = "isis";
+        $servername = "127.0.0.1";
+        $username = "admin";
+        $password = "123456";
+        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=toku_adaptacniprojekt", $username, $password);
+            $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $array = array(':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
             $sth = $conn->prepare($sql);
             $sth->execute($array);
             return true;
         } catch (Exception $e) {
-            die($e->getMessage());
+            \Tracy\Debugger::barDump($e->getMessage());
         }
-
     }
 
 
@@ -48,14 +48,14 @@ class User
     {
         $field = (is_numeric($param)) ? 'id' : 'email';
 
-        $sql = 'SELECT * FROM users WHERE '.$field.' = :'.$field;
-        $servername = "srv-insodev.ccv.cz";
-        $username = "insodev";
-        $password = "isis";
-        $conn = new PDO("mysql:host=$servername;dbname=toku_adaptacniprojekt", $username, $password);
+        $sql = 'SELECT * FROM users WHERE ' . $field . ' = :' . $field;
+        $servername = "127.0.0.1";
+        $username = "admin";
+        $password = "123456";
+        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sth = $conn->prepare($sql);
-        $sth->execute(array(':'.$field => $param));
+        $sth->execute(array(':' . $field => $param));
         return $sth->fetch();
     }
 
@@ -73,18 +73,38 @@ class User
         } else {
             $sql = "UPDATE users SET email = :email, name = :name, role_id = :role_id WHERE id = :id";
         }
-        $servername = "srv-insodev.ccv.cz";
-        $username = "insodev";
-        $password = "isis";
+        $servername = "127.0.0.1";
+        $username = "admin";
+        $password = "123456";
+        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=toku_adaptacniprojekt", $username, $password);
+            $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sth = $conn->prepare($sql);
             $sth->execute($array);
             return true;
         } catch (Exception $e) {
-            die($e->getMessage());
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function delete($id)
+    {
+        $sql = "DELETE FROM users WHERE id = ?";
+        $servername = "127.0.0.1";
+        $username = "admin";
+        $password = "123456";
+        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
+
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sth = $conn->prepare($sql);
+            $sth->execute(array($id));
+            return true;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
         }
     }
 
@@ -94,15 +114,15 @@ class User
      */
     public function login($user)
     {
-            $this->_data = $this->find($user['email']);
+        $this->_data = $this->find($user['email']);
 
-            if ($user) {
-                if (Hash::verify($user['password'], $this->_data['password'])) {
-                   return $this->_data['id'];
-                }
+        if ($user) {
+            if (Hash::verify($user['password'], $this->_data['password'])) {
+                return $this->_data['id'];
             }
+        }
 
-            return false;
+        return false;
     }
 
     /**
@@ -111,10 +131,9 @@ class User
     public function logout()
     {
 
-//        $this->_db->deleteSession('user_session', $this->data()->id);
-//
-//        Session::delete($this->_sessionName);
-//        Cookie::delete($this->_cookieName);
+        //        $this->_db->deleteSession('user_session', $this->data()->id);
+        //
+        //        Session::delete($this->_sessionName);
+        //        Cookie::delete($this->_cookieName);
     }
-
 }
