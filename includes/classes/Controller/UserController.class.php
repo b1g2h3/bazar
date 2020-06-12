@@ -84,22 +84,49 @@ class UserController
      */
     public static function update($data)
     {
-        $data = json_decode($data['data'], true);
+        $data = json_decode($data, true);
+        $errors = null;
+        $role_id = $data['role_id'];
+        $id = $data['id'];
 
-        echo json_encode($validation->errors());
-        if ($validation->passed()) {
-            if ($data['password'] != null) {
-                $data['password'] = Hash::make($data['password']);
-            } else {
-                unset($data['password']);
+        if(!empty($data['password'])) {
+            $password = $data['password'];
+            unset($data['password']);
+        }
+        unset($data['role_id']);
+        unset($data['id']);
+        foreach($data as $name => $param) {
+            if(empty($param)){
+                $errors[$name] = self::$customAttr[$name]." je nutné vyplnit";
+            } elseif(strlen($param ) < 4) {
+                $error[$name] = self::$customAttr[$name]." musí obsahovat minimálně 4 znaky.";
+            } elseif(strlen($param ) > 50) {
+                $errors[$name] = self::$customAttr[$name]." musí obsahovat maximálně 50 znaků.";
             }
-            $user = new User();
-            try {
-                $user->update($data);
-                echo json_encode(array('success' => 'Uživatel byl zaregistrován.'));
-            } catch (Exception $e) {
-                \Tracy\Debugger::barDump($e);
-            }
+        }
+        if(empty($role_id)) {
+            $errors['role_id'] = "Musíte vybrat roli uživatele.";
+        }
+        $user = User::find($data['email']);
+        $currentUser = User::find($id);
+        if($data['email'] != $currentUser['email'] && !is_bool($user)) {
+            $errors['email'] = "Email již existuje.";
+        }
+
+        if(!is_null($errors))
+        {
+            echo json_encode(array('errors' => $errors));
+            return;
+        }
+        $data['role_id'] = $role_id;
+        $data['id'] = $id;
+        $data['password'] = Hash::make($password);
+        User::update($data);
+        unset($data['password']);
+        if($user){
+            echo json_encode(array('success' => 'Uživatel byl aktualizován.', 'user' => $data));
+        } else {
+            echo json_encode(array('errors' => 'Uživatel nebyl vytvořen.'));
         }
     }
 }

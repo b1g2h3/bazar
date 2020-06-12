@@ -20,47 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bb85a4d-43f2-4ca7-8cbd-99ece17e1251" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/includes/views/Articles/articles.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/includes/views/Auth/login.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Controller/AuthController.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Controller/AuthController.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Controller/UserController.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Database/DB.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/Database/DB.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Interfaces/ControllerInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Interfaces/ModelInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/Interfaces/ViewInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/models/Article.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/models/Article.class.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/models/User.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/models/User.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Config.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Cookie.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Hash.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Hash.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Input.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Input.class.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Redirect.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Session.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Token.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/Validate.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/classes/services/View.class.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/core.inc.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/functions/sanitize.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/admin.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/api/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/js/ajax/users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/dropzone.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/dropzonesettings.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/js/func/validation.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/Route.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/Users/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/views/Users/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/admin.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/articles.php" beforeDir="false" afterPath="$PROJECT_DIR$/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/home.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/login.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/logout.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/views/Auth/logout.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/routes/views/register.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/src/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/src/nav.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/nav.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/src/scripts.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/src/scripts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/js/ajax/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/includes/js/ajax/users.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/dist/bundle.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -146,7 +109,7 @@
       <workItem from="1591768893409" duration="12347000" />
       <workItem from="1591781891943" duration="14480000" />
       <workItem from="1591854650624" duration="205000" />
-      <workItem from="1591854867178" duration="44216000" />
+      <workItem from="1591854867178" duration="49910000" />
     </task>
     <servers />
   </component>
@@ -214,10 +177,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" width="672" height="677" key="run.anything.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591960791542" />
-    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1591959884074">
+    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1591971756390">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591959884074" />
+    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591971756390" />
   </component>
   <component name="hg4idea.settings">
     <option name="CHECK_INCOMING_OUTGOING" value="true" />

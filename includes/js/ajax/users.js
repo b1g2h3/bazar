@@ -50,25 +50,34 @@ function updateUser(user) {
   $.ajax({
     type: "POST",
     dataType: "json",
-    url: "/edituser",
+    url: "/ajax.php",
     data: {
-      method: "_POST",
-      data: JSON.stringify(user),
+      method: "editUser",
+      data: JSON.stringify(user)
     },
     success: function (res) {
       $(".error").hide();
       if (res["errors"]) {
         const errors = res["errors"];
-        errors.map((error) => {
-          for (let [input, msg] of Object.entries(error)) {
-            let name = customValidationMessage[input];
-            $(".error").show();
-            $(`#err${name}`).text(msg);
-          }
-        });
+        for (let [input, msg] of Object.entries(errors)) {
+          let name = customValidationMessage[input];
+          $(".error").show();
+          $(`#err${name}`).text(msg);
+        }
       }
       if (res["success"]) {
-        console.log(res["success"]);
+        $("#updateUser").modal("hide");
+        $('.alert').show().text(res['success']);
+        var t = $('#users').DataTable();
+        var counter = 1;
+        user = res.user;
+        console.log(t.row(0).data());
+        // t.row.add( [
+        //   user.id,
+        //   user.name,
+        //   user.email,
+        //   user.role === 1 ? 'Admin' : 'Editor',
+        // ] ).draw( false );
       }
     },
     error: function (xhr, status, error) {
