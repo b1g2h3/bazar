@@ -8,114 +8,31 @@ use PDOException;
 
 class DB
 {
-    private static $_instance = null;
-    protected $_pdo,
-        $_results,
-        $_result,
-        $_query,
-        $_count = 0;
+    private static $init = null,
+        $pdo;
+    protected
+        $serverName = "127.0.0.1",
+        $username = "admin",
+        $password = "123456";
     private function __construct()
     {
         try {
-            $this->_pdo = new PDO(
-                'mysql:host=' . Config::get('mysql/host') . ';
-                                     dbname=' . Config::get('mysql/db'),
-                Config::get('mysql/username'),
-                Config::get('mysql/password')
-            );
+            $this->pdo = new PDO("mysql:host=$this->serverName;dbname=bazar2", $this->username, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);;
         } catch (PDOException $e) {
-            die($e->getMessage());
+            die(\Tracy\Debugger::barDump($e->getMessage()));
         }
     }
-    public static function getInstance()
+    public static function init()
     {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new DB();
+        if (!isset(self::$init)) {
+            self::$init = new DB();
         }
-        return self::$_instance;
+        return new self;
     }
 
-    protected function actionOne($sql, $param)
+    public function PDO()
     {
-
-        $item = is_numeric($param) ? 'id' : 'email';
-        $this->_query = $this->_pdo->prepare($sql);
-        $this->_query->execute(array(':' . $item   => $param));
-        $this->_result = $this->_query->fetch();
-        return $this->_result;
-    }
-
-    protected function actionDeleteSession($sql, $id)
-    {
-        $this->_query = $this->_pdo->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $this->_query->execute(array(':id' => $id));
-        $this->_results = $this->_query->fetchAll();
-    }
-
-    protected function actionAll($sql)
-    {
-        $sql = 'select * from users';
-        $this->_query = $this->_pdo->prepare($sql);
-        $this->_query->execute();
-        $this->_results = $this->_query->fetchAll();
-    }
-
-
-    public function get($table, $field, $param)
-    {
-        $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $field . ' = :' . $field;
-
-        return $this->actionOne($sql, $param);
-    }
-
-    public function createUser($sql, $data)
-    {
-        $this->_query = $this->_pdo->prepare($sql);
-        if ($this->_query->execute($data)) {
-            return true;
-        }
-    }
-
-    public function updateUser($sql, $data)
-    {
-        if(array_key_exists('password', $data)){
-            $array = array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
-        } else {
-            $array = array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], ':role_id' => $data['role_id']);
-        }
-        $this->_query = $this->_pdo->prepare($sql);
-        if ($this->_query->execute($array)) {
-            return true;
-        }
-    }
-
-    public function insertSession($sql, $data)
-    {
-        $this->_query = $this->_pdo->prepare($sql);
-        if ($this->_query->execute($data)) {
-            return true;
-        }
-    }
-
-    public function deleteSession($table, $id)
-    {
-        $sql = 'SELECT * FROM ' . $table . ' WHERE id = :id';
-        $this->actionDeleteSession($sql, $id);
-    }
-
-    public function getAll($table)
-    {
-        $sql = 'SELECT * FROM ' . $table;
-        $this->actionAll($sql);
-    }
-
-    public function result()
-    {
-        return $this->_result;
-    }
-
-    public function results()
-    {
-        return $this->_results;
+        return $this->pdo;
     }
 }

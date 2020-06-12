@@ -54,7 +54,7 @@ function updateUser(user) {
     dataType: "json",
     url: "/ajax.php",
     data: {
-      method: "updateUserttt",
+      method: "updateUser",
       data: JSON.stringify(user),
     },
     success: function (res) {
@@ -70,15 +70,16 @@ function updateUser(user) {
       if (res["success"]) {
         $("#updateUser").modal("hide");
         $(".alert-success").show().text(res["success"]);
-        var t = $("#users").DataTable();
-        user = res.user;
-        console.log(t.row(0).data());
-        // t.row.add( [
-        //   user.id,
-        //   user.name,
-        //   user.email,
-        //   user.role === 1 ? 'Admin' : 'Editor',
-        // ] ).draw( false );
+        let t = $("#users").DataTable();
+        let rowId = $("#users").dataTable().fnFindCellRowIndexes(user.id, 0);
+        t.row(rowId)
+          .data([
+            user.id,
+            user.name,
+            user.email,
+            user.role === 1 ? "Admin" : "Editor",
+          ])
+          .invalidate();
       }
     },
     error: function (xhr, status, error) {
@@ -124,38 +125,4 @@ function deleteUser(user) {
   });
 }
 
-function handleLogin(user) {
-  console.log("login");
-  console.log(user);
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    url: "/prihlasit",
-    data: {
-      method: "_POST",
-      data: JSON.stringify(user),
-    },
-    success: function (res) {
-      $(".error").hide();
-      console.log(res);
-      // if (res["errors"]) {
-      //   const errors = res["errors"];
-      //   errors.map((error) => {
-      //     for (let [input, msg] of Object.entries(error)) {
-      //       let name = customValidationMessage[input];
-      //       $(".error").show();
-      //       $(`#err${name}`).text(msg);
-      //     }
-      //   });
-      // }
-      // if (res["success"]) {
-      //   console.log(res["success"]);
-      // }
-    },
-    error: function (xhr, status, error) {
-      console.log(xhr, status, error);
-    },
-  });
-}
-
-module.exports = { createUser, updateUser, deleteUser, handleLogin };
+module.exports = { createUser, updateUser, deleteUser };

@@ -7,17 +7,14 @@ use App\Services\Hash;
 use App\Services\Cookie;
 use App\Services\Session;
 use Exception;
-use PDO;
+use App\Database\DB;
 
 class User
 {
     public static function getAllUsers()
     {
-        $servername = "127.0.0.1";
-        $username = "admin";
-        $password = "123456";
-        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db = DB::init();
+        $conn = $db->PDO();
         $sql = 'SELECT * FROM users';
         $sth = $conn->prepare($sql);
         $sth->execute();
@@ -26,14 +23,10 @@ class User
 
     public static function create($data)
     {
+        $db = DB::init();
+        $conn = $db->PDO();
         $sql = "insert users(name, email, password, role_id) values (:name, :email, :password, :role_id)";
-        $servername = "127.0.0.1";
-        $username = "admin";
-        $password = "123456";
-        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $array = array(':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
             $sth = $conn->prepare($sql);
             $sth->execute($array);
@@ -46,14 +39,10 @@ class User
 
     public static function find($param)
     {
+        $db = DB::init();
+        $conn = $db->PDO();
         $field = (is_numeric($param)) ? 'id' : 'email';
-
         $sql = 'SELECT * FROM users WHERE ' . $field . ' = :' . $field;
-        $servername = "127.0.0.1";
-        $username = "admin";
-        $password = "123456";
-        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sth = $conn->prepare($sql);
         $sth->execute(array(':' . $field => $param));
         return $sth->fetch();
@@ -91,15 +80,11 @@ class User
 
     public static function delete($id)
     {
+        $db = DB::init();
+        $conn = $db->PDO();
         $sql = "DELETE FROM users WHERE id = ?";
-        $servername = "127.0.0.1";
-        $username = "admin";
-        $password = "123456";
-        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sth = $conn->prepare($sql);
             $sth->execute(array($id));
             return true;

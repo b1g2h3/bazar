@@ -9,9 +9,8 @@ class Hash
         return password_hash($string, PASSWORD_DEFAULT);
     }
 
-    public static function verify($password1, $password2)
+    public static function verify($password, $hashedPassword)
     {
-        return password_verify($password1, $password2);
+        return password_verify($password, $hashedPassword);
     }
-
 }

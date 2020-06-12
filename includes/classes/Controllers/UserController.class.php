@@ -5,9 +5,6 @@ namespace App\Controller;
 
 use App\Models\User;
 use App\Services\Hash;
-use App\Services\Validate;
-use App\Services\View;
-use App\Services\Redirect;
 
 class UserController
 {
@@ -17,7 +14,7 @@ class UserController
     public
         $user,
         $errors;
-    private static
+    public static
         $customAttr = array(
             'name' => 'Jméno',
             'role_id' => 'Role',
@@ -32,7 +29,8 @@ class UserController
      */
     public static function index()
     {
-        return User::getAllUsers();
+        $allUsers = User::getAllUsers();
+        include('./includes/views/Users/index.php');
     }
 
     /**
@@ -91,10 +89,8 @@ class UserController
 
         if (!empty($data['password'])) {
             $password = $data['password'];
-            unset($data['password']);
         }
-        \Tracy\Debugger::barDump($data);
-
+        unset($data['password']);
         unset($data['role_id']);
         unset($data['id']);
         foreach ($data as $name => $param) {
@@ -116,16 +112,16 @@ class UserController
         }
 
         if (!is_null($errors)) {
+            \Tracy\Debugger::barDump($errors);
+
             echo json_encode(array('errors' => $errors));
             return;
         }
         $data['role_id'] = $role_id;
         $data['id'] = $id;
-        $data['password'] = Hash::make($password);
-        \Tracy\Debugger::barDump($data);
-        User::update($data);
-        unset($data['password']);
-        if ($user) {
+        array_key_exists('password', $data) ? $data['password'] = Hash::make($password) : '';
+
+        if (User::update($data)) {
             echo json_encode(array('success' => 'Uživatel byl aktualizován.', 'user' => $data));
         } else {
             echo json_encode(array('errors' => 'Uživatel nebyl vytvořen.'));
@@ -134,15 +130,14 @@ class UserController
 
     public static function destroy($data)
     {
-        // $data = json_decode($data, true);
-        // $user = User::find($data['id']);
-        $user = true;
+        $data = json_decode($data, true);
+        $user = User::find($data['id']);
         if ($user) {
-            // if (User::delete($user['id'])) {
-            echo json_encode(array('success' => 'Uživatel byl odstraněn.'));
-            // } else {
-            //     echo json_encode(array('errors' => 'Uživatel nebyl odstraněn.'));
-            // }
+            if (User::delete($user['id'])) {
+                echo json_encode(array('success' => 'Uživatel byl odstraněn.'));
+            } else {
+                echo json_encode(array('errors' => 'Uživatel nebyl odstraněn.'));
+            }
         }
     }
 }
