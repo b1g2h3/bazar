@@ -27,7 +27,9 @@ function createUser(user) {
           }
         });
       }
-      console.log("true");
+      if (res["success"]) {
+        console.log(res["success"]);
+      }
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;

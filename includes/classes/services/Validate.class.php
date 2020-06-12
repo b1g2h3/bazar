@@ -85,6 +85,6 @@ class Validate
 
     public function passed()
     {
-        return $this->_errors != false;
+        return $this->_errors === false;
     }
 }

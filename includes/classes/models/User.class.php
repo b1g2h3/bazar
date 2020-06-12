@@ -50,7 +50,16 @@ class User
 
     public function update($data)
     {
-        $sql = "UPDATE users SET email = :email, name = :name, password = :password, role_id = :role_id WHERE id = :id";
+        if (array_key_exists('password', $data)) {
+            $sql = "UPDATE users SET email = :email, name = :name, password = :password, role_id = :role_id WHERE id = :id";
+            \Tracy\Debugger::barDump($sql);
+            \Tracy\Debugger::barDump($data);
+        } else {
+            $sql = "UPDATE users SET email = :email, name = :name, role_id = :role_id WHERE id = :id";
+            \Tracy\Debugger::barDump($sql);
+            \Tracy\Debugger::barDump($data);
+        }
+        die;
         if (!$this->_db->updateUser($sql, $data)) {
             throw new Exception('There was a problem updating.');
         }
@@ -60,7 +69,6 @@ class User
     {
         $data = $this->_db->getAll('users');
         return $this->_db->results();
-
     }
 
     public function find($user = null)
@@ -69,12 +77,11 @@ class User
             // if user had a numeric username this FAILS...
             $field = (is_numeric($user)) ? 'id' : 'email';
 
-             $this->_db->get('users', $field, $user);
+            $this->_db->get('users', $field, $user);
 
-             if($this->_db->result())
-             {
-                 return true;
-             }
+            if ($this->_db->result()) {
+                return true;
+            }
         }
         return false;
     }
@@ -116,17 +123,17 @@ class User
         return false;
     }
 
-//    public function hasPermission($key)
-//    {
-//        $group = $this->_db->get('groups', array('id', '=', $this->data()->group));
-//        if ($group->count()) {
-//            $permissions = json_decode($group->first()->permissions, true);
-//            if ($permissions[$key] == true) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    //    public function hasPermission($key)
+    //    {
+    //        $group = $this->_db->get('groups', array('id', '=', $this->data()->group));
+    //        if ($group->count()) {
+    //            $permissions = json_decode($group->first()->permissions, true);
+    //            if ($permissions[$key] == true) {
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    //    }
 
     public function exists()
     {

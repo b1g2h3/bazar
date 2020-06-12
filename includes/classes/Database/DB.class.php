@@ -77,6 +77,12 @@ class DB
 
     public function updateUser($sql, $data)
     {
+
+        if(array_key_exists('password', $data){
+            $array = array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']));
+        } else {
+
+        }
         $this->_query = $this->_pdo->prepare($sql);
         if ($this->_query->execute(array(':id' => $data['id'], ':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id'],))) {
             return true;

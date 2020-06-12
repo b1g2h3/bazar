@@ -60,16 +60,13 @@ class UserController
         if ($validation->passed()) {
 
             $user = new User();
-
-            // try {
-            //     $user->create($data);
-            //     $data['password'] = Hash::make($data['password']);
-            //     // Session::flash('home', 'You have been registered and can now log in!');
-            //     return json_decode('true');
-            //     // Redirect::to('indexx.php');
-            // } catch (Exception $e) {
-            //     \Tracy\Debugger::barDump($e);
-            // }
+            try {
+                $data['password'] = Hash::make($data['password']);
+                $user->create($data);
+                echo json_encode(array('success' => 'Uživatel byl zaregistrován.'));
+            } catch (Exception $e) {
+                \Tracy\Debugger::barDump($e);
+            }
         }
     }
 
@@ -84,9 +81,6 @@ class UserController
                 'max' => 30,
                 // 'email' => true,
             ),
-            'password' => array(
-                'required' => false,
-            ),
             'name' => array(
                 'required' => true,
                 'min' => 2,
@@ -96,12 +90,20 @@ class UserController
                 'required' => true,
             )
         ));
-
+        echo json_encode($validation->errors());
         if ($validation->passed()) {
-
+            if ($data['password'] != null) {
+                $data['password'] = Hash::make($data['password']);
+            } else {
+                unset($data['password']);
+            }
             $user = new User();
-            $user->update($data);
-            return json_encode('true');
+            try {
+                $user->update($data);
+                echo json_encode(array('success' => 'Uživatel byl zaregistrován.'));
+            } catch (Exception $e) {
+                \Tracy\Debugger::barDump($e);
+            }
         }
     }
 }
