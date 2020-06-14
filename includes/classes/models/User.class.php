@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-use App\Services\Config;
 use App\Services\Hash;
-use App\Services\Cookie;
-use App\Services\Session;
 use Exception;
 use App\Database\DB;
 
@@ -26,10 +23,10 @@ class User
         $db = DB::init();
         $conn = $db->PDO();
         $sql = "insert users(name, email, password, role_id) values (:name, :email, :password, :role_id)";
+        $args = array(':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
         try {
-            $array = array(':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
             $sth = $conn->prepare($sql);
-            $sth->execute($array);
+            $sth->execute($args);
             return true;
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());
@@ -50,7 +47,7 @@ class User
 
     public static function update($data)
     {
-        $array = array(
+        $args = array(
             ':id' => $data['id'],
             ':name' => $data['name'],
             ':email' => $data['email'],
@@ -58,20 +55,16 @@ class User
         );
         if (array_key_exists('password', $data)) {
             $sql = "UPDATE users SET email = :email, name = :name, password = :password, role_id = :role_id WHERE id = :id";
-            $array[':password'] = $data['password'];
+            $args[':password'] = $data['password'];
         } else {
             $sql = "UPDATE users SET email = :email, name = :name, role_id = :role_id WHERE id = :id";
         }
-        $servername = "127.0.0.1";
-        $username = "admin";
-        $password = "123456";
-        $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
 
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=bazar2", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db = DB::init();
+            $conn = $db->PDO();
             $sth = $conn->prepare($sql);
-            $sth->execute($array);
+            $sth->execute($args);
             return true;
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());

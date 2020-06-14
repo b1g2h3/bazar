@@ -19,6 +19,9 @@ switch ($_REQUEST['page']) {
     case 'articles':
         \App\Controller\ArticleController::index();
         break;
+    case 'editArticles':
+        \App\Controller\ArticleController::edit();
+        break;
     default:
         \App\Controller\UserController::index();
         break;

@@ -5,14 +5,14 @@ const customValidationMessage = {
   password: "Heslo",
 };
 
-function addArticle(article) {
+function createArticle(article) {
   $.ajax({
     type: "POST",
     dataType: "json",
     url: "/ajax.php",
     data: {
       method: "addArticle",
-      data: JSON.stringify(article),
+      data: JSON.stringify(user),
     },
     success: function (res) {
       console.log(res);
@@ -26,21 +26,21 @@ function addArticle(article) {
       //       $(`#err${name}`).text(msg);
       //     }
       //   }
-      //   if (res["success"]) {
-      //     $("#addUser").modal("hide");
-      //     $(".alert-success").show().text(res["success"]);
-      //     var t = $("#users").DataTable();
-      //     var counter = 1;
-      //     user = res.user;
-      //     t.row
-      //       .add([
-      //         user.id,
-      //         user.name,
-      //         user.email,
-      //         user.role === 1 ? "Admin" : "Editor",
-      //       ])
-      //       .draw(false);
-      //   }
+      // if (res["success"]) {
+      //   $("#addUser").modal("hide");
+      //   $(".alert-success").show().text(res["success"]);
+      //   var t = $("#users").DataTable();
+      //   var counter = 1;
+      //   user = res.user;
+      //   t.row
+      //     .add([
+      //       user.id,
+      //       user.name,
+      //       user.email,
+      //       user.role === 1 ? "Admin" : "Editor",
+      //     ])
+      //     .draw(false);
+      // }
     },
     error: function (xhr, status, error) {
       console.log(xhr, status, error);
@@ -128,4 +128,4 @@ function deleteArticle(article) {
   });
 }
 
-module.exports = { addArticle, updateArticle, deleteArticle };
+module.exports = { createArticle, updateArticle, deleteArticle };

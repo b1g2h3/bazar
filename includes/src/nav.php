@@ -10,6 +10,9 @@
                     <a class="nav-link" href="?page=articles">Inzeráty</a>
                 </li>
                 <li class="nav-item active">
+                    <a class="nav-link" href="?page=editArticles">Upravit inzeráty</a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link" href="?page=users">Uživatelé</a>
                 </li>
                 <!--                --><?php

@@ -2,6 +2,7 @@
 
 require('server.php');
 
+
 switch ($_POST['method']) {
     case 'addUser':
         \App\Controller\UserController::store($_POST['data']);
@@ -16,7 +17,7 @@ switch ($_POST['method']) {
         \App\Controller\AuthController::handleLogin($_POST['data']);
         break;
     case 'addArticle':
-        \App\Controller\ArticleController::create($_POST['data']);
+        \App\Controller\ArticleController::create($_POST, $_FILES);
         break;
     default:
         \Tracy\Debugger::barDump('cesta neexistuje');
