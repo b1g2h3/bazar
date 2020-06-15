@@ -16,11 +16,11 @@ class ArticleController
         $request = $_REQUEST;;
         if(!is_null($request['orderBy'])) {
             if($request['orderBy'] === "1") {
-                $orderBy = 'desc';
+                $orderBy = 'DESC';
             } elseif($request['orderBy'] ==="2") {
-                $orderBy = 'asc';
+                $orderBy = 'ASC';
             } else {
-                $orderBy = 'desc';
+                $orderBy = 'DESC';
             }
         }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use App\Database\DB;
+use PDO;
 use Tracy\Debugger;
 
 class Article
@@ -44,7 +45,7 @@ class Article
             $name = 'a.price';
         }
         \Tracy\Debugger::barDump($orderBy);
-        $args = array(':name' => $name,':priceOd' => $cenaOd, ':priceDo' => $cenaDo);
+        $args = array(':priceOd' => $cenaOd, ':priceDo' => $cenaDo);
         \Tracy\Debugger::barDump($args);
         $sql = 'SELECT a.id,
                         a.title,
@@ -58,9 +59,7 @@ class Article
                 WHERE price
                 BETWEEN :priceOd AND :priceDo
                 GROUP BY a.id
-                ORDER BY :name '.$orderBy;
-        echo $sql;
-
+                ORDER BY '.$name.' '.$orderBy;
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
