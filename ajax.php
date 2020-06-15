@@ -2,7 +2,6 @@
 
 require('server.php');
 
-
 switch ($_POST['method']) {
     case 'addUser':
         \App\Controller\UserController::store($_POST['data']);

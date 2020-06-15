@@ -21,23 +21,26 @@
                             <div id="errPopis" class="hidden error text-danger"></div>
                         </div>
                         <?php
-                        \App\Services\Input::create('Telefon', 'phone', false);
+                        \App\Services\Input::create('Email', 'email', false);
                         \App\Services\Input::create('Lokalita', 'text', false);
                         \App\Services\Input::create('Cena', 'text', false);
                         ?>
                         <div id="errObrázky" class="hidden error text-danger"></div>
-                        <div class="dropzone" id="myDropzone">
-                            <div class="fallback">
-                                <input class="form-input-file" id="form-input-file" type="file" name="articleImages" multiple />
+                        <div id="drop_file_zone" class="w-100 dropArticleImages" >
+                            <div id="drag_upload_file">
+                                <p>Přetáhnete soubor</p>
+                                <p>nebo</p>
+                                <p><input type="button" value="vyberte soubor" class="uploadArticleImages btn btn-secondary"></p>
+                                <input type="file" id="selectfile" multiple>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                        <button type="button" class="btn btn-primary addArticle">Vytvořit inzerát</button>
+                        <button type="button" class="btn btn-primary sendArticle">Vytvořit inzerát</button>
                     </div>
                 </form>
-
+                <div class="dropArticlePreview" ></div>
             </div>
 
         </div>
@@ -49,8 +52,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form method="post" action="ajax.php" enctype="multipart/form-data" data-form-output="form-output-global" data-form-type="forms">
-                    <div class="modal-body editArticle">
-                        <h2>Upravit inzerát</h2>
+                    <div class="modal-body createArticle">
+                        <h2>Vytvořit inzerát</h2>
                         <?php
                         \App\Services\Input::create('Název', 'text', false);
                         ?>
@@ -60,23 +63,26 @@
                             <div id="errPopis" class="hidden error text-danger"></div>
                         </div>
                         <?php
-                        \App\Services\Input::create('Telefon', 'phone', false);
+                        \App\Services\Input::create('Email', 'email', false);
                         \App\Services\Input::create('Lokalita', 'text', false);
                         \App\Services\Input::create('Cena', 'text', false);
                         ?>
                         <div id="errObrázky" class="hidden error text-danger"></div>
-                        <div class="dropzone" id="myDropzone">
-                            <div class="fallback">
-                                <input class="form-input-file" id="form-input-file" type="file" name="articleImages" multiple />
+                        <div id="drop_file_zone" class="w-100 dropArticleImages" >
+                            <div id="drag_upload_file">
+                                <p>Přetáhnete soubor</p>
+                                <p>nebo</p>
+                                <p><input type="button" value="vyberte soubor" class="uploadArticleImages btn btn-secondary"></p>
+                                <input type="file" id="selectfile" multiple>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                        <button type="button" class="btn btn-primary addArticle">Upravit inzerát</button>
+                        <button type="button" class="btn btn-primary sendArticle">Vytvořit inzerát</button>
                     </div>
                 </form>
-
+                <div class="dropArticlePreview" ></div>
             </div>
 
         </div>

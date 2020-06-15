@@ -4,6 +4,8 @@ namespace App\Controller;
 
 
 use App\Models\Article;
+use App\Models\Image;
+use Tracy\Debugger;
 
 class ArticleController
 {
@@ -11,7 +13,35 @@ class ArticleController
 
     public static function index()
     {
-        $allArticles = Article::getAllArticles();
+        $request = $_REQUEST;;
+        if(!is_null($request['orderBy'])) {
+            if($request['orderBy'] === "1") {
+                $orderBy = 'desc';
+            } elseif($request['orderBy'] ==="2") {
+                $orderBy = 'asc';
+            } else {
+                $orderBy = 'desc';
+            }
+        }
+
+        $cenaOd = 0;
+        $cenaDo = 1000000;
+        if(!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
+            $cenaOd = $request['cenaOd'];
+        }
+        if(!is_null($request['cenaDo']) && is_numeric($request['cenaDo'])) {
+            $cenaDo = $request['cenaDo'];
+        }
+
+
+
+        if(!is_null($request['orderBy'])) {
+            $allArticles = Article::getArticleByFilter($orderBy, $cenaOd, $cenaDo);
+        }else{
+//            $allArticles = Article::getAllArticles();
+        }
+        \Tracy\Debugger::barDump($allArticles);
+
         include('./includes/views/Articles/index.php');
     }
 
@@ -21,10 +51,18 @@ class ArticleController
         include('./includes/views/Articles/edit.php');
     }
 
+    public static function show($id)
+    {
+        $article = Article::find($id);
+        $article['images'] = Image::findImages($id);
+        include('./includes/views/Articles/show.php');
+    }
+
     public static function create($request, $files)
     {
         $data = json_decode($request['data'], true);
         $errors = null;
+        unset($data['files']);
         unset($data['method']);
 
         foreach ($data as $name => $param) {
@@ -36,10 +74,10 @@ class ArticleController
                 $errors[$name] = $name . " musí obsahovat maximálně 200 znaků.";
             }
         }
-        if ($files['file']['name'][0] === 'blob') {
+        \Tracy\Debugger::barDump($files);
+        if (empty($files)) {
             $errors['Obrázky'] = "Vložte obrázky";
         }
-        self::validatePhoneNumber($data['Telefon']) ? '' : $errors['Telefon'] = "Telefonní číslo není ve správném formátu. +420987654321";
         is_numeric($data['Cena']) ? '' :  $errors['Cena'] = "Cena musí obsahovat jen čísla";
 
         if (!is_null($errors)) {
@@ -77,23 +115,13 @@ class ArticleController
             echo json_encode(array('errors' => $errors));
             return;
         } else {
-            \Tracy\Debugger::barDump(Article::create($data, $images));
-            if (Article::create($data, $images)) {
-                echo json_encode(array('success' => 'Inzerát byl vytvořen.', 'inzerat' => $data));
+            $articleID =  Article::create($data, $images);
+            if($articleID) {
+                $data['id'] = $articleID;
+                echo json_encode(array('success' => 'Inzerát byl vytvořen.', 'article' => $data));
             } else {
                 echo json_encode(array('errors' => 'Inzerát nebyl vytvořen.'));
             }
-        }
-    }
-
-    protected static function validatePhoneNumber($phone)
-    {
-        $filteredPhoneNumber = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
-        $phoneToCheck = str_replace("-", "", $filteredPhoneNumber);
-        if (strlen($phoneToCheck) < 8 || strlen($phoneToCheck) > 14) {
-            return false;
-        } else {
-            return true;
         }
     }
 }

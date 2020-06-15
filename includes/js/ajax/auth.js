@@ -25,7 +25,11 @@ function handleLogin(user) {
         }
       }
       if (res["success"]) {
-        console.log(res);
+        if(res.user.role_id === "1") {
+          window.location.href = "/?page=users";
+        } else {
+          window.location.href = "/?page=editArticles";
+        }
       }
     },
     error: function (xhr, status, error) {

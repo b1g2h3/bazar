@@ -19,11 +19,14 @@ switch ($_REQUEST['page']) {
     case 'articles':
         \App\Controller\ArticleController::index();
         break;
+    case 'articleDetail':
+        \App\Controller\ArticleController::show($_REQUEST['id']);
+        break;
     case 'editArticles':
         \App\Controller\ArticleController::edit();
         break;
     default:
-        \App\Controller\UserController::index();
+        \App\Controller\ArticleController::index();
         break;
 }
 

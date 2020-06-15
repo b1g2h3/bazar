@@ -1,7 +1,10 @@
 const { createUser, updateUser, deleteUser } = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
-const { addArticle, updateArticle, deleteArticle } = require("./ajax/articles");
+const { createArticle, updateArticle, deleteArticle } = require("./ajax/articles");
 const { parseJSON } = require("jquery");
+
+
+var allFiles = [];
 
 function saveUser(user) {
   if (user.id == null) {
@@ -13,78 +16,77 @@ function saveUser(user) {
 
 function saveArticle(article) {
   if (article.id == null) {
-    addArticle(article);
+    createArticle(article);
   } else {
     updateArticle(article);
   }
 }
 
-Dropzone.options.myDropzone = {
-  url: "ajax.php",
-  autoProcessQueue: false,
-  uploadMultiple: true,
-  parallelUploads: 5,
-  maxFiles: 5,
-  maxFilesize: 10,
-  acceptedFiles: "image/*",
-  addRemoveLinks: true,
-  init: function () {
-    dzClosure = this;
 
-    $(".error").hide();
-    document
-      .getElementById("addArticle")
-      .addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (dzClosure.getQueuedFiles().length === 0) {
-          var blob = new Blob();
-          blob.upload = { chunked: dzClosure.defaultOptions.chunking };
-          dzClosure.uploadFile(blob);
-        } else {
-          dzClosure.processQueue();
-        }
-      });
 
-    //send all the form data along with the files:
-    this.on("sendingmultiple", function (file, xhr, formData) {
-      var article = {
-        Název: $("#Název").val(),
-        Popis: $("#Popis").val(),
-        Lokalita: $("#Lokalita").val(),
-        Telefon: $("#Telefon").val(),
-        Cena: $("#Cena").val(),
-      };
-      formData.append("method", "addArticle");
-      formData.append("data", JSON.stringify(article));
-      formData.append("title", $("#Název").val());
-      formData.append("phone", $("#Telefon").val());
-      formData.append("description", $("#Popis").val());
-      formData.append("location", $("#Lokalita").val());
-      formData.append("price", $("#Cena").val());
+$(".sendArticle").click(function () {
+  $(".error").hide();
+  $(".alert").hide();
+  let article = {
+    Název: $("#Název").val(),
+    Popis: $("#Popis").val(),
+    Email: $("#Email").val(),
+    Lokalita: $("#Lokalita").val(),
+    Cena: $("#Cena").val(),
+  };
+  article.files = allFiles;
+  saveArticle(article);
+});
+
+
+
+$(".uploadArticleImages").click(function (e) {
+  document.getElementById('selectfile').click();
+  document.getElementById('selectfile').onchange = function() {
+    files = document.getElementById('selectfile').files;
+    renderImages(files)
+    handleFiles(files)
+  };
+});
+
+$(".dropArticleImages")
+    .bind('dragenter dragover', false)
+    .bind("drop", function(e) {
+      e.preventDefault();
+      e.stopPropagation()
+      let dt = e.originalEvent.dataTransfer;
+      let files = dt.files
+      renderImages(files)
+      handleFiles(files)
     });
 
-    this.on("successmultiple", function (file, res) {
-      console.log(file);
-      res = parseJSON(res);
-      $(".error").hide();
-      if (res["errors"]) {
-        const errors = res["errors"];
-        for (let [input, msg] of Object.entries(errors)) {
-          $(".error").show();
-          $(`#err${input}`).text(msg);
-        }
-      }
-      if (res["success"]) {
-        $("#addUser").modal("hide");
-        $(".alert-success").show().text(res["success"]);
-        var t = $("#users").DataTable();
-        article = res.article;
-        t.row.add([user.id, user.name, user.email]).draw(false);
-      }
-    });
-  },
-};
+
+function handleFiles(files) {
+  let article = {
+    Název: $("#Název").val(),
+    Popis: $("#Popis").val(),
+    Lokalita: $("#Lokalita").val(),
+    Telefon: $("#Telefon").val(),
+    Cena: $("#Cena").val(),
+  };
+  for (let [index, file] of Object.entries(files)) {
+    allFiles.push(file);
+  }
+}
+
+function renderImages(files) {
+  for (let [index, file] of Object.entries(files)) {
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.className = "previewImage"
+    $('.dropArticlePreview').append(img);
+    img.onerror = function(){
+      alert('Pravděpodobně nepodporovaný typ obrázku.');
+    }
+    img.src = url;
+  }
+
+}
 
 $(".createUser").click(function () {
   $(".error").hide();
@@ -99,7 +101,11 @@ $(".createUser").click(function () {
 });
 
 $(document).ready(function () {
-  var table = $("#users").DataTable();
+  var table = $("#users").DataTable({
+    "language": {
+      "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json"
+    }
+  });
   $(".alert").hide();
   $("#users tbody").on("click", "tr", function () {
     var data = table.row(this).data();
@@ -135,7 +141,11 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-  var table = $("#articles").DataTable();
+  var table = $("#articles").DataTable({
+    "language": {
+      "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json"
+    }
+  });
   $(".alert").hide();
   $("#articles tbody").on("click", "tr", function () {
     var data = table.row(this).data();
@@ -196,18 +206,6 @@ $(".loginSubmit").click(function () {
 //   });
 // });
 
-$(".addArticle").click(function () {
-  $(".error").hide();
-  $(".alert").hide();
-  let article = {
-    title: $(".createArticle #Název").val(),
-    description: $(".createArticle #Popis").val(),
-    price: $(".createArticle #Lokalita").val(),
-    location: $(".createArticle #Cena").val(),
-  };
-  console.log(article);
-  saveArticle(article);
-});
 
 $(".deleteArticle").click(function () {
   $(".error").hide();
@@ -219,3 +217,6 @@ $(".deleteArticle").click(function () {
   };
   deleteArticle(user);
 });
+
+
+

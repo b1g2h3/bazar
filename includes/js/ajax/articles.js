@@ -1,51 +1,43 @@
-const customValidationMessage = {
-  name: "Jméno",
-  email: "Email",
-  role_id: "Roli",
-  password: "Heslo",
-};
-
 function createArticle(article) {
-  $.ajax({
-    type: "POST",
-    dataType: "json",
-    url: "/ajax.php",
-    data: {
-      method: "addArticle",
-      data: JSON.stringify(user),
-    },
-    success: function (res) {
-      console.log(res);
-      //   $(".error").hide();
-      //   console.log($(".error"));
-      //   if (res["errors"]) {
-      //     const errors = res["errors"];
-      //     for (let [input, msg] of Object.entries(errors)) {
-      //       let name = customValidationMessage[input];
-      //       $(".error").show();
-      //       $(`#err${name}`).text(msg);
-      //     }
-      //   }
-      // if (res["success"]) {
-      //   $("#addUser").modal("hide");
-      //   $(".alert-success").show().text(res["success"]);
-      //   var t = $("#users").DataTable();
-      //   var counter = 1;
-      //   user = res.user;
-      //   t.row
-      //     .add([
-      //       user.id,
-      //       user.name,
-      //       user.email,
-      //       user.role === 1 ? "Admin" : "Editor",
-      //     ])
-      //     .draw(false);
-      // }
-    },
-    error: function (xhr, status, error) {
-      console.log(xhr, status, error);
-    },
-  });
+    let fd = new FormData();
+      for(i=0; i<article.files.length; i++) {
+        fd.append('file[]', article.files[i]);
+      }
+      fd.append('data', JSON.stringify(article))
+      fd.append('method', 'addArticle')
+      $.ajax({
+        type: 'POST',
+        url: 'ajax.php',
+        contentType: false,
+        processData: false,
+        data: fd,
+        success:function(res) {
+          res = JSON.parse(res);
+          console.log(res);
+          $(".error").hide();
+          if (res["errors"]) {
+            const errors = res["errors"];
+            for (let [input, msg] of Object.entries(errors)) {
+              $(".error").show();
+              $(`#err${input}`).text(msg);
+            }
+          }
+          if (res["success"]) {
+            $("#addArticle").modal("hide");
+            $(".alert-success").show().text(res["success"]);
+            var t = $("#articles").DataTable();
+            article = res.article;
+            t.row.add([
+                article.id,
+                article.Název,
+                article.Popis,
+                article.Cena,
+                article.Lokalita
+            ]).draw(false);
+          }
+
+        }
+      });
 }
 
 function updateArticle(article) {

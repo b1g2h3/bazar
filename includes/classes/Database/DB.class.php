@@ -11,13 +11,13 @@ class DB
     private static $init = null,
         $pdo;
     protected
-        $serverName = "127.0.0.1",
-        $username = "admin",
-        $password = "123456";
+        $servername = "srv-insodev.ccv.cz",
+        $username = "insodev",
+        $password = "isis";
     private function __construct()
     {
         try {
-            $this->pdo = new PDO("mysql:host=$this->serverName;dbname=bazar2", $this->username, $this->password);
+            $this->pdo = new PDO("mysql:host=$this->servername;dbname=toku_adaptacniprojekt;", $this->username, $this->password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);;
         } catch (PDOException $e) {
             die(\Tracy\Debugger::barDump($e->getMessage()));

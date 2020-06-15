@@ -8,6 +8,24 @@ use App\Database\DB;
 class Image
 {
 
+    public static function findImages($aticleID)
+    {
+        $db = DB::init();
+        $conn = $db->PDO();
+        $sql = 'SELECT image
+                FROM images
+                WHERE articles_id = :articleID;';
+        $args = array(':articleID' => $aticleID);
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute($args);
+            $results = $sth->fetchAll();
+            return $results;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
     public static function create($images, $articleId)
     {
         $db = DB::init();
@@ -25,8 +43,8 @@ class Image
                 } catch (Exception $e) {
                     \Tracy\Debugger::barDump($e->getMessage());
                 }
-                return true;
             }
+            return true;
         }
     }
 }
