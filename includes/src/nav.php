@@ -9,26 +9,35 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="?page=articles">Inzeráty</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="?page=editArticles">Upravit inzeráty</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="?page=users">Uživatelé</a>
-                </li>
-                <!--                --><?php
-                                        //                $user = new \App\Models\User();
-                                        //                if ($user->isLoggedIn()) : 
-                                        ?>
-                <li class="nav-item active">
-                    <a class="nav-link" href="?page=logout">Odhlásit se</a>
-                </li>
-                <!--                --><?php //else : 
-                                        ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="?page=login">Přihlásit se</a>
-                </li>
-                <!--                --><?php //endif 
-                                        ?>
+                <?php
+                \Tracy\Debugger::barDump($_SESSION['isEditor']);
+                \Tracy\Debugger::barDump($_SESSION['isAdmin']);
+                if (isset($_SESSION['isEditor'])) {
+                ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="?page=editArticles">Upravit inzeráty</a>
+                    </li>
+                <?php
+                } elseif (isset($_SESSION['iAdmin'])) {
+                ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="?page=users">Uživatelé</a>
+                    </li>
+
+                <?php
+                }
+                if (isset($_SESSION['isLoggedIn'])) :
+                ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="?page=logout">Odhlásit se</a>
+                    </li>
+                <?php else :
+                ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="?page=login">Přihlásit se</a>
+                    </li>
+                <?php endif
+                ?>
 
             </ul>
             <!--            <form class="form-inline mt-2 mt-md-0">-->
