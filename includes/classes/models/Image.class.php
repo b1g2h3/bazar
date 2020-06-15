@@ -10,8 +10,8 @@ class Image
 
     public static function findImages($aticleID)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = 'SELECT image
                 FROM images
                 WHERE articles_id = :articleID;';
@@ -28,8 +28,8 @@ class Image
 
     public static function create($images, $articleId)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = "insert images(image, articles_id) values (:image, :articleId)";
         $sth = $conn->prepare($sql);
         if ($sth) {

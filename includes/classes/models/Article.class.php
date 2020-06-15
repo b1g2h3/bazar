@@ -10,11 +10,11 @@ use Tracy\Debugger;
 class Article
 {
 
-//https://www.interval.cz/clanky/oop-v-php-vzor-singleton/
+    //https://www.interval.cz/clanky/oop-v-php-vzor-singleton/
     public static function getAllArticles()
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = 'SELECT 
                 a.id,
                 a.title,
@@ -37,16 +37,14 @@ class Article
     public static function getArticleByFilter($orderBy, $cenaOd, $cenaDo)
     {
 
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $name = 'a.title';
-        if($orderBy == 'price'){
-            $orderBy= 'DESC';
+        if ($orderBy == 'price') {
+            $orderBy = 'DESC';
             $name = 'a.price';
         }
-        \Tracy\Debugger::barDump($orderBy);
         $args = array(':priceOd' => $cenaOd, ':priceDo' => $cenaDo);
-        \Tracy\Debugger::barDump($args);
         $sql = 'SELECT a.id,
                         a.title,
                         a.description,
@@ -59,7 +57,7 @@ class Article
                 WHERE price
                 BETWEEN :priceOd AND :priceDo
                 GROUP BY a.id
-                ORDER BY '.$name.' '.$orderBy;
+                ORDER BY ' . $name . ' ' . $orderBy;
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
@@ -72,8 +70,8 @@ class Article
 
     public static function find($id)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = 'SELECT *
             FROM articles a
             WHERE a.id = :id;';
@@ -91,8 +89,8 @@ class Article
 
     public static function create($data, $images)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = "insert articles(title, description, price, location, phone) values (:title, :description, :price, :location, :phone)";
         $args = array(':title' => $data['Název'], ':description' => $data['Popis'], ':price' => $data['Cena'], ':location' => $data['Lokalita'], ':phone' => $data['Telefon']);
         try {

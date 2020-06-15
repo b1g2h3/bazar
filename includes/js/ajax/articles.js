@@ -1,43 +1,44 @@
 function createArticle(article) {
-    let fd = new FormData();
-      for(i=0; i<article.files.length; i++) {
-        fd.append('file[]', article.files[i]);
-      }
-      fd.append('data', JSON.stringify(article))
-      fd.append('method', 'addArticle')
-      $.ajax({
-        type: 'POST',
-        url: 'ajax.php',
-        contentType: false,
-        processData: false,
-        data: fd,
-        success:function(res) {
-          res = JSON.parse(res);
-          console.log(res);
-          $(".error").hide();
-          if (res["errors"]) {
-            const errors = res["errors"];
-            for (let [input, msg] of Object.entries(errors)) {
-              $(".error").show();
-              $(`#err${input}`).text(msg);
-            }
-          }
-          if (res["success"]) {
-            $("#addArticle").modal("hide");
-            $(".alert-success").show().text(res["success"]);
-            var t = $("#articles").DataTable();
-            article = res.article;
-            t.row.add([
-                article.id,
-                article.Název,
-                article.Popis,
-                article.Cena,
-                article.Lokalita
-            ]).draw(false);
-          }
-
+  let fd = new FormData();
+  for (i = 0; i < article.files.length; i++) {
+    fd.append("file[]", article.files[i]);
+  }
+  fd.append("data", JSON.stringify(article));
+  fd.append("method", "addArticle");
+  $.ajax({
+    type: "POST",
+    url: "ajax.php",
+    contentType: false,
+    processData: false,
+    data: fd,
+    success: function (res) {
+      res = JSON.parse(res);
+      console.log(res);
+      $(".error").hide();
+      if (res["errors"]) {
+        const errors = res["errors"];
+        for (let [input, msg] of Object.entries(errors)) {
+          $(".error").show();
+          $(`#err${input}`).text(msg);
         }
-      });
+      }
+      if (res["success"]) {
+        $("#addArticle").modal("hide");
+        $(".alert-success").show().text(res["success"]);
+        var t = $("#articles").DataTable();
+        article = res.article;
+        t.row
+          .add([
+            article.id,
+            article.Název,
+            article.Popis,
+            article.Cena,
+            article.Lokalita,
+          ])
+          .draw(false);
+      }
+    },
+  });
 }
 
 function updateArticle(article) {
@@ -120,4 +121,27 @@ function deleteArticle(article) {
   });
 }
 
-module.exports = { createArticle, updateArticle, deleteArticle };
+function getArticleImages(articleId) {
+  $.ajax({
+    type: "POST",
+    url: "ajax.php",
+    data: { id: articleId, method: "getArticleImages" },
+    success: function (res) {
+      res = JSON.parse(res);
+      console.log(res);
+      if (res["success"]) {
+        var blobData = res.images[0];
+        var url = window.URL || window.webkitURL;
+        var src = url.createObjectURL(blobData);
+        $(".dropArticlePreview").attr("src", src);
+      }
+    },
+  });
+}
+
+module.exports = {
+  createArticle,
+  updateArticle,
+  deleteArticle,
+  getArticleImages,
+};

@@ -14,10 +14,10 @@ class ArticleController
     public static function index()
     {
         $request = $_REQUEST;;
-        if(!is_null($request['orderBy'])) {
-            if($request['orderBy'] === "1") {
+        if (!is_null($request['orderBy'])) {
+            if ($request['orderBy'] === "1") {
                 $orderBy = 'DESC';
-            } elseif($request['orderBy'] ==="2") {
+            } elseif ($request['orderBy'] === "2") {
                 $orderBy = 'ASC';
             } else {
                 $orderBy = 'DESC';
@@ -26,23 +26,29 @@ class ArticleController
 
         $cenaOd = 0;
         $cenaDo = 1000000;
-        if(!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
+        if (!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
             $cenaOd = $request['cenaOd'];
         }
-        if(!is_null($request['cenaDo']) && is_numeric($request['cenaDo'])) {
+        if (!is_null($request['cenaDo']) && is_numeric($request['cenaDo'])) {
             $cenaDo = $request['cenaDo'];
         }
 
 
 
-        if(!is_null($request['orderBy'])) {
+        if (!is_null($request['orderBy'])) {
             $allArticles = Article::getArticleByFilter($orderBy, $cenaOd, $cenaDo);
-        }else{
-//            $allArticles = Article::getAllArticles();
+        } else {
+            $allArticles = Article::getAllArticles();
         }
-        \Tracy\Debugger::barDump($allArticles);
 
         include('./includes/views/Articles/index.php');
+    }
+
+    public static function getArticleImages($articleID)
+    {
+        $images = Image::findImages($articleID);
+        \Tracy\Debugger::barDump($images);
+        echo json_encode(array('success' => 'Obrázky byly nalezeny.', 'images' => $images));
     }
 
     public static function edit()
@@ -116,7 +122,7 @@ class ArticleController
             return;
         } else {
             $articleID =  Article::create($data, $images);
-            if($articleID) {
+            if ($articleID) {
                 $data['id'] = $articleID;
                 echo json_encode(array('success' => 'Inzerát byl vytvořen.', 'article' => $data));
             } else {

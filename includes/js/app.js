@@ -1,8 +1,12 @@
 const { createUser, updateUser, deleteUser } = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
-const { createArticle, updateArticle, deleteArticle } = require("./ajax/articles");
+const {
+  createArticle,
+  updateArticle,
+  deleteArticle,
+  getArticleImages,
+} = require("./ajax/articles");
 const { parseJSON } = require("jquery");
-
 
 var allFiles = [];
 
@@ -22,8 +26,6 @@ function saveArticle(article) {
   }
 }
 
-
-
 $(".sendArticle").click(function () {
   $(".error").hide();
   $(".alert").hide();
@@ -38,28 +40,25 @@ $(".sendArticle").click(function () {
   saveArticle(article);
 });
 
-
-
 $(".uploadArticleImages").click(function (e) {
-  document.getElementById('selectfile').click();
-  document.getElementById('selectfile').onchange = function() {
-    files = document.getElementById('selectfile').files;
-    renderImages(files)
-    handleFiles(files)
+  document.getElementById("selectfile").click();
+  document.getElementById("selectfile").onchange = function () {
+    files = document.getElementById("selectfile").files;
+    files = renderImages(files);
+    handleFiles(files);
   };
 });
 
 $(".dropArticleImages")
-    .bind('dragenter dragover', false)
-    .bind("drop", function(e) {
-      e.preventDefault();
-      e.stopPropagation()
-      let dt = e.originalEvent.dataTransfer;
-      let files = dt.files
-      renderImages(files)
-      handleFiles(files)
-    });
-
+  .bind("dragenter dragover", false)
+  .bind("drop", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let dt = e.originalEvent.dataTransfer;
+    let files = dt.files;
+    files = renderImages(files);
+    handleFiles(files);
+  });
 
 function handleFiles(files) {
   let article = {
@@ -75,17 +74,30 @@ function handleFiles(files) {
 }
 
 function renderImages(files) {
+  console.log(files);
   for (let [index, file] of Object.entries(files)) {
     var url = URL.createObjectURL(file);
     var img = new Image();
-    img.className = "previewImage"
-    $('.dropArticlePreview').append(img);
-    img.onerror = function(){
-      alert('Pravděpodobně nepodporovaný typ obrázku.');
-    }
+    img.className = "previewImage";
+    img.onerror = function () {
+      alert("Pravděpodobně nepodporovaný typ obrázku.");
+    };
     img.src = url;
-  }
 
+    var number = Math.random();
+    number.toString(36);
+    var id = number.toString(36).substr(2, 9);
+    img.id = id;
+    file.id = id;
+    $(".dropArticlePreview").append(img);
+    $(".previewImage").click(function () {
+      let id = $(this).attr("id");
+      index = allFiles.findIndex((file) => file.id === id);
+      allFiles.splice(index, 1);
+      $(`#${id}`).remove();
+    });
+  }
+  return files;
 }
 
 $(".createUser").click(function () {
@@ -102,9 +114,9 @@ $(".createUser").click(function () {
 
 $(document).ready(function () {
   var table = $("#users").DataTable({
-    "language": {
-      "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json"
-    }
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json",
+    },
   });
   $(".alert").hide();
   $("#users tbody").on("click", "tr", function () {
@@ -142,9 +154,9 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   var table = $("#articles").DataTable({
-    "language": {
-      "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json"
-    }
+    language: {
+      url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json",
+    },
   });
   $(".alert").hide();
   $("#articles tbody").on("click", "tr", function () {
@@ -157,6 +169,8 @@ $(document).ready(function () {
     $(".editArticle #Popis").val(data[2]);
     $(".editArticle #Cena").val(data[3]);
     $(".editArticle #Lokalita").val(data[4]);
+
+    getArticleImages(data["0"]);
   });
 });
 
@@ -171,42 +185,6 @@ $(".loginSubmit").click(function () {
   handleLogin(user);
 });
 
-// $(document).ready(function () {
-//   var table = $("#articles").DataTable();
-//   $(".alert").hide();
-//   $("#users tbody").on("click", "tr", function () {
-//     var data = table.row(this).data();
-//     $(".editArticle").unbind("click");
-//     $(".updateArticle").unbind("click");
-//     $("#createArticle").modal("show");
-//     $(".error").hide();
-//     $(".createArticle #Jméno").val(data[1]);
-//     $(".createArticle #Email").val(data[2]);
-//     $(`.createArticle #role option[value=${data[3]}]`).attr(
-//       "selected",
-//       "selected"
-//     );
-
-//     $(".editArticle").click(function () {
-//       let article = {
-//         id: data[0],
-//         title: $(".createArticle #Název").val(),
-//         description: $(".createArticle #Popis").val(),
-//         price: $(".createArticle #Lokalita").val(),
-//         location: $(".createArticle #Cena").val(),
-//       };
-//       saveArticle(article);
-//     });
-//     $(".deleteArticle").click(function () {
-//       let article = {
-//         id: data[0],
-//       };
-//       deleteUser(article);
-//     });
-//   });
-// });
-
-
 $(".deleteArticle").click(function () {
   $(".error").hide();
   $(".alert").hide();
@@ -217,6 +195,3 @@ $(".deleteArticle").click(function () {
   };
   deleteArticle(user);
 });
-
-
-

@@ -16,26 +16,39 @@ h1 {
   display: none;
 }
 
-.dropArticlePreview{
+.dropArticlePreview {
 }
 
-.previewImage{
-  width: 200px
+.imgDelete {
+  display: none;
+}
+.imgDelete:hover {
+  display: block;
+  color: red;
+  top: 50%;
+  left: 5%;
+  margin: 0 0 auto;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.previewImage {
+  width: 200px;
 }
 
 #drop_file_zone {
   display: flex;
   align-items: center;
-  background-color: #EEE;
-  border: #999 5px dashed;
+  background-color: #eee;
+  border: rgba(109, 152, 172, 0.801) 5px dashed;
   width: 290px;
   height: 200px;
   padding: 8px;
   font-size: 18px;
 }
 #drag_upload_file {
-  width:50%;
-  margin:0 auto;
+  width: 50%;
+  margin: 0 auto;
 }
 #drag_upload_file p {
   text-align: center;
@@ -47,4 +60,3 @@ h1 {
 .errorBorder {
   border: 1px solid red;
 }
-

@@ -18,6 +18,9 @@ switch ($_POST['method']) {
     case 'addArticle':
         \App\Controller\ArticleController::create($_POST, $_FILES);
         break;
+    case 'getArticleImages':
+        \App\Controller\ArticleController::getArticleImages($_POST['id']);
+        break;
     default:
         \Tracy\Debugger::barDump('cesta neexistuje');
 }

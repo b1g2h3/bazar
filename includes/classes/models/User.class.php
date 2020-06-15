@@ -10,8 +10,8 @@ class User
 {
     public static function getAllUsers()
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = 'SELECT * FROM users';
         $sth = $conn->prepare($sql);
         $sth->execute();
@@ -20,8 +20,8 @@ class User
 
     public static function create($data)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = "insert users(name, email, password, role_id) values (:name, :email, :password, :role_id)";
         $args = array(':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
         try {
@@ -36,8 +36,8 @@ class User
 
     public static function find($param)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $field = (is_numeric($param)) ? 'id' : 'email';
         $sql = 'SELECT * FROM users WHERE ' . $field . ' = :' . $field;
         $sth = $conn->prepare($sql);
@@ -61,8 +61,8 @@ class User
         }
 
         try {
-            $db = DB::init();
-            $conn = $db->PDO();
+            $pdo = DB::init();
+            $conn = $pdo->conn;
             $sth = $conn->prepare($sql);
             $sth->execute($args);
             return true;
@@ -73,8 +73,8 @@ class User
 
     public static function delete($id)
     {
-        $db = DB::init();
-        $conn = $db->PDO();
+        $pdo = DB::init();
+        $conn = $pdo->conn;
         $sql = "DELETE FROM users WHERE id = ?";
 
         try {
