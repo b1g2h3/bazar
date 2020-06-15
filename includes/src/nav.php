@@ -10,15 +10,15 @@
                     <a class="nav-link" href="?page=articles">Inzeráty</a>
                 </li>
                 <?php
-                \Tracy\Debugger::barDump($_SESSION['isEditor']);
-                \Tracy\Debugger::barDump($_SESSION['isAdmin']);
-                if (isset($_SESSION['isEditor'])) {
+                \Tracy\Debugger::barDump(isset($_SESSION['isEditor']) && $_SESSION['isEditor']);
+                \Tracy\Debugger::barDump(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']);
+                if (isset($_SESSION['isEditor']) && $_SESSION['isEditor']) {
                 ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="?page=editArticles">Upravit inzeráty</a>
                     </li>
                 <?php
-                } elseif (isset($_SESSION['iAdmin'])) {
+                } elseif (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
                 ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="?page=users">Uživatelé</a>
