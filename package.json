@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^4.3.1",
     "datatables": "^1.10.18",
     "datatables.net": "^1.10.21",
     "dropzone": "^5.7.1",
