@@ -13,7 +13,6 @@ function createArticle(article) {
     data: fd,
     success: function (res) {
       res = JSON.parse(res);
-      console.log(res);
       $(".error").hide();
       if (res["errors"]) {
         const errors = res["errors"];
@@ -34,6 +33,8 @@ function createArticle(article) {
             article.Popis,
             article.Cena,
             article.Lokalita,
+            article.Email,
+            article.rezervace = 'Není',
           ])
           .draw(false);
       }
@@ -42,43 +43,47 @@ function createArticle(article) {
 }
 
 function updateArticle(article) {
-  console.log(article);
+  let fd = new FormData();
+  for (i = 0; i < article.files.length; i++) {
+    fd.append("file[]", article.files[i]);
+  }
+  fd.append("data", JSON.stringify(article));
+  fd.append("method", "updateArticle");
   $.ajax({
     type: "POST",
-    dataType: "json",
-    url: "/ajax.php",
-    data: {
-      method: "updateArticle",
-      data: JSON.stringify(article),
-    },
+    url: "ajax.php",
+    contentType: false,
+    processData: false,
+    data: fd,
     success: function (res) {
-      console.log(res);
-      //   $(".error").hide();
-      //   if (res["errors"]) {
-      //     const errors = res["errors"];
-      //     for (let [input, msg] of Object.entries(errors)) {
-      //       let name = customValidationMessage[input];
-      //       $(".error").show();
-      //       $(`#err${name}`).text(msg);
-      //     }
-      //   }
-      //   if (res["success"]) {
-      //     $("#updateUser").modal("hide");
-      //     $(".alert-success").show().text(res["success"]);
-      //     let t = $("#users").DataTable();
-      //     let rowId = $("#users").dataTable().fnFindCellRowIndexes(user.id, 0);
-      //     t.row(rowId)
-      //       .data([
-      //         user.id,
-      //         user.name,
-      //         user.email,
-      //         user.role === 1 ? "Admin" : "Editor",
-      //       ])
-      //       .invalidate();
-      //   }
-    },
-    error: function (xhr, status, error) {
-      console.log(xhr, status, error);
+      res = JSON.parse(res);
+      $(".error").hide();
+      if (res["errors"]) {
+        const errors = res["errors"];
+        for (let [input, msg] of Object.entries(errors)) {
+          $(".error").show();
+          $(`#err${input}`).text(msg);
+        }
+      }
+      if (res["success"]) {
+        $("#editArticle").modal("hide");
+        $(".alert-success").show().text(res["success"]);
+        var t = $("#articles").DataTable();
+        let rowId = $("#articles").dataTable().fnFindCellRowIndexes(article.id, 0);
+        t.row(rowId)
+            .data([
+              article.id,
+              article.Název,
+              article.Popis,
+              article.Cena,
+              article.Lokalita,
+              article.Email,
+              article.rezervace == 0 ? 'Není' : 'Již rezervován',
+            ])
+            .invalidate();
+        article = res.article;
+       console.log(article);
+      }
     },
   });
 }
@@ -128,20 +133,118 @@ function getArticleImages(articleId) {
     data: { id: articleId, method: "getArticleImages" },
     success: function (res) {
       res = JSON.parse(res);
-      console.log(res);
       if (res["success"]) {
-        var blobData = res.images[0];
-        var url = window.URL || window.webkitURL;
-        var src = url.createObjectURL(blobData);
-        $(".dropArticlePreview").attr("src", src);
+        $('.previewImageEdit').remove();
+        var images = res.images;
+        images.map(image => {
+          $('.dropArticlePreviewImages').prepend(`<img id="img${image.id}" class="previewImageEdit deleteImage" src="data:image/jpg;base64,${image.base64} " />`);
+        });
+        $(".deleteImage").click(function () {
+          if(confirm('Chcete vážně odstranit obrázek z databáze?')) {
+            let id = $(this).attr("id");
+            deleteImage(id) ;
+          }
+        });
+
       }
     },
   });
 }
 
+function sendArticleToEmail(email) {
+  let articleId = location.search.split('id=')[1]
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    url: "/ajax.php",
+    data: {
+      method: "sendArticleToEmail",
+      data: JSON.stringify({
+        email: email,
+        id: articleId
+      }),
+    },
+    success: function (res) {
+      $(".error").hide();
+      if (res["errors"]) {
+        const errors = res["errors"];
+        for (let [input, msg] of Object.entries(errors)) {
+          $(".error").show();
+          $(`#err${input}`).text(msg);
+        }
+      }
+      if(res["success"]) {
+        $("#sendArticleOnEmail").modal("hide");
+        $(".alert-success").show().text(res["success"]);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log(xhr, status, error);
+    },
+  });
+}
+
+
+function sendReservationToEmail(data) {
+  data.id = location.search.split('id=')[1]
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    url: "/ajax.php",
+    data: {
+      method: "sendReservationToOwner",
+      data: JSON.stringify(data),
+    },
+    success: function (res) {
+      $(".error").hide();
+      if (res["errors"]) {
+        const errors = res["errors"];
+        for (let [input, msg] of Object.entries(errors)) {
+          $(".error").show();
+          $(`#err${input}`).text(msg);
+        }
+      }
+      if(res["success"]) {
+        $("#sendArticleOnEmail").modal("hide");
+        $(".alert-success").show().text(res["success"]);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log(xhr, status, error);
+    },
+  });
+}
+
+
+function deleteImage(id) {
+  $.ajax({
+    type: "POST",
+    dataType: "json",
+    url: "/ajax.php",
+    data: {
+      method: "deleteImage",
+      imageId: id,
+    },
+    success: function (res) {
+      $(".error").hide();
+      if (res.errors) {
+        console.log(res.errors);
+      }
+      if(res.success) {
+        $(".editalert-danger").show().text(res.success);
+        $(`#${id}`).remove()
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log(xhr, status, error);
+    },
+  });
+}
 module.exports = {
   createArticle,
   updateArticle,
   deleteArticle,
   getArticleImages,
+  sendArticleToEmail,
+  sendReservationToEmail
 };

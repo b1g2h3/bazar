@@ -53,6 +53,7 @@
                 </div>
                 <form method="post" action="ajax.php" enctype="multipart/form-data" data-form-output="form-output-global" data-form-type="forms">
                     <div class="modal-body editArticle">
+
                         <h2>Upravit inzerát</h2>
                         <?php
                         \App\Services\Input::create('Název', 'text', false);
@@ -67,13 +68,19 @@
                         \App\Services\Input::create('Lokalita', 'text', false);
                         \App\Services\Input::create('Cena', 'text', false);
                         ?>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rezervace">
+                            <label class="form-check-label" for="rezervace">Rezervace</label>
+                        </div>
+                        <div class="hidden alert editalert-success font-weight-bold" role="alert"></div>
+                        <div class="hidden alert  editalert-danger font-weight-bold" role="alert"></div>
                         <div id="errObrázky" class="hidden error text-danger"></div>
-                        <div id="drop_file_zone" class="w-100 dropArticleImages">
+                        <div id="drop_file_zone" class="w-100 dropArticleImagesEdit mt-2">
                             <div id="drag_upload_file">
                                 <p>Přetáhnete soubor</p>
                                 <p>nebo</p>
-                                <p><input type="button" value="vyberte soubor" class="uploadArticleImages btn btn-secondary"></p>
-                                <input type="file" id="selectfile" multiple>
+                                <p><input type="button" value="vyberte soubor" class="uploadArticleImagesEdit btn btn-secondary"></p>
+                                <input type="file" id="selectfileedit" multiple>
                             </div>
                         </div>
                     </div>
@@ -82,7 +89,7 @@
                         <button type="button" class="btn btn-primary updateArticle">Upravit inzerát</button>
                     </div>
                 </form>
-                <div class="dropArticlePreview"></div>
+                <div class="dropArticlePreviewImages"></div>
             </div>
 
         </div>
@@ -96,6 +103,8 @@
                     <th>Popis</th>
                     <th>Cena</th>
                     <th>Lokalita</th>
+                    <th>Email</th>
+                    <th>Rezervováno</th>
                 </tr>
             </thead>
             <tbody>
@@ -106,6 +115,8 @@
                         <td><?php echo $article['description'] ?></td>
                         <td><?php echo $article['price'] ?></td>
                         <td><?php echo $article['location'] ?></td>
+                        <td><?php echo $article['email'] ?></td>
+                        <td><?php echo $article['reservation'] ? 'Již rezervován' : 'Není' ?></td>
                     </tr>
                 <?php } ?>
                 </tfoot>

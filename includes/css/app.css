@@ -35,6 +35,9 @@ h1 {
 .previewImage {
   width: 200px;
 }
+.previewImageEdit {
+  width: 200px;
+}
 
 #drop_file_zone {
   display: flex;
@@ -56,6 +59,21 @@ h1 {
 #drag_upload_file #selectfile {
   display: none;
 }
+
+#drag_upload_file #selectfileedit {
+  display: none;
+}
+
+.modal
+{
+  overflow: hidden;
+}
+
+.modal-header{      /* not necessary but imo important for user */
+  cursor: move;
+}
+
+
 
 .errorBorder {
   border: 1px solid red;

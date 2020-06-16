@@ -6,6 +6,11 @@ $title = 'Bazar | Administrace';
 require('./includes/src/header.php');
 require('./includes/src/nav.php');
 
+
+if(isset($_REQUEST['reservation'])) {
+    \App\Controller\ArticleController::bookArticle($_REQUEST['reservation']);
+}
+
 switch ($_REQUEST['page']) {
     case 'login':
         include('./includes/views/Auth/login.php');

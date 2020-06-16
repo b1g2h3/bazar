@@ -18,9 +18,19 @@ switch ($_POST['method']) {
     case 'addArticle':
         \App\Controller\ArticleController::create($_POST, $_FILES);
         break;
+    case 'updateArticle':
+        \App\Controller\ArticleController::update($_POST, $_FILES);
+        break;
+    case 'deleteImage':
+    \App\Controller\ImageController::destroy($_POST['imageId']);
+        break;
     case 'getArticleImages':
         \App\Controller\ArticleController::getArticleImages($_POST['id']);
         break;
+    case 'sendArticleToEmail':
+        \App\Controller\ArticleController::sendArticleToEmail($_POST);
+    case 'sendReservationToOwner':
+        \App\Controller\ArticleController::sendReservationToOwner($_POST);
     default:
         \Tracy\Debugger::barDump('cesta neexistuje');
 }

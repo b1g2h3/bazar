@@ -1,14 +1,20 @@
-const { createUser, updateUser, deleteUser } = require("./ajax/users");
+const {
+  createUser,
+  updateUser,
+  deleteUser
+} = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
 const {
   createArticle,
   updateArticle,
   deleteArticle,
   getArticleImages,
+  sendArticleToEmail,
+  sendReservationToEmail
 } = require("./ajax/articles");
-const { parseJSON } = require("jquery");
-
 var allFiles = [];
+var allFilesEdit = [];
+
 
 function saveUser(user) {
   if (user.id == null) {
@@ -40,65 +46,8 @@ $(".sendArticle").click(function () {
   saveArticle(article);
 });
 
-$(".uploadArticleImages").click(function (e) {
-  document.getElementById("selectfile").click();
-  document.getElementById("selectfile").onchange = function () {
-    files = document.getElementById("selectfile").files;
-    files = renderImages(files);
-    handleFiles(files);
-  };
-});
 
-$(".dropArticleImages")
-  .bind("dragenter dragover", false)
-  .bind("drop", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    let dt = e.originalEvent.dataTransfer;
-    let files = dt.files;
-    files = renderImages(files);
-    handleFiles(files);
-  });
 
-function handleFiles(files) {
-  let article = {
-    Název: $("#Název").val(),
-    Popis: $("#Popis").val(),
-    Lokalita: $("#Lokalita").val(),
-    Telefon: $("#Telefon").val(),
-    Cena: $("#Cena").val(),
-  };
-  for (let [index, file] of Object.entries(files)) {
-    allFiles.push(file);
-  }
-}
-
-function renderImages(files) {
-  console.log(files);
-  for (let [index, file] of Object.entries(files)) {
-    var url = URL.createObjectURL(file);
-    var img = new Image();
-    img.className = "previewImage";
-    img.onerror = function () {
-      alert("Pravděpodobně nepodporovaný typ obrázku.");
-    };
-    img.src = url;
-
-    var number = Math.random();
-    number.toString(36);
-    var id = number.toString(36).substr(2, 9);
-    img.id = id;
-    file.id = id;
-    $(".dropArticlePreview").append(img);
-    $(".previewImage").click(function () {
-      let id = $(this).attr("id");
-      index = allFiles.findIndex((file) => file.id === id);
-      allFiles.splice(index, 1);
-      $(`#${id}`).remove();
-    });
-  }
-  return files;
-}
 
 $(".createUser").click(function () {
   $(".error").hide();
@@ -110,6 +59,29 @@ $(".createUser").click(function () {
     password: $(".create #Heslo").val(),
   };
   saveUser(user);
+});
+
+$(".alert").hide();
+
+
+$(".sendReservation").click(function (e) {
+  let email = $(".sendReservationToEmail #Email").val();
+  let msg = $(".sendReservationToEmail #Zpráva").val();
+  e.preventDefault();
+  e.stopPropagation();
+  data = {
+    Email: email,
+    Zpráva: msg,
+  }
+  sendReservationToEmail(data)
+});
+
+
+$(".sendArticleEmail").click(function (e) {
+  let email = $(".sendArticleToEmail #Email").val();
+  e.preventDefault();
+  e.stopPropagation();
+  sendArticleToEmail(email)
 });
 
 $(document).ready(function () {
@@ -152,6 +124,7 @@ $(document).ready(function () {
   });
 });
 
+
 $(document).ready(function () {
   var table = $("#articles").DataTable({
     language: {
@@ -161,16 +134,37 @@ $(document).ready(function () {
   $(".alert").hide();
   $("#articles tbody").on("click", "tr", function () {
     var data = table.row(this).data();
-    $(".editUser").unbind("click");
-    $(".deleteUser").unbind("click");
-    $("#editArticle").modal("show");
+    allFilesEdit = [];
+    $(".updateArticle").unbind("click");
+    $(".alert").hide()
+    $('#editArticle').modal('show')
+        // .draggable({ handle: ".modal-header" });
     $(".error").hide();
+    let isCheck = data[6] !== 'Není' ;
     $(".editArticle #Název").val(data[1]);
     $(".editArticle #Popis").val(data[2]);
+    $(".editArticle #Email").val(data[5]);
     $(".editArticle #Cena").val(data[3]);
     $(".editArticle #Lokalita").val(data[4]);
+    $( "#rezervace" ).prop( "checked", isCheck );
 
     getArticleImages(data["0"]);
+    $(".updateArticle").click(function () {
+      $(".error").hide();
+      $(".alert").hide();
+      let isCheck =$(".editArticle #rezervace").is(':checked') ? '1' : '0';
+      let article = {
+        id: data[0],
+        Název: $(".editArticle #Název").val(),
+        Popis: $(".editArticle #Popis").val(),
+        Email: $(".editArticle #Email").val(),
+        Lokalita: $(".editArticle #Lokalita").val(),
+        Cena: $(".editArticle #Cena").val(),
+        rezervace: isCheck,
+      };
+      article.files = allFilesEdit;
+      saveArticle(article);
+    });
   });
 });
 
@@ -195,3 +189,114 @@ $(".deleteArticle").click(function () {
   };
   deleteArticle(user);
 });
+
+
+$(".uploadArticleImages").click(function (e) {
+  document.getElementById("selectfile").click();
+  document.getElementById("selectfile").onchange = function () {
+    files = document.getElementById("selectfile").files;
+    files = renderImages(files);
+    handleFiles(files);
+  };
+});
+
+$(".uploadArticleImagesEdit").click(function (e) {
+  document.getElementById("selectfileedit").click();
+  document.getElementById("selectfileedit").onchange = function () {
+    files = document.getElementById("selectfileedit").files;
+    files = renderImagesEdit(files);
+    handleFilesEdit(files);
+  };
+});
+
+$(".dropArticleImages")
+    .bind("dragenter dragover", false)
+    .bind("drop", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      let dt = e.originalEvent.dataTransfer;
+      let files = dt.files;
+      files = renderImages(files);
+      handleFiles(files);
+    });
+
+$(".dropArticleImagesEdit")
+    .bind("dragenter dragover", false)
+    .bind("drop", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      let dt = e.originalEvent.dataTransfer;
+      let files = dt.files;
+      files = renderImagesEdit(files);
+      handleFilesEdit(files);
+    });
+
+
+function handleFiles(files) {
+  for (let [index, file] of Object.entries(files)) {
+    allFiles.push(file);
+  }
+}
+
+function handleFilesEdit(files) {
+  for (let [index, file] of Object.entries(files)) {
+    allFilesEdit.push(file);
+  }
+
+  console.log(allFilesEdit);
+}
+
+function renderImages(files) {
+  console.log(files);
+  for (let [index, file] of Object.entries(files)) {
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.className = "previewImage";
+    img.onerror = function () {
+      alert("Pravděpodobně nepodporovaný typ obrázku.");
+    };
+    img.src = url;
+
+    var number = Math.random();
+    number.toString(36);
+    var id = number.toString(36).substr(2, 9);
+    img.id = id;
+    file.id = id;
+    $(".dropArticlePreview").append(img);
+    $(".previewImage").click(function () {
+      let id = $(this).attr("id");
+      index = allFiles.findIndex((file) => file.id === id);
+      allFiles.splice(index, 1);
+      $(`#${id}`).remove();
+    });
+  }
+  return files;
+}
+
+
+function renderImagesEdit(files) {
+  console.log(files);
+  for (let [index, file] of Object.entries(files)) {
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.className = "previewImageEdit";
+    img.onerror = function () {
+      alert("Pravděpodobně nepodporovaný typ obrázku.");
+    };
+    img.src = url;
+
+    var number = Math.random();
+    number.toString(36);
+    var id = number.toString(36).substr(2, 9);
+    img.id = id;
+    file.id = id;
+    $(".dropArticlePreviewImages").append(img);
+    $(".previewImageEdit").click(function () {
+      let id = $(this).attr("id");
+      index = allFilesEdit.findIndex((file) => file.id === id);
+      allFilesEdit.splice(index, 1);
+      $(`#${id}`).remove();
+    });
+  }
+  return files;
+}

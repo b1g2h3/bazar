@@ -12,7 +12,7 @@ class Image
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $sql = 'SELECT image
+        $sql = 'SELECT id, image
                 FROM images
                 WHERE articles_id = :articleID;';
         $args = array(':articleID' => $aticleID);
@@ -25,6 +25,40 @@ class Image
             \Tracy\Debugger::barDump($e->getMessage());
         }
     }
+
+    public static function find($imageID)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = 'SELECT id, image
+                FROM images
+                WHERE id = :imageID;';
+        $args = array(':imageID' => $imageID);
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute($args);
+            $result = $sth->fetch();
+            return $result;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function delete($id)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = "DELETE FROM images WHERE id = ?";
+
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute(array($id));
+            return true;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
 
     public static function create($images, $articleId)
     {

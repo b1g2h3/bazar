@@ -4,13 +4,11 @@ namespace App\Models;
 
 use Exception;
 use App\Database\DB;
-use PDO;
 use Tracy\Debugger;
 
 class Article
 {
 
-    //https://www.interval.cz/clanky/oop-v-php-vzor-singleton/
     public static function getAllArticles()
     {
         $pdo = DB::init();
@@ -26,6 +24,21 @@ class Article
             INNER JOIN images i
                 ON a.id = i.articles_id
             GROUP BY a.id';
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute();
+            return $sth->fetchAll();
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function getAllArticlesWithoutImages()
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = 'SELECT  *
+            FROM articles';
         try {
             $sth = $conn->prepare($sql);
             $sth->execute();
@@ -91,14 +104,75 @@ class Article
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $sql = "insert articles(title, description, price, location, phone) values (:title, :description, :price, :location, :phone)";
-        $args = array(':title' => $data['Název'], ':description' => $data['Popis'], ':price' => $data['Cena'], ':location' => $data['Lokalita'], ':phone' => $data['Telefon']);
+        $sql = "insert articles(title, description, price, location, email, created_at) values (:title, :description, :price, :location, :email, :created_at)";
+        $args = array(
+            ':title' => $data['Název'],
+            ':description' => $data['Popis'],
+            ':price' => $data['Cena'],
+            ':location' => $data['Lokalita'],
+            ':email' => $data['Email'],
+            ':created_at' => date ("Y-m-d H:i:s"),
+        );
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
             $insertedId = $conn->lastInsertId();
+            \Tracy\Debugger::barDump($insertedId);
             Image::create($images, $insertedId);
             return $insertedId;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function update($data, $images)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = "UPDATE articles 
+                SET title = :title, 
+                    description = :description, 
+                    price = :price, 
+                    location = :location, 
+                    email = :email,
+                    reservation = :reservation,                  
+                    updated_at = :updated_at                    
+                WHERE id = :id";
+        $args = array(
+            ':title' => $data['Název'],
+            ':description' => $data['Popis'],
+            ':price' => $data['Cena'],
+            ':location' => $data['Lokalita'],
+            ':email' => $data['Email'],
+            ':reservation' => $data['rezervace'],
+            ':updated_at' => date ("Y-m-d H:i:s"),
+            ':id' => $data['id']
+        );
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute($args);
+            $insertedId = $conn->lastInsertId();
+            is_null($images) ?: Image::create($images, $insertedId);
+            return true;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function book($id)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = "UPDATE articles 
+                SET reservation = 1                   
+                WHERE id = :id";
+        $args = array(
+            ':id' => $id
+        );
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute($args);
+            return true;
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());
         }

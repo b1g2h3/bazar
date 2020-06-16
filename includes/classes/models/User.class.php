@@ -22,8 +22,14 @@ class User
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $sql = "insert users(name, email, password, role_id) values (:name, :email, :password, :role_id)";
-        $args = array(':name' => $data['name'], ':email' => $data['email'], 'password' => $data['password'], ':role_id' => $data['role_id']);
+        $sql = "insert users(name, email, password, role_id, created_at) values (:name, :email, :password, :role_id, :created_at)";
+        $args = array(
+            ':name' => $data['name'],
+            ':email' => $data['email'],
+            'password' => $data['password'],
+            ':role_id' => $data['role_id'],
+            ':created_at' => date ("Y-m-d H:i:s"),
+        );
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
@@ -51,13 +57,14 @@ class User
             ':id' => $data['id'],
             ':name' => $data['name'],
             ':email' => $data['email'],
-            ':role_id' => $data['role_id']
+            ':role_id' => $data['role_id'],
+            ':updated_at' => date ("Y-m-d H:i:s"),
         );
         if (array_key_exists('password', $data)) {
-            $sql = "UPDATE users SET email = :email, name = :name, password = :password, role_id = :role_id WHERE id = :id";
+            $sql = "UPDATE users SET email = :email, name = :name, password = :password, updated_at = :updated_at, role_id = :role_id WHERE id = :id";
             $args[':password'] = $data['password'];
         } else {
-            $sql = "UPDATE users SET email = :email, name = :name, role_id = :role_id WHERE id = :id";
+            $sql = "UPDATE users SET email = :email, name = :name, updated_at = :updated_at, role_id = :role_id WHERE id = :id";
         }
 
         try {
