@@ -2,6 +2,7 @@
     <h2>Inzeráty</h2>
     <div class="col-12">
         <form class="d-flex align-items-center justify-content-center" method="get" action="?page=articles">
+            <input type="hidden" value="articles" name="page">
             <div class="col-4 form-group">
                 <label for="orderBy">Seřadit podle:</label>
                 <select onchange="this.form.submit()" class="form-control"  name="orderBy" id="orderBy">

@@ -34,15 +34,17 @@ class AuthController
             return;
         }
         $user = User::find($data['email']);
-        if (Hash::verify($data['password'], $user['password'])) {
-            $_SESSION['isLoggedIn'] = true;
-            $_SESSION['isAdmin'] = $user['role_id'] === "1" ? true : false;
-            $_SESSION['isEditor'] = $user['role_id'] === "2" ? true : false;
-            $_SESSION['id'] = $user['id'];
-            $_SESSION['email'] = $user['email'];
-            echo json_encode(array('success' => 'Uživatel byl přihlášen.', 'user' => $user));
+        if($user) {
+            if (Hash::verify($data['password'], $user['password'])) {
+                $_SESSION['isLoggedIn'] = true;
+                $_SESSION['isAdmin'] = $user['role_id'] === "1" ? true : false;
+                $_SESSION['isEditor'] = $user['role_id'] === "2" ? true : false;
+                $_SESSION['id'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
+                echo json_encode(array('success' => 'Uživatel byl přihlášen.', 'user' => $user));
+            }
         } else {
-            echo json_encode(array('errors' => 'Špatné iniciály.'));
+            echo json_encode(array('errors' => array('email' => 'Špatné iniciály.')));
         }
     }
 
