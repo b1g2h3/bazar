@@ -21,8 +21,12 @@
   <component name="ChangeListManager">
     <list default="true" id="3bb85a4d-43f2-4ca7-8cbd-99ece17e1251" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pokus1email.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/classes/services/Mail.class.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/classes/services/Mail.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/includes/css/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/views/Articles/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/views/Articles/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +53,8 @@
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/tracy/tracy" />
+      <path value="$PROJECT_DIR$/vendor/nette/mail" />
+      <path value="$PROJECT_DIR$/vendor/nette/utils" />
     </include_path>
   </component>
   <component name="ProjectId" id="1d1xMzEfMbYmYhF1aQi9nroYq4M" />
@@ -62,7 +68,6 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/includes/classes/models" />
@@ -108,7 +113,7 @@
       <workItem from="1591768893409" duration="12347000" />
       <workItem from="1591781891943" duration="14480000" />
       <workItem from="1591854650624" duration="205000" />
-      <workItem from="1591854867178" duration="106695000" />
+      <workItem from="1591854867178" duration="110091000" />
     </task>
     <servers />
   </component>
@@ -176,10 +181,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" width="672" height="677" key="run.anything.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592299249474" />
-    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1592314216718">
+    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup" timestamp="1592316683713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592314216718" />
+    <state x="623" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1536.832/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1592316683713" />
   </component>
   <component name="hg4idea.settings">
     <option name="CHECK_INCOMING_OUTGOING" value="true" />

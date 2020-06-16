@@ -2,8 +2,36 @@
 
 namespace App\Services;
 
+use Nette\Mail\Mailer;
+use Nette\Mail\Message;
+use Nette\Mail\SendmailMailer;
+
 class Mail
 {
+
+    protected $host = 'stmp.gmail.com',
+              $username = 'john@gmail.com',
+              $password = '*****';
+
+    public function __construct()
+    {
+
+//        $mail = new Message;
+//        $mail->setFrom('eVčelár <holubjan@gmail.com>')
+//            ->addTo('holubjan@gmail.com')
+//            ->setSubject($values['nazov'])
+//            ->setBody($values['sprava']);
+//
+//        $mailer = new Nette\Mail\SmtpMailer([
+//            'host' => 'smtp.gmail.com',
+//            'username' => 'holubjan@gmail.com',
+//            'password' => '**********',
+//            'secure' => 'ssl',
+//
+//        ]);
+//        $mailer->send($mail);
+    }
+
     public static function sendArticle($email, $article, $images)
     {
 //        $to = $email;
@@ -52,6 +80,9 @@ class Mail
 //        $to = $email;
 //        $subject = "Posílám vám inzerát";
 
+        $url =  'http://bazar.local/?reservation='.$article['id'];
+
+
         $msg = "
                 <html>
                 <head>
@@ -60,11 +91,16 @@ class Mail
                 <body>
                 <table>
                 <tr>
+                <th>Dobrý den,</th>
                 <th>Posíláme nabídku na Váš inzerát ".$article['title'].".</th>
                 </tr>
                 <tr>
                 <th>Od: ".$data['Email']. "</th>
                 <th>Zpráva: ".$data['Zpráva']. "</th>
+                </tr>
+                <tr>
+                <th>Rezervaci můžete potvrdit na odkazu uvedeném níže</th>
+                <th>Zpráva: ".$url. "</th>
                 </tr>
                 </table>
                 </body>
@@ -85,4 +121,18 @@ class Mail
 //        mail($to,$subject,$msg,$headers);
     }
 
+    public static function testMail() {
+//        phpinfo();
+//        die;
+        ini_set();
+        stream_socket_client();
+        $mail = new Message;
+        $mail->setFrom('Franta <franta@example.com>')
+            ->addTo('petr@example.com')
+            ->addTo('jirka@example.com')
+            ->setSubject('Potvrzení objednávky')
+            ->setBody("Dobrý den,\nvaše objednávka byla přijata.");
+        $mailer = new SendmailMailer;
+        $mailer->send($mail);
+    }
 }

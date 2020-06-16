@@ -51,9 +51,11 @@
                     <a href="?page=articleDetail&id=<?php echo $article['id'] ?>">
 
                         <?php echo $article['title'] ?></h3>
-                <?php
-                echo '<img class="w-100" src="data:image/jpg;base64,'.base64_encode($article['image']) .'" />';
-                ?>
+               <div class="allArticles">
+                   <?php
+                   echo '<img class="w-100" src="data:image/jpg;base64,'.base64_encode($article['image']) .'" />';
+                   ?>
+               </div>
                 <span>Cena <?php echo $article['price'] ?> </span>
                     </a>
             </div>

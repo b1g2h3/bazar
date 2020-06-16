@@ -30,6 +30,9 @@ switch ($_REQUEST['page']) {
     case 'editArticles':
         \App\Controller\ArticleController::edit();
         break;
+    case 'sendemail':
+        \App\Services\Mail::testMail();
+        break;
     default:
         \App\Controller\ArticleController::index();
         break;
