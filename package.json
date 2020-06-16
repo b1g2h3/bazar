@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "bootstrap": "^4.1.1",
+    "datatables": "^1.10.18",
+    "datatables.net": "^1.10.21",
     "dropzone": "^5.7.1",
     "jquery": "^3.5.1",
     "npm-watch": "^0.6.0",
+    "popper.js": "^1.14.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },

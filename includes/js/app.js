@@ -1,3 +1,5 @@
+// require("bootstrap/dist/js/bootstrap");
+// require("popper.js");
 const { createUser, updateUser, deleteUser } = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
 const {
