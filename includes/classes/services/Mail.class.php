@@ -51,7 +51,6 @@ class Mail
     {
 //        $to = $email;
 //        $subject = "Posílám vám inzerát";
-        $showImages = null;
 
         $msg = "
                 <html>
@@ -61,7 +60,6 @@ class Mail
                 <body>
                 <table>
                 <tr>
-                <th>Zpátky <a href='/'>Zpátky</a></th>
                 <th>Posíláme nabídku na Váš inzerát ".$article['title'].".</th>
                 </tr>
                 <tr>
