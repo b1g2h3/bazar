@@ -105,18 +105,26 @@
                     <th>Lokalita</th>
                     <th>Email</th>
                     <th>Rezervováno</th>
+                    <th>Možnost</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($allArticles as $article) { ?>
                     <tr>
-                        <td><?php echo $article['id'] ?></td>
+                        <td>
+                            <a href="/?page=articleDetail&id=<?php echo $article['id'] ?>">
+                                <?php echo $article['id'] ?>
+                            </a>
+                        </td>
                         <td><?php echo $article['title'] ?></td>
                         <td><?php echo $article['description'] ?></td>
                         <td><?php echo $article['price'] ?></td>
                         <td><?php echo $article['location'] ?></td>
                         <td><?php echo $article['email'] ?></td>
                         <td><?php echo $article['reservation'] ? 'Již rezervován' : 'Není' ?></td>
+                        <td>
+                            <div style="cursor:pointer" class="editArticleEvent">Upravit</div>
+                        </td>
                     </tr>
                 <?php } ?>
                 </tfoot>

@@ -16,9 +16,6 @@ h1 {
   display: none;
 }
 
-.dropArticlePreview {
-}
-
 .imgDelete {
   display: none;
 }
@@ -64,18 +61,18 @@ h1 {
   display: none;
 }
 
-.modal
-{
+.modal {
   overflow: hidden;
 }
 
-.allArticles > img{
+.allArticles > img {
   object-fit: cover;
   width: 100%;
   height: 33vh;
 }
 
-.modal-header{      /* not necessary but imo important for user */
+.modal-header {
+  /* not necessary but imo important for user */
   cursor: move;
 }
 

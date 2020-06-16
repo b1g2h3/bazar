@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "watch": "npm-watch"
+    "watch": "webpack --watch --config webpack.config.js"
   },
   "repository": {
     "type": "git",

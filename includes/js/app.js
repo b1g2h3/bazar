@@ -1,8 +1,4 @@
-const {
-  createUser,
-  updateUser,
-  deleteUser
-} = require("./ajax/users");
+const { createUser, updateUser, deleteUser } = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
 const {
   createArticle,
@@ -10,11 +6,10 @@ const {
   deleteArticle,
   getArticleImages,
   sendArticleToEmail,
-  sendReservationToEmail
+  sendReservationToEmail,
 } = require("./ajax/articles");
 var allFiles = [];
 var allFilesEdit = [];
-
 
 function saveUser(user) {
   if (user.id == null) {
@@ -46,9 +41,6 @@ $(".sendArticle").click(function () {
   saveArticle(article);
 });
 
-
-
-
 $(".createUser").click(function () {
   $(".error").hide();
   $(".alert").hide();
@@ -63,7 +55,6 @@ $(".createUser").click(function () {
 
 $(".alert").hide();
 
-
 $(".sendReservation").click(function (e) {
   let email = $(".sendReservationToEmail #Email").val();
   let msg = $(".sendReservationToEmail #Zpráva").val();
@@ -72,16 +63,15 @@ $(".sendReservation").click(function (e) {
   data = {
     Email: email,
     Zpráva: msg,
-  }
-  sendReservationToEmail(data)
+  };
+  sendReservationToEmail(data);
 });
-
 
 $(".sendArticleEmail").click(function (e) {
   let email = $(".sendArticleToEmail #Email").val();
   e.preventDefault();
   e.stopPropagation();
-  sendArticleToEmail(email)
+  sendArticleToEmail(email);
 });
 
 $(document).ready(function () {
@@ -124,7 +114,6 @@ $(document).ready(function () {
   });
 });
 
-
 $(document).ready(function () {
   var table = $("#articles").DataTable({
     language: {
@@ -135,35 +124,37 @@ $(document).ready(function () {
   $("#articles tbody").on("click", "tr", function () {
     var data = table.row(this).data();
     allFilesEdit = [];
-    $(".updateArticle").unbind("click");
-    $(".alert").hide()
-    $('#editArticle').modal('show')
-        // .draggable({ handle: ".modal-header" });
-    $(".error").hide();
-    let isCheck = data[6] !== 'Není' ;
-    $(".editArticle #Název").val(data[1]);
-    $(".editArticle #Popis").val(data[2]);
-    $(".editArticle #Email").val(data[5]);
-    $(".editArticle #Cena").val(data[3]);
-    $(".editArticle #Lokalita").val(data[4]);
-    $( "#rezervace" ).prop( "checked", isCheck );
-
-    getArticleImages(data["0"]);
-    $(".updateArticle").click(function () {
-      $(".error").hide();
+    $(".editArticleEvent").on("click", function () {
+      $(".updateArticle").unbind("click");
       $(".alert").hide();
-      let isCheck =$(".editArticle #rezervace").is(':checked') ? '1' : '0';
-      let article = {
-        id: data[0],
-        Název: $(".editArticle #Název").val(),
-        Popis: $(".editArticle #Popis").val(),
-        Email: $(".editArticle #Email").val(),
-        Lokalita: $(".editArticle #Lokalita").val(),
-        Cena: $(".editArticle #Cena").val(),
-        rezervace: isCheck,
-      };
-      article.files = allFilesEdit;
-      saveArticle(article);
+      $("#editArticle").modal("show");
+      // .draggable({ handle: ".modal-header" });
+      $(".error").hide();
+      let isCheck = data[6] !== "Není";
+      $(".editArticle #Název").val(data[1]);
+      $(".editArticle #Popis").val(data[2]);
+      $(".editArticle #Email").val(data[5]);
+      $(".editArticle #Cena").val(data[3]);
+      $(".editArticle #Lokalita").val(data[4]);
+      $("#rezervace").prop("checked", isCheck);
+
+      getArticleImages(data["0"]);
+      $(".updateArticle").click(function () {
+        $(".error").hide();
+        $(".alert").hide();
+        let isCheck = $(".editArticle #rezervace").is(":checked") ? "1" : "0";
+        let article = {
+          id: data[0],
+          Název: $(".editArticle #Název").val(),
+          Popis: $(".editArticle #Popis").val(),
+          Email: $(".editArticle #Email").val(),
+          Lokalita: $(".editArticle #Lokalita").val(),
+          Cena: $(".editArticle #Cena").val(),
+          rezervace: isCheck,
+        };
+        article.files = allFilesEdit;
+        saveArticle(article);
+      });
     });
   });
 });
@@ -190,7 +181,6 @@ $(".deleteArticle").click(function () {
   deleteArticle(user);
 });
 
-
 $(".uploadArticleImages").click(function (e) {
   document.getElementById("selectfile").click();
   document.getElementById("selectfile").onchange = function () {
@@ -210,27 +200,26 @@ $(".uploadArticleImagesEdit").click(function (e) {
 });
 
 $(".dropArticleImages")
-    .bind("dragenter dragover", false)
-    .bind("drop", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      let dt = e.originalEvent.dataTransfer;
-      let files = dt.files;
-      files = renderImages(files);
-      handleFiles(files);
-    });
+  .bind("dragenter dragover", false)
+  .bind("drop", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let dt = e.originalEvent.dataTransfer;
+    let files = dt.files;
+    files = renderImages(files);
+    handleFiles(files);
+  });
 
 $(".dropArticleImagesEdit")
-    .bind("dragenter dragover", false)
-    .bind("drop", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      let dt = e.originalEvent.dataTransfer;
-      let files = dt.files;
-      files = renderImagesEdit(files);
-      handleFilesEdit(files);
-    });
-
+  .bind("dragenter dragover", false)
+  .bind("drop", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let dt = e.originalEvent.dataTransfer;
+    let files = dt.files;
+    files = renderImagesEdit(files);
+    handleFilesEdit(files);
+  });
 
 function handleFiles(files) {
   for (let [index, file] of Object.entries(files)) {
@@ -272,7 +261,6 @@ function renderImages(files) {
   }
   return files;
 }
-
 
 function renderImagesEdit(files) {
   console.log(files);

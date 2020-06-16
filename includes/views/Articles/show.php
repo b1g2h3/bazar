@@ -10,7 +10,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form method="post" action="ajax.php"  data-form-output="form-output-global" data-form-type="forms">
+                <form method="post" action="ajax.php" data-form-output="form-output-global" data-form-type="forms">
                     <div class="modal-body sendReservationToEmail">
                         <h2>Rezervovat inzerát</h2>
                         <?php
@@ -38,7 +38,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form method="post" action="ajax.php"  data-form-output="form-output-global" data-form-type="forms">
+                <form method="post" action="ajax.php" data-form-output="form-output-global" data-form-type="forms">
                     <div class="modal-body sendArticleToEmail">
                         <h2>Odešlete si inzerát na svůj email</h2>
                         <?php
@@ -56,22 +56,22 @@
         </div>
     </div>
     <div class="row">
-            <div class="col-4 mt-2">
-                <h3>
-                    <?php echo $article['title']; ?>
-                </h3>
-                <div>Cena: <strong><?php echo $article['price'] ?></strong> kč</div>
-                <div>Lokalita: <strong><?php echo $article['location'] ?></strong></div>
-                <div>
-                    <div>Popis:
-                        <p>
-                            <?php echo $article['description'] ?>
-                        </p>
-                    </div>
-
+        <div class="col-4 mt-2">
+            <h3>
+                <?php echo $article['title']; ?>
+            </h3>
+            <div>Cena: <strong><?php echo $article['price'] ?></strong> kč</div>
+            <div>Lokalita: <strong><?php echo $article['location'] ?></strong></div>
+            <div>
+                <div>Popis:
+                    <p>
+                        <?php echo $article['description'] ?>
+                    </p>
                 </div>
 
             </div>
+
+        </div>
         <div class="d-flex col-12">
             <?php
             foreach ($article['images'] as $image) {
