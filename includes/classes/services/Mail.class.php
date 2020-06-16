@@ -122,9 +122,8 @@ class Mail
     }
 
     public static function testMail() {
-//        phpinfo();
-//        die;
-        ini_set();
+        phpinfo();
+        die;
         stream_socket_client();
         $mail = new Message;
         $mail->setFrom('Franta <franta@example.com>')
