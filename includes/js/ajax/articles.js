@@ -170,7 +170,7 @@ function sendArticleToEmail(email) {
         const errors = res["errors"];
         for (let [input, msg] of Object.entries(errors)) {
           $(".error").show();
-          $(`#err${input}`).text(msg);
+          $(`.sendArticleToEmail #err${input}`).text(msg);
         }
       }
       if(res["success"]) {
@@ -205,7 +205,7 @@ function sendReservationToEmail(data) {
         }
       }
       if(res["success"]) {
-        $("#sendArticleOnEmail").modal("hide");
+        $("#addReservation").modal("hide");
         $(".alert-success").show().text(res["success"]);
       }
     },

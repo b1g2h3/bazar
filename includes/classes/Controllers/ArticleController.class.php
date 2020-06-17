@@ -6,7 +6,7 @@ namespace App\Controller;
 use App\Models\Article;
 use App\Models\Image;
 use App\Services\Mail;
-use Tracy\Debugger;
+use App\Services\Redirect;
 
 class ArticleController
 {
@@ -15,7 +15,7 @@ class ArticleController
     public static function index()
     {
         $request = $_REQUEST;;
-        if (!is_null($request['orderBy'])) {
+        if (isset($request['orderBy']) && !is_null($request['orderBy'])) {
             if ($request['orderBy'] === "1") {
                 $orderBy = 'DESC';
             } elseif ($request['orderBy'] === "2") {
@@ -27,21 +27,23 @@ class ArticleController
 
         $cenaOd = 0;
         $cenaDo = 1000000;
-        if (!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
-            $cenaOd = $request['cenaOd'];
+        if(isset($request['cenaOd'])){
+            if (!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
+                $cenaOd = $request['cenaOd'];
+            }
+        } elseif(isset($request['cenaDo'])) {
+            if (!is_null($request['cenaDo']) && is_numeric($request['cenaDo'])) {
+                $cenaDo = $request['cenaDo'];
+            }
         }
-        if (!is_null($request['cenaDo']) && is_numeric($request['cenaDo'])) {
-            $cenaDo = $request['cenaDo'];
-        }
 
 
 
-        if (!is_null($request['orderBy'])) {
+        if (isset($request['orderBy']) && !is_null($request['orderBy'])) {
             $allArticles = Article::getArticleByFilter($orderBy, $cenaOd, $cenaDo);
         } else {
             $allArticles = Article::getAllArticles();
         }
-        \Tracy\Debugger::barDump($allArticles);
 
         include('./includes/views/Articles/index.php');
     }
@@ -66,8 +68,12 @@ class ArticleController
     public static function show($id)
     {
         $article = Article::find($id);
+        if(!$article)
+            Redirect::to('/');
+
         $article['images'] = Image::findImages($id);
         include('./includes/views/Articles/show.php');
+
     }
 
     public static function create($request, $files)
@@ -139,11 +145,15 @@ class ArticleController
     public static function update($request, $files)
     {
         $data = json_decode($request['data'], true);
+
         $errors = null;
         $checked = $data['rezervace'];
+        $id = $data['id'];
+        unset($data['id']);
         unset($data['files']);
         unset($data['method']);
         unset($data['rezervace']);
+
 
         foreach ($data as $name => $param) {
             if (empty($param)) {
@@ -162,6 +172,7 @@ class ArticleController
             echo json_encode(array('errors' => $errors));
             return;
         }
+
         $images = null;
         if (!empty($files)) {
             $allowed = array('jpg', 'jpeg', 'png');
@@ -190,11 +201,13 @@ class ArticleController
                 }
             }
         }
+
         if (!is_null($errors)) {
             echo json_encode(array('errors' => $errors));
             return;
         } else {
             $data['rezervace'] = $checked;
+            $data['id'] = $id;
             if (Article::update($data, $images)) {
                 echo json_encode(array('success' => 'Inzerát byl upraven.', 'article' => $data));
             } else {
@@ -208,20 +221,18 @@ class ArticleController
         $errors = null;
         $data = json_decode($request['data']);
         if (filter_var($data->email, FILTER_VALIDATE_EMAIL) === false) {
-            $errors['Email'] ='Email není ve správném formátu';
-        }
-        if (!is_null($errors)) {
-            \Tracy\Debugger::barDump($errors);
+            $errors['Email'] = 'Email není ve správném formátu';
             echo json_encode(array('errors' => $errors));
             return;
-        }
-        $article = Article::find($data->id);
-        $images = Image::findImages($article['id']);
-        \Tracy\Debugger::barDump(Mail::sendArticle($data->email, $article, $images));
-        if(Mail::sendArticle($data->email, $article, $images)) {
-            echo json_encode(array('success' => 'Inzerát byl odeslán na Váš email'));
         } else {
-            echo json_encode(array('errors' => 'Inzerát nebylo možno poslat.'));
+                $article = Article::find($data->id);
+                $images = Image::findImages($article['id']);
+                if (Mail::sendArticle($data->email, $article, $images)) {
+                    echo json_encode(array('success' => 'Inzerát byl odeslán na Váš email'));
+                } else {
+                    echo json_encode(array('errors' => 'Inzerát nebylo možno poslat.'));
+                }
+
         }
     }
 
@@ -237,7 +248,7 @@ class ArticleController
                 $errors[$name] = $name . " je nutné vyplnit";
             } elseif (strlen($param) < 4) {
                 $error[$name] = $name . " musí obsahovat minimálně 4 znaky.";
-            } elseif (strlen($param) > 50) {
+            } elseif (strlen($param) > 500) {
                 $errors[$name] = $name . " musí obsahovat maximálně 200 znaků.";
             }
         }
@@ -251,20 +262,25 @@ class ArticleController
         }
 
         $article = Article::find($id);
-
-        if(Mail::sendReservation($article, $data)) {
-            echo json_encode(array('success' => 'Vaše rezervace byla přijate ke zpracování.'));
+        $data['reservationID'] = Article::saveResevation($article['id'], $data);
+        if($data['reservationID']) {
+            if (Mail::sendReservation($article, $data)) {
+                $msg = array('success' => 'Vaše rezervace byla přijate ke zpracování.');
+                echo json_encode($msg);
+            }
         } else {
             echo json_encode(array('errors' => 'Vaše rezervace nešla odeslat majiteli.'));
         }
     }
 
-    public static function bookArticle($id)
+    public static function bookArticle($request)
     {
-        $article = Article::find($id);
-        if($article['reservation'] !== 0)
+        $article = Article::find($request['articleId']);
+        $article['reservationID'] = $request['reservation'];
+        \Tracy\Debugger::barDump($article['reservation']);
+        if(is_null($article['reservation']))
         {
-            Article::book($id);
+            Article::book($article);
             echo 'Vaše rezervace byla potrvrzena.';
         } else {
             echo 'Vaš inzerát již byl rezervován.';

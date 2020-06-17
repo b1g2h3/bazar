@@ -111,11 +111,7 @@
             <tbody>
                 <?php foreach ($allArticles as $article) { ?>
                     <tr>
-                        <td>
-                            <a href="/?page=articleDetail&id=<?php echo $article['id'] ?>">
-                                <?php echo $article['id'] ?>
-                            </a>
-                        </td>
+                        <td><?php echo $article['id'] ?></td>
                         <td><?php echo $article['title'] ?></td>
                         <td><?php echo $article['description'] ?></td>
                         <td><?php echo $article['price'] ?></td>
@@ -127,7 +123,7 @@
                         </td>
                     </tr>
                 <?php } ?>
-                </tfoot>
+            </tbody>
         </table>
     </div>
 </div>

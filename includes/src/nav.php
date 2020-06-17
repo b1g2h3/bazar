@@ -10,32 +10,32 @@
                     <a class="nav-link" href="?page=articles">Inzeráty</a>
                 </li>
                 <?php
-                if (isset($_SESSION['isEditor']) && $_SESSION['isEditor']) {
+//                if (isset($_SESSION['isEditor']) && $_SESSION['isEditor']) {
                 ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="?page=editArticles">Upravit inzeráty</a>
                     </li>
                 <?php
-                } elseif (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
+//                } elseif (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
                 ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="?page=users">Uživatelé</a>
                     </li>
 
                 <?php
-                }
-                if (isset($_SESSION['isLoggedIn'])) :
+//                }
+//                if (isset($_SESSION['isLoggedIn'])) :
                 ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="?page=logout">Odhlásit se</a>
                     </li>
-                <?php else :
-                ?>
+<!--                --><?php //else :
+//                ?>
                     <li class="nav-item">
                         <a class="nav-link" href="?page=login">Přihlásit se</a>
                     </li>
-                <?php endif
-                ?>
+<!--                --><?php //endif
+//                ?>
 
             </ul>
 <!--            <form class="form-inline mt-2 mt-md-0">-->

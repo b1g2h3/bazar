@@ -8,12 +8,12 @@
                 <select onchange="this.form.submit()" class="form-control"  name="orderBy" id="orderBy">
                     <option value="1"
                         <?php
-                        echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === 'desc' ? 'selected' : '';
+                        echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === '1' ? 'selected' : '';
                         ?>
                     >Vzestupně</option>
                     <option value="2"
                         <?php
-                        echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === 'asc' ? 'selected' : '';
+                        echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === '2' ? 'selected' : '';
                         ?>
                     >Sestupně</option>
                     <option value="price"
@@ -27,7 +27,7 @@
                 <label for="CenaOd">Cena Od:</label>
                 <input type="text" name="cenaOd" class="form-control"
                        placeholder="Cena od" id="CenaOd"
-                        value="<?php echo !is_null($_REQUEST['cenaOd']) ? $_REQUEST['cenaOd'] : ''  ?>"
+                        value="<?php echo isset($_REQUEST['cenaOd']) && !is_null($_REQUEST['cenaOd']) ? $_REQUEST['cenaOd'] : ''  ?>"
                 >
                 <div id="errCenaOd" class="hidden error text-danger"></div>
             </div>
@@ -35,7 +35,7 @@
                 <label for="cenaDo">Cena Do:</label>
                 <input type="text" name="cenaDo" class="form-control"
                        placeholder="Cena do" id="cenaDo"
-                       value="<?php echo !is_null($_REQUEST['cenaDo']) ? $_REQUEST['cenaDo'] : ''  ?>"
+                       value="<?php echo isset($_REQUEST['cenaDo']) && !is_null($_REQUEST['cenaDo']) ? $_REQUEST['cenaDo'] : ''  ?>"
                 >
                 <div id="errCenaOd" class="hidden error text-danger"></div>
             </div>
@@ -48,14 +48,18 @@
     <div class="row">
         <?php foreach ($allArticles as $article) { ?>
             <div class="col-4 mt-2">
-                    <a href="?page=articleDetail&id=<?php echo $article['id'] ?>">
+                    <a style="text-decoration: none; color: black;" href="?page=articleDetail&id=<?php echo $article['id'] ?>">
 
-                        <?php echo $article['title'] ?></h3>
-               <div class="allArticles">
-                   <?php
-                   echo '<img class="w-100" src="data:image/jpg;base64,'.base64_encode($article['image']) .'" />';
-                   ?>
-               </div>
+                        <h3><?php echo $article['title'] ?></h3>
+                        <div class="allArticles">
+                            <?php
+                            if(empty($article['image'])) {
+                                echo '<img class="w-100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/No_image_available_cs.svg/768px-No_image_available_cs.svg.png" />';
+                            } else {
+                                echo '<img class="w-100" src="data:image/jpg;base64,'.base64_encode($article['image']) .'" />';
+                            }
+                            ?>
+                        </div>
                 <span>Cena <?php echo $article['price'] ?> </span>
                     </a>
             </div>

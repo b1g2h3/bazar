@@ -53,8 +53,8 @@
                         <div class="form-group">
                             <label for="role">Role:</label>
                             <select name="user_role" class="form-control" placeholder="Role" id="role">
-                                <option value="1">Admin</option>
-                                <option value="2">Editor</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Editor">Editor</option>
                             </select>
                         </div>
                     </div>
@@ -76,15 +76,20 @@
                 <th>Jméno</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($allUsers as $user) { ?>
+                <?php \Tracy\Debugger::barDump($user); ?>
                 <tr>
                     <td><?php echo $user['id'] ?></td>
                     <td><?php echo $user['name'] ?></td>
                     <td><?php echo $user['email'] ?></td>
-                    <td><?php echo $user['role_id'] == 1 ? 'Admin' : 'Editor' ?></td>
+                    <td><?php echo $user['roles_id'] == 1 ? 'Admin' : 'Editor' ?></td>
+                    <td>
+                        <div style="cursor:pointer" class="editUserEvent">Upravit</div>
+                    </td>
                 </tr>
             <?php } ?>
             </tfoot>

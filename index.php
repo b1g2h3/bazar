@@ -2,13 +2,13 @@
 
 require('server.php');
 
-$title = 'Bazar | Administrace';
+$title = 'Bazar';
 require('./includes/src/header.php');
 require('./includes/src/nav.php');
 
 
 if(isset($_REQUEST['reservation'])) {
-    \App\Controller\ArticleController::bookArticle($_REQUEST['reservation']);
+    \App\Controller\ArticleController::bookArticle($_REQUEST);
 }
 
 

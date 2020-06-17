@@ -86,11 +86,9 @@ class UserController
         $errors = null;
         $role_id = $data['role_id'];
         $id = $data['id'];
-
-        if (!empty($data['password'])) {
-            $password = $data['password'];
+        if (empty($data['password'])) {
+            unset($data['password']);
         }
-        unset($data['password']);
         unset($data['role_id']);
         unset($data['id']);
         foreach ($data as $name => $param) {
@@ -119,8 +117,7 @@ class UserController
         }
         $data['role_id'] = $role_id;
         $data['id'] = $id;
-        array_key_exists('password', $data) ? $data['password'] = Hash::make($password) : '';
-
+        array_key_exists('password', $data) ? $data['password'] = Hash::make($data['password']) : '';
         if (User::update($data)) {
             echo json_encode(array('success' => 'Uživatel byl aktualizován.', 'user' => $data));
         } else {

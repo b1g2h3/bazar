@@ -2,6 +2,7 @@
 
 require('server.php');
 
+
 switch ($_POST['method']) {
     case 'addUser':
         \App\Controller\UserController::store($_POST['data']);
@@ -29,8 +30,10 @@ switch ($_POST['method']) {
         break;
     case 'sendArticleToEmail':
         \App\Controller\ArticleController::sendArticleToEmail($_POST);
+        break;
     case 'sendReservationToOwner':
         \App\Controller\ArticleController::sendReservationToOwner($_POST);
+        break;
     default:
         \Tracy\Debugger::barDump('cesta neexistuje');
 }

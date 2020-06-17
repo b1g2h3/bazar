@@ -22,12 +22,12 @@ class User
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $sql = "insert users(name, email, password, role_id, created_at) values (:name, :email, :password, :role_id, :created_at)";
+        $sql = "insert users(name, email, password, roles_id, created_at) values (:name, :email, :password, :roles_id, :created_at)";
         $args = array(
             ':name' => $data['name'],
             ':email' => $data['email'],
             'password' => $data['password'],
-            ':role_id' => $data['role_id'],
+            ':roles_id' => $data['role_id'],
             ':created_at' => date ("Y-m-d H:i:s"),
         );
         try {
@@ -46,9 +46,13 @@ class User
         $conn = $pdo->conn;
         $field = (is_numeric($param)) ? 'id' : 'email';
         $sql = 'SELECT * FROM users WHERE ' . $field . ' = :' . $field;
-        $sth = $conn->prepare($sql);
-        $sth->execute(array(':' . $field => $param));
-        return $sth->fetch();
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute(array(':' . $field => $param));
+            return $sth->fetch();
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
     }
 
     public static function update($data)
@@ -57,14 +61,14 @@ class User
             ':id' => $data['id'],
             ':name' => $data['name'],
             ':email' => $data['email'],
-            ':role_id' => $data['role_id'],
+            ':roles_id' => $data['role_id'],
             ':updated_at' => date ("Y-m-d H:i:s"),
         );
         if (array_key_exists('password', $data)) {
-            $sql = "UPDATE users SET email = :email, name = :name, password = :password, updated_at = :updated_at, role_id = :role_id WHERE id = :id";
+            $sql = "UPDATE users SET email = :email, name = :name, password = :password, updated_at = :updated_at, roles_id = :roles_id WHERE id = :id";
             $args[':password'] = $data['password'];
         } else {
-            $sql = "UPDATE users SET email = :email, name = :name, updated_at = :updated_at, role_id = :role_id WHERE id = :id";
+            $sql = "UPDATE users SET email = :email, name = :name, updated_at = :updated_at, roles_id = :roles_id WHERE id = :id";
         }
 
         try {

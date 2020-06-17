@@ -21,7 +21,7 @@ class Article
                 a.price,
                 i.image
             FROM articles a
-            INNER JOIN images i
+            LEFT JOIN images i
                 ON a.id = i.articles_id
             GROUP BY a.id';
         try {
@@ -65,7 +65,7 @@ class Article
                         a.price,
                         i.image
                 FROM articles a
-                INNER JOIN images i
+                LEFT JOIN images i
                     ON a.id = i.articles_id
                 WHERE price
                 BETWEEN :priceOd AND :priceDo
@@ -151,28 +151,52 @@ class Article
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
-            $insertedId = $conn->lastInsertId();
-            is_null($images) ?: Image::create($images, $insertedId);
+            is_null($images) ?: Image::create($images, $data['id']);
             return true;
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());
         }
     }
 
-    public static function book($id)
+    public static function book($article)
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
         $sql = "UPDATE articles 
-                SET reservation = 1                   
+                SET reservation = :reservationID,  updated_at = :updated_at                 
                 WHERE id = :id";
         $args = array(
-            ':id' => $id
+            ':reservationID' => $article['reservationID'],
+            ':updated_at' => date ("Y-m-d H:i:s"),
+            ':id' => $article['id']
         );
+        \Tracy\Debugger::barDump($args);
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
             return true;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function saveResevation($id, $data)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = "insert reservation(name, email, message, articles_id, created_at) values (:name, :message, :email,:articleID ,:created_at)";
+        $args = array(
+            ':name' => $data['Jméno'],
+            ':email' => $data['Email'],
+            ':message' => $data['Zpráva'],
+            ':articleID' => $id,
+            ':created_at' => date ("Y-m-d H:i:s"),
+        );
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute($args);
+            $insertedId = $conn->lastInsertId();
+            return $insertedId;
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());
         }

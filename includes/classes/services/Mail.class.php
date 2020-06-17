@@ -2,86 +2,39 @@
 
 namespace App\Services;
 
-use Nette\Mail\Mailer;
 use Nette\Mail\Message;
-use Nette\Mail\SendmailMailer;
+use Nette\Mail\SmtpMailer;
 
 class Mail
 {
 
-    protected $host = 'stmp.gmail.com',
-              $username = 'john@gmail.com',
-              $password = '*****';
+    protected static
+        $host = "smtp.seznam.cz",
+        $username = "testemailtest1@email.cz",
+        $password = "123456321",
+        $secure = "none",
+        $port = "25";
+    public $mail;
 
-    public function __construct()
+    protected static function init()
     {
-
-//        $mail = new Message;
-//        $mail->setFrom('eVčelár <holubjan@gmail.com>')
-//            ->addTo('holubjan@gmail.com')
-//            ->setSubject($values['nazov'])
-//            ->setBody($values['sprava']);
-//
-//        $mailer = new Nette\Mail\SmtpMailer([
-//            'host' => 'smtp.gmail.com',
-//            'username' => 'holubjan@gmail.com',
-//            'password' => '**********',
-//            'secure' => 'ssl',
-//
-//        ]);
-//        $mailer->send($mail);
+        return new SmtpMailer([
+        'host' => self::$host,
+        'username' => self::$username,
+        'password' => self::$password,
+        'secure' => self::$secure,
+        'port' => self::$port,
+    ]);
     }
 
     public static function sendArticle($email, $article, $images)
     {
-//        $to = $email;
-//        $subject = "Posílám vám inzerát";
         $showImages = null;
-        foreach ($images as $image) {
-            $showImages .= '<th><img class="w-100 col-4" src="data:image/jpg;base64,' . base64_encode($image['image']) . '" /></th>';
+        if(!is_null($images)) {
+            foreach ($images as $image) {
+                $showImages .= '<th><img style="width: 200px; height: 200px" src="data:image/jpg;base64,' . base64_encode($image['image']) . '" /></th>';
+            }
         }
-
-        $msg = "
-                <html>
-                <head>
-                <title>Inzerát ".$article['id']."</title>
-                </head>
-                <body>
-                <table>
-                <tr>
-                <th>Posíláme Vám inzerát na Vaše přání.</th>
-                <th>".$article['title']."</th>
-                <th>Popis:".$article['description']."</th>
-                <th>Cena ".$article['cena']." kč</th>
-                <th>Lokalita: ".$article['location']."</th>
-                </tr>
-                <tr>
-                <th>Obrázky</th>
-                ".$showImages ? $showImages : 'Inzerát neobsahuje žádné obrázky'."
-                </tr>
-                </table>
-                </body>
-                </html>
-                ";
-
-
-        $file = str_replace(" ", '', $article['title']).'email.html';
-        if(!is_file($file)){
-            file_put_contents($file, $msg);
-        }
-
-//        $headers = "From: admin@bazar.local";
-
-//        mail($to,$subject,$msg,$headers);
-    }
-
-    public static function sendReservation($article, $data)
-    {
-//        $to = $email;
-//        $subject = "Posílám vám inzerát";
-
-        $url =  'http://bazar.local/?reservation='.$article['id'];
-
 
         $msg = "
                 <html>
@@ -89,49 +42,94 @@ class Mail
                 <title>Inzerát ".$article['title']."</title>
                 </head>
                 <body>
-                <table>
+                <table style='text-align: left'>
                 <tr>
-                <th>Dobrý den,</th>
-                <th>Posíláme nabídku na Váš inzerát ".$article['title'].".</th>
+                <th>Posíláme Vám inzerát na Vaše přání.
+                 <br>Inzerát ".$article['title']."
+                 <br>Popis:".$article['description']."
+                 <br>Cena ".$article['price']." kč
+                 <br>Lokalita: ".$article['location']."
                 </tr>
                 <tr>
-                <th>Od: ".$data['Email']. "</th>
-                <th>Zpráva: ".$data['Zpráva']. "</th>
+                  <th>S pozdravem  <br>bazal.local</th>
                 </tr>
                 <tr>
-                <th>Rezervaci můžete potvrdit na odkazu uvedeném níže</th>
-                <th>Zpráva: ".$url. "</th>
+                  <th>Na tento email neodpovídejte</th>
+                </tr>
+                <tr>
+                ".$showImages."
                 </tr>
                 </table>
                 </body>
                 </html>
                 ";
 
-        $file = str_replace(" ", '', $article['title']).'rezervace.html';
-        \Tracy\Debugger::barDump(is_file($file));
-        if(!is_file($file)){
-            file_put_contents($file, $msg);
+        $message = new Message;
+        $message->setFrom(self::$username)
+            ->addTo($email)
+            ->setSubject(' Inzerát '.$article['title'])
+            ->setHtmlBody($msg);
+        $mailer = self::init();
+
+        try {
+            $mailer->send($message);
+            return true;
+        } catch (\Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
         }
-
-
-        return true;
-
-//        $headers = "From: admin@bazar.local";
-
-//        mail($to,$subject,$msg,$headers);
     }
 
-    public static function testMail() {
-        phpinfo();
-        die;
-        stream_socket_client();
-        $mail = new Message;
-        $mail->setFrom('Franta <franta@example.com>')
-            ->addTo('petr@example.com')
-            ->addTo('jirka@example.com')
-            ->setSubject('Potvrzení objednávky')
-            ->setBody("Dobrý den,\nvaše objednávka byla přijata.");
-        $mailer = new SendmailMailer;
-        $mailer->send($mail);
+    public static function sendReservation($article, $data)
+    {
+
+        $url =  'http://bazar.local/?reservation='.$data['reservationID'].'&articleId='.$article['id'];
+
+        $msg = "
+
+                <html>
+                <head>
+                <title>Inzerát ".$article['title']."</title>
+                </head>
+                <body>
+                <table>
+                <tbody style=\"text-align:left\">
+                  <tr>
+                    <th>Dobrý den, Posíláme nabídku na Váš inzerát ".$article['title'].".
+                        <br>
+                        od: ".$data['Jméno']." <br>
+                        email: ".$data["Email"]."
+                    </th>
+                  </tr>
+                  <th>Zpráva: ".$data['Zpráva']."</th>
+                </tr>
+                <tr>
+                <th>Rezervaci můžete potvrdit na odkazu uvedeném níže <br>
+                  <a href=".$url.">Klikněte zde</a></th>
+                </tr>
+                <tr>
+                  <th>S pozdravem  <br>bazal.local</th>
+                </tr>
+                <tr>
+                  <th>Na tento email neodpovídejte</th>
+                </tr>
+                </tbody>
+                </table>
+                </body>
+                </html>
+                ";
+
+        $message = new Message;
+        $message->setFrom(self::$username)
+            ->addTo($data['Email'])
+            ->setSubject('Zájem o '.$article['title'])
+            ->setHtmlBody($msg);
+        $mailer = self::init();
+
+        try {
+            $mailer->send($message);
+            return true;
+        } catch (\Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
     }
 }

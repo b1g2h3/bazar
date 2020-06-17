@@ -60,11 +60,13 @@ $(".alert").hide();
 $(".sendReservation").click(function (e) {
   let email = $(".sendReservationToEmail #Email").val();
   let msg = $(".sendReservationToEmail #Zpráva").val();
+  let name = $(".sendReservationToEmail #Jméno").val();
   e.preventDefault();
   e.stopPropagation();
   data = {
     Email: email,
     Zpráva: msg,
+    Jméno: name
   };
   sendReservationToEmail(data);
 });
@@ -85,34 +87,36 @@ $(document).ready(function () {
   $(".alert").hide();
   $("#users tbody").on("click", "tr", function () {
     var data = table.row(this).data();
-    $(".editUser").unbind("click");
-    $(".deleteUser").unbind("click");
-    $("#updateUser").modal("show");
-    $(".error").hide();
-    $(".edit #Jméno").val(data[1]);
-    $(".edit #Email").val(data[2]);
-    $(`.edit #role option[value=${data[3]}]`).attr("selected", "selected");
+    $('.editUserEvent').on('click', function () {
+      $(".editUser").unbind("click");
+      $(".deleteUser").unbind("click");
+      $("#updateUser").modal("show");
+      $(".error").hide();
+      $(".edit #Jméno").val(data[1]);
+      $(".edit #Email").val(data[2]);
+      $(`.edit #role option[value=${data[3]}]`).attr("selected", "selected");
 
-    $(".editUser").click(function () {
-      let user = {
-        id: data[0],
-        name: $(".edit #Jméno").val(),
-        email: $(".edit #Email").val(),
-        password: $(".edit #Heslo").val(),
-        role_id: $(".edit #role").val(),
-      };
-      saveUser(user);
-    });
-    $(".deleteUser").click(function () {
-      let user = {
-        id: data[0],
-        name: $(".edit #Jméno").val(),
-        email: $(".edit #Email").val(),
-        password: $(".edit #Heslo").val(),
-        role_id: $(".edit #role").val(),
-      };
-      deleteUser(user);
-    });
+      $(".editUser").click(function () {
+        let user = {
+          id: data[0],
+          name: $(".edit #Jméno").val(),
+          email: $(".edit #Email").val(),
+          password: $(".edit #Heslo").val(),
+          role_id: $(".edit #role").val(),
+        };
+        saveUser(user);
+      });
+      $(".deleteUser").click(function () {
+        let user = {
+          id: data[0],
+          name: $(".edit #Jméno").val(),
+          email: $(".edit #Email").val(),
+          password: $(".edit #Heslo").val(),
+          role_id: $(".edit #role").val(),
+        };
+        deleteUser(user);
+      });
+    })
   });
 });
 

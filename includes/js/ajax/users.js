@@ -16,7 +16,6 @@ function createUser(user) {
     },
     success: function (res) {
       $(".error").hide();
-      console.log($(".error"));
       if (res["errors"]) {
         const errors = res["errors"];
         for (let [input, msg] of Object.entries(errors)) {
@@ -36,7 +35,7 @@ function createUser(user) {
             user.id,
             user.name,
             user.email,
-            user.role === 1 ? "Admin" : "Editor",
+            user.roles_id == 1 ? "Admin" : "Editor",
           ])
           .draw(false);
       }
@@ -48,7 +47,7 @@ function createUser(user) {
 }
 
 function updateUser(user) {
-  console.log(user);
+  user.role_id = user.role_id == 'Admin' ? 1 : 2;
   $.ajax({
     type: "POST",
     dataType: "json",
@@ -68,6 +67,7 @@ function updateUser(user) {
         }
       }
       if (res["success"]) {
+        res.user = user;
         $("#updateUser").modal("hide");
         $(".alert-success").show().text(res["success"]);
         let t = $("#users").DataTable();
@@ -77,7 +77,7 @@ function updateUser(user) {
             user.id,
             user.name,
             user.email,
-            user.role === 1 ? "Admin" : "Editor",
+            user.role_id == 1 ? "Admin" : "Editor",
           ])
           .invalidate();
       }
