@@ -16,6 +16,8 @@ class Article
         $sql = 'SELECT 
                 a.id,
                 a.title,
+                a.email,
+                a.reservation,
                 a.description,
                 a.location,
                 a.price,
@@ -37,11 +39,13 @@ class Article
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
+        $args = array(':userID' => $_SESSION['id']);
         $sql = 'SELECT  *
-            FROM articles';
+            FROM articles
+            WHERE user_id = :userID';
         try {
             $sth = $conn->prepare($sql);
-            $sth->execute();
+            $sth->execute($args);
             return $sth->fetchAll();
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());
@@ -100,11 +104,37 @@ class Article
         }
     }
 
+    public static function findReservation($id)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = 'SELECT *
+            FROM reservation
+            WHERE id = :id;';
+        $args = array(':id' => $id);
+
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute($args);
+            $result = $sth->fetch();
+            return $result;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
     public static function create($data, $images)
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $sql = "insert articles(title, description, price, location, email, created_at) values (:title, :description, :price, :location, :email, :created_at)";
+        $sql = "insert articles
+                    (title,
+                     description,
+                     price,
+                     location,
+                     email,
+                     user_id,
+                     created_at) values (:title, :description, :price, :location, :email, :userID, :created_at)";
         $args = array(
             ':title' => $data['Název'],
             ':description' => $data['Popis'],
@@ -112,6 +142,7 @@ class Article
             ':location' => $data['Lokalita'],
             ':email' => $data['Email'],
             ':created_at' => date ("Y-m-d H:i:s"),
+            ':userID' => $_SESSION['id']
         );
         try {
             $sth = $conn->prepare($sql);
@@ -135,7 +166,8 @@ class Article
                     price = :price, 
                     location = :location, 
                     email = :email,
-                    reservation = :reservation,                  
+                    reservation = :reservation,
+                    user_id = :userID                  
                     updated_at = :updated_at                    
                 WHERE id = :id";
         $args = array(
@@ -146,7 +178,8 @@ class Article
             ':email' => $data['Email'],
             ':reservation' => $data['rezervace'],
             ':updated_at' => date ("Y-m-d H:i:s"),
-            ':id' => $data['id']
+            ':id' => $data['id'],
+            ':userID' => $_SESSION['id']
         );
         try {
             $sth = $conn->prepare($sql);
@@ -170,7 +203,6 @@ class Article
             ':updated_at' => date ("Y-m-d H:i:s"),
             ':id' => $article['id']
         );
-        \Tracy\Debugger::barDump($args);
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
@@ -184,7 +216,7 @@ class Article
     {
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $sql = "insert reservation(name, email, message, articles_id, created_at) values (:name, :message, :email,:articleID ,:created_at)";
+        $sql = "insert reservation(name, email, message, articles_id, created_at) values (:name, :email, :message,:articleID ,:created_at)";
         $args = array(
             ':name' => $data['Jméno'],
             ':email' => $data['Email'],

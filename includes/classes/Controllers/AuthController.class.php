@@ -37,8 +37,8 @@ class AuthController
         if($user) {
             if (Hash::verify($data['password'], $user['password'])) {
                 $_SESSION['isLoggedIn'] = true;
-                $_SESSION['isAdmin'] = $user['role_id'] === "1" ? true : false;
-                $_SESSION['isEditor'] = $user['role_id'] === "2" ? true : false;
+                $_SESSION['isAdmin'] = $user['roles_id'] === "1" ? true : false;
+                $_SESSION['isEditor'] = $user['roles_id'] === "2" ? true : false;
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['email'] = $user['email'];
                 echo json_encode(array('success' => 'Uživatel byl přihlášen.', 'user' => $user));

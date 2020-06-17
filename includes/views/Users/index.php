@@ -81,7 +81,6 @@
         </thead>
         <tbody>
             <?php foreach ($allUsers as $user) { ?>
-                <?php \Tracy\Debugger::barDump($user); ?>
                 <tr>
                     <td><?php echo $user['id'] ?></td>
                     <td><?php echo $user['name'] ?></td>

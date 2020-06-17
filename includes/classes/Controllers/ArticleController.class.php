@@ -61,7 +61,13 @@ class ArticleController
 
     public static function edit()
     {
-        $allArticles = Article::getAllArticlesWithoutImages();
+        if(!isset($_SESSION['isEditor']) or !isset($_SESSION['isAdmin']))
+           Redirect::to('/');
+
+        if(isset($_SESSION['isEditor']))
+            $allArticles = Article::getAllArticlesWithoutImages();
+        if(isset($_SESSION['isAdmin']))
+            $allArticles = Article::getAllArticles();
         include('./includes/views/Articles/edit.php');
     }
 
@@ -71,6 +77,9 @@ class ArticleController
         if(!$article)
             Redirect::to('/');
 
+        if($article['reservation'] != 0)
+            $article['reservation'] = Article::findReservation($article['reservation']);
+
         $article['images'] = Image::findImages($id);
         include('./includes/views/Articles/show.php');
 
@@ -78,6 +87,9 @@ class ArticleController
 
     public static function create($request, $files)
     {
+        if(empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
+            Redirect::to('/');
+
         $data = json_decode($request['data'], true);
         $errors = null;
         unset($data['files']);
@@ -144,6 +156,10 @@ class ArticleController
 
     public static function update($request, $files)
     {
+
+        if(empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
+            Redirect::to('/');
+
         $data = json_decode($request['data'], true);
 
         $errors = null;
@@ -277,8 +293,7 @@ class ArticleController
     {
         $article = Article::find($request['articleId']);
         $article['reservationID'] = $request['reservation'];
-        \Tracy\Debugger::barDump($article['reservation']);
-        if(is_null($article['reservation']))
+        if($article['reservation'] == 0)
         {
             Article::book($article);
             echo 'Vaše rezervace byla potrvrzena.';

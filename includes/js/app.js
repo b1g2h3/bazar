@@ -71,6 +71,29 @@ $(".sendReservation").click(function (e) {
   sendReservationToEmail(data);
 });
 
+$(document).ready(function(){
+  $(".lightBox").on("click", function(){
+    $(".backDrop").animate({"opacity": ".70"}, 500);
+    $(".box").animate({"opacity": "1.0"}, 500);
+    $(".backDrop, .box").css("display", "block");
+  });
+
+  $(".thumb").on("click", function(){
+    var largeImage = $(this).attr("src");
+    $(".largeImage").attr({src: largeImage});
+  });
+
+  $(".close, .backDrop").on("click", function(){
+    closeBox();
+  });
+
+  function closeBox(){
+    $(".backDrop, .box").animate({"opacity": "0"}, 500, function(){
+      $(".backDrop, .box").css("display", "none");
+    });
+  }
+});
+
 $(".sendArticleEmail").click(function (e) {
   let email = $(".sendArticleToEmail #Email").val();
   e.preventDefault();

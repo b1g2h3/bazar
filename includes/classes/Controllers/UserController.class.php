@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Models\User;
 use App\Services\Hash;
+use App\Services\Redirect;
 
 class UserController
 {
@@ -29,6 +30,9 @@ class UserController
      */
     public static function index()
     {
+        if(empty($_SESSION['isAdmin']))
+            Redirect::to('/');
+
         $allUsers = User::getAllUsers();
         include('./includes/views/Users/index.php');
     }
@@ -39,6 +43,9 @@ class UserController
      */
     public static function store($data)
     {
+        if(empty($_SESSION['isAdmin']))
+            Redirect::to('/');
+
         $data = json_decode($data, true);
         $errors = null;
         $role_id = $data['role_id'];
@@ -82,6 +89,9 @@ class UserController
      */
     public static function update($data)
     {
+        if(empty($_SESSION['isAdmin']))
+            Redirect::to('/');
+
         $data = json_decode($data, true);
         $errors = null;
         $role_id = $data['role_id'];
@@ -127,6 +137,9 @@ class UserController
 
     public static function destroy($data)
     {
+        if(empty($_SESSION['isAdmin']))
+            Redirect::to('/');
+
         $data = json_decode($data, true);
         $user = User::find($data['id']);
         if ($user) {

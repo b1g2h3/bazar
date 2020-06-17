@@ -120,7 +120,7 @@ class Mail
 
         $message = new Message;
         $message->setFrom(self::$username)
-            ->addTo($data['Email'])
+            ->addTo($article['email'])
             ->setSubject('Zájem o '.$article['title'])
             ->setHtmlBody($msg);
         $mailer = self::init();

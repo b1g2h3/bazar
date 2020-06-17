@@ -67,6 +67,12 @@
             <div>Lokalita: <strong><?php echo $article['location'] ?></strong></div>
             <?php if(!empty($article['reservation'])) {?>
             <div><h3>Inzerát již byl rezervován</h3></div>
+                <div style="font-weight: bold">
+                    Byla rezervována od
+                    <?php
+                       echo $article['reservation']['name'].' dne '.date('d, m, Y ', strtotime($article['reservation']['created_at']));
+                    ?>
+                </div>
             <?php  } ?>
             <div>
                 <div>Popis:
@@ -78,23 +84,25 @@
             </div>
 
         </div>
-        <div class="row">
+        <div class="container">
 
             <?php
             if($article['images']) {
             foreach ($article['images'] as $image) { ?>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-                <div class="img-wrapper">
-                    <?php echo '<img class="w-100" src="data:image/jpg;base64,' . base64_encode($image['image']) . '" />'; ?>
-                    <div class="img-overlay">
-                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                    </div>
+                <?php echo '<a href="#" class="lightBox"><img class="thumb" src="data:image/jpg;base64,' . base64_encode($image['image']) . '" /> </a>'; ?>
+            <?php   }    ?>
+                <div class="backDrop"></div>
+
+                <div class="box">
+                    <div class="close">Zavřít</div>
+                    <img class="largeImage" src=""/>
                 </div>
-            </div>
-        <?php
-                }
-            } else {
-                ?>
+
+                <div class="clear"></div>
+            <?php
+                } else {
+            ?>
+
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
                     <div class="img-wrapper">
                         <?php echo '<img class="w-100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/No_image_available_cs.svg/768px-No_image_available_cs.svg.png" />'; ?>
