@@ -30,7 +30,7 @@ class UserController
      */
     public static function index()
     {
-        if(empty($_SESSION['isAdmin']))
+        if (empty($_SESSION['isAdmin']))
             Redirect::to('/');
 
         $allUsers = User::getAllUsers();
@@ -43,7 +43,7 @@ class UserController
      */
     public static function store($data)
     {
-        if(empty($_SESSION['isAdmin']))
+        if (empty($_SESSION['isAdmin']))
             Redirect::to('/');
 
         $data = json_decode($data, true);
@@ -89,7 +89,7 @@ class UserController
      */
     public static function update($data)
     {
-        if(empty($_SESSION['isAdmin']))
+        if (empty($_SESSION['isAdmin']))
             Redirect::to('/');
 
         $data = json_decode($data, true);
@@ -137,7 +137,7 @@ class UserController
 
     public static function destroy($data)
     {
-        if(empty($_SESSION['isAdmin']))
+        if (empty($_SESSION['isAdmin']))
             Redirect::to('/');
 
         $data = json_decode($data, true);

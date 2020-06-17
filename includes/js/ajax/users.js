@@ -36,6 +36,7 @@ function createUser(user) {
             user.name,
             user.email,
             user.roles_id == 1 ? "Admin" : "Editor",
+            '<div style="cursor:pointer" class="editUserEvent">Upravit</div>',
           ])
           .draw(false);
       }
@@ -47,7 +48,7 @@ function createUser(user) {
 }
 
 function updateUser(user) {
-  user.role_id = user.role_id == 'Admin' ? 1 : 2;
+  user.role_id = user.role_id == "Admin" ? 1 : 2;
   $.ajax({
     type: "POST",
     dataType: "json",
@@ -78,6 +79,7 @@ function updateUser(user) {
             user.name,
             user.email,
             user.role_id == 1 ? "Admin" : "Editor",
+            '<div style="cursor:pointer" class="editUserEvent">Upravit</div>',
           ])
           .invalidate();
       }

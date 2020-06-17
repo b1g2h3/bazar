@@ -85,7 +85,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zavřít</button>
+                        <button type="button" class="btn btn-danger deleteArticle">Smazat inzerát</button>
                         <button type="button" class="btn btn-primary updateArticle">Upravit inzerát</button>
                     </div>
                 </form>

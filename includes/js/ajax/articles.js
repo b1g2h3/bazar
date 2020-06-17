@@ -34,7 +34,8 @@ function createArticle(article) {
             article.Cena,
             article.Lokalita,
             article.Email,
-            article.rezervace = 'Není',
+            (article.rezervace = "Není"),
+            "<div style='cursor:pointer' class='editArticleEvent'>Upravit</div>",
           ])
           .draw(false);
       }
@@ -69,20 +70,23 @@ function updateArticle(article) {
         $("#editArticle").modal("hide");
         $(".alert-success").show().text(res["success"]);
         var t = $("#articles").DataTable();
-        let rowId = $("#articles").dataTable().fnFindCellRowIndexes(article.id, 0);
+        let rowId = $("#articles")
+          .dataTable()
+          .fnFindCellRowIndexes(article.id, 0);
         t.row(rowId)
-            .data([
-              article.id,
-              article.Název,
-              article.Popis,
-              article.Cena,
-              article.Lokalita,
-              article.Email,
-              article.rezervace == 0 ? 'Není' : 'Již rezervován',
-            ])
-            .invalidate();
+          .data([
+            article.id,
+            article.Název,
+            article.Popis,
+            article.Cena,
+            article.Lokalita,
+            article.Email,
+            article.rezervace == 0 ? "Není" : "Již rezervován",
+            "<div style='cursor:pointer' class='editArticleEvent'>Upravit</div>",
+          ])
+          .invalidate();
         article = res.article;
-       console.log(article);
+        console.log(article);
       }
     },
   });
@@ -96,29 +100,28 @@ function deleteArticle(article) {
     url: "/ajax.php",
     data: {
       method: "deleteArticle",
-      data: JSON.stringify(user),
+      data: JSON.stringify(article),
     },
     success: function (res) {
       console.log(res);
-      //   $(".error").hide();
-      //   if (res["errors"]) {
-      //     const errors = res["errors"];
-      //     for (let [input, msg] of Object.entries(errors)) {
-      //       let name = customValidationMessage[input];
-      //       $(".error").show();
-      //       $(`#err${name}`).text(msg);
-      //     }
-      //   }
-      //   if (res["success"]) {
-      //     $("#updateUser").modal("hide");
-      //     $(".alert-danger").show().text(res["success"]);
-      //     var t = $("#users").DataTable();
-      //     t.rows(function (index, data) {
-      //       return data[0] === user.id;
-      //     })
-      //       .remove()
-      //       .draw();
-      //   }
+      $(".error").hide();
+      if (res["errors"]) {
+        const errors = res["errors"];
+        for (let [name, msg] of Object.entries(errors)) {
+          $(".error").show();
+          $(`#err${name}`).text(msg);
+        }
+      }
+      if (res["success"]) {
+        $("#editArticle").modal("hide");
+        $(".alert-danger").show().text(res["success"]);
+        var t = $("#articles").DataTable();
+        t.rows(function (index, data) {
+          return data[0] === article.id;
+        })
+          .remove()
+          .draw();
+      }
     },
     error: function (xhr, status, error) {
       console.log(xhr, status, error);
@@ -134,25 +137,26 @@ function getArticleImages(articleId) {
     success: function (res) {
       res = JSON.parse(res);
       if (res["success"]) {
-        $('.previewImageEdit').remove();
+        $(".previewImageEdit").remove();
         var images = res.images;
-        images.map(image => {
-          $('.dropArticlePreviewImages').prepend(`<img id="img${image.id}" class="previewImageEdit deleteImage" src="data:image/jpg;base64,${image.base64} " />`);
+        images.map((image) => {
+          $(".dropArticlePreviewImages").prepend(
+            `<img id="img${image.id}" class="previewImageEdit deleteImage" src="data:image/jpg;base64,${image.base64} " />`
+          );
         });
         $(".deleteImage").click(function () {
-          if(confirm('Chcete vážně odstranit obrázek z databáze?')) {
+          if (confirm("Chcete vážně odstranit obrázek z databáze?")) {
             let id = $(this).attr("id");
-            deleteImage(id) ;
+            deleteImage(id);
           }
         });
-
       }
     },
   });
 }
 
 function sendArticleToEmail(email) {
-  let articleId = location.search.split('id=')[1]
+  let articleId = location.search.split("id=")[1];
   $.ajax({
     type: "POST",
     dataType: "json",
@@ -161,7 +165,7 @@ function sendArticleToEmail(email) {
       method: "sendArticleToEmail",
       data: JSON.stringify({
         email: email,
-        id: articleId
+        id: articleId,
       }),
     },
     success: function (res) {
@@ -173,7 +177,7 @@ function sendArticleToEmail(email) {
           $(`.sendArticleToEmail #err${input}`).text(msg);
         }
       }
-      if(res["success"]) {
+      if (res["success"]) {
         $("#sendArticleOnEmail").modal("hide");
         $(".alert-success").show().text(res["success"]);
       }
@@ -184,9 +188,8 @@ function sendArticleToEmail(email) {
   });
 }
 
-
 function sendReservationToEmail(data) {
-  data.id = location.search.split('id=')[1]
+  data.id = location.search.split("id=")[1];
   $.ajax({
     type: "POST",
     dataType: "json",
@@ -204,7 +207,7 @@ function sendReservationToEmail(data) {
           $(`#err${input}`).text(msg);
         }
       }
-      if(res["success"]) {
+      if (res["success"]) {
         $("#addReservation").modal("hide");
         $(".alert-success").show().text(res["success"]);
       }
@@ -214,7 +217,6 @@ function sendReservationToEmail(data) {
     },
   });
 }
-
 
 function deleteImage(id) {
   $.ajax({
@@ -230,9 +232,9 @@ function deleteImage(id) {
       if (res.errors) {
         console.log(res.errors);
       }
-      if(res.success) {
+      if (res.success) {
         $(".editalert-danger").show().text(res.success);
-        $(`#${id}`).remove()
+        $(`#${id}`).remove();
       }
     },
     error: function (xhr, status, error) {
@@ -246,5 +248,5 @@ module.exports = {
   deleteArticle,
   getArticleImages,
   sendArticleToEmail,
-  sendReservationToEmail
+  sendReservationToEmail,
 };

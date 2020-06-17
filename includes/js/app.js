@@ -66,29 +66,29 @@ $(".sendReservation").click(function (e) {
   data = {
     Email: email,
     Zpráva: msg,
-    Jméno: name
+    Jméno: name,
   };
   sendReservationToEmail(data);
 });
 
-$(document).ready(function(){
-  $(".lightBox").on("click", function(){
-    $(".backDrop").animate({"opacity": ".70"}, 500);
-    $(".box").animate({"opacity": "1.0"}, 500);
+$(document).ready(function () {
+  $(".lightBox").on("click", function () {
+    $(".backDrop").animate({ opacity: ".70" }, 500);
+    $(".box").animate({ opacity: "1.0" }, 500);
     $(".backDrop, .box").css("display", "block");
   });
 
-  $(".thumb").on("click", function(){
+  $(".thumb").on("click", function () {
     var largeImage = $(this).attr("src");
-    $(".largeImage").attr({src: largeImage});
+    $(".largeImage").attr({ src: largeImage });
   });
 
-  $(".close, .backDrop").on("click", function(){
+  $(".close, .backDrop").on("click", function () {
     closeBox();
   });
 
-  function closeBox(){
-    $(".backDrop, .box").animate({"opacity": "0"}, 500, function(){
+  function closeBox() {
+    $(".backDrop, .box").animate({ opacity: "0" }, 500, function () {
       $(".backDrop, .box").css("display", "none");
     });
   }
@@ -110,7 +110,7 @@ $(document).ready(function () {
   $(".alert").hide();
   $("#users tbody").on("click", "tr", function () {
     var data = table.row(this).data();
-    $('.editUserEvent').on('click', function () {
+    $(".editUserEvent").on("click", function () {
       $(".editUser").unbind("click");
       $(".deleteUser").unbind("click");
       $("#updateUser").modal("show");
@@ -139,7 +139,7 @@ $(document).ready(function () {
         };
         deleteUser(user);
       });
-    })
+    });
   });
 });
 
@@ -155,6 +155,7 @@ $(document).ready(function () {
     allFilesEdit = [];
     $(".editArticleEvent").on("click", function () {
       $(".updateArticle").unbind("click");
+      $(".deleteArticle").unbind("click");
       $(".alert").hide();
       $("#editArticle").modal("show");
       // .draggable({ handle: ".modal-header" });
@@ -168,6 +169,14 @@ $(document).ready(function () {
       $("#rezervace").prop("checked", isCheck);
 
       getArticleImages(data["0"]);
+      $(".deleteArticle").click(function () {
+        $(".error").hide();
+        $(".alert").hide();
+        let article = {
+          id: data[0],
+        };
+        deleteArticle(article);
+      });
       $(".updateArticle").click(function () {
         $(".error").hide();
         $(".alert").hide();

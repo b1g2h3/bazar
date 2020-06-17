@@ -2,7 +2,6 @@
 
 require('server.php');
 
-
 switch ($_POST['method']) {
     case 'addUser':
         \App\Controller\UserController::store($_POST['data']);
@@ -22,8 +21,11 @@ switch ($_POST['method']) {
     case 'updateArticle':
         \App\Controller\ArticleController::update($_POST, $_FILES);
         break;
+    case 'deleteArticle':
+        \App\Controller\ArticleController::destroy($_POST);
+        break;
     case 'deleteImage':
-    \App\Controller\ImageController::destroy($_POST['imageId']);
+        \App\Controller\ImageController::destroy($_POST['imageId']);
         break;
     case 'getArticleImages':
         \App\Controller\ArticleController::getArticleImages($_POST['id']);

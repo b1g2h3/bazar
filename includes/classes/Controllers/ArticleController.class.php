@@ -27,11 +27,11 @@ class ArticleController
 
         $cenaOd = 0;
         $cenaDo = 1000000;
-        if(isset($request['cenaOd'])){
+        if (isset($request['cenaOd'])) {
             if (!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
                 $cenaOd = $request['cenaOd'];
             }
-        } elseif(isset($request['cenaDo'])) {
+        } elseif (isset($request['cenaDo'])) {
             if (!is_null($request['cenaDo']) && is_numeric($request['cenaDo'])) {
                 $cenaDo = $request['cenaDo'];
             }
@@ -61,12 +61,12 @@ class ArticleController
 
     public static function edit()
     {
-        if(!isset($_SESSION['isEditor']) or !isset($_SESSION['isAdmin']))
-           Redirect::to('/');
+        if (!isset($_SESSION['isEditor']) or !isset($_SESSION['isAdmin']))
+            Redirect::to('/');
 
-        if(isset($_SESSION['isEditor']))
+        if (isset($_SESSION['isEditor']))
             $allArticles = Article::getAllArticlesWithoutImages();
-        if(isset($_SESSION['isAdmin']))
+        if (isset($_SESSION['isAdmin']))
             $allArticles = Article::getAllArticles();
         include('./includes/views/Articles/edit.php');
     }
@@ -74,20 +74,19 @@ class ArticleController
     public static function show($id)
     {
         $article = Article::find($id);
-        if(!$article)
+        if (!$article)
             Redirect::to('/');
 
-        if($article['reservation'] != 0)
+        if ($article['reservation'] != 0)
             $article['reservation'] = Article::findReservation($article['reservation']);
 
         $article['images'] = Image::findImages($id);
         include('./includes/views/Articles/show.php');
-
     }
 
     public static function create($request, $files)
     {
-        if(empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
+        if (empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
             Redirect::to('/');
 
         $data = json_decode($request['data'], true);
@@ -157,7 +156,7 @@ class ArticleController
     public static function update($request, $files)
     {
 
-        if(empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
+        if (empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
             Redirect::to('/');
 
         $data = json_decode($request['data'], true);
@@ -188,6 +187,7 @@ class ArticleController
             echo json_encode(array('errors' => $errors));
             return;
         }
+
 
         $images = null;
         if (!empty($files)) {
@@ -232,6 +232,24 @@ class ArticleController
         }
     }
 
+    public static function destroy($request)
+    {
+        if (empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin']))) {
+            echo json_encode(array('errors' => 'Neopravněný přístup.'));
+            return;
+        }
+        unset($request['method']);
+        $data = json_decode($request['data'], true);
+        $article = Article::find($data['id']);
+        if ($article) {
+            if (Article::delete($article['id'])) {
+                echo json_encode(array('success' => 'Inzerát byl odstraněn.'));
+            } else {
+                echo json_encode(array('errors' => 'Inzerát nebylo odstranit.'));
+            }
+        }
+    }
+
     public static function sendArticleToEmail($request)
     {
         $errors = null;
@@ -241,14 +259,13 @@ class ArticleController
             echo json_encode(array('errors' => $errors));
             return;
         } else {
-                $article = Article::find($data->id);
-                $images = Image::findImages($article['id']);
-                if (Mail::sendArticle($data->email, $article, $images)) {
-                    echo json_encode(array('success' => 'Inzerát byl odeslán na Váš email'));
-                } else {
-                    echo json_encode(array('errors' => 'Inzerát nebylo možno poslat.'));
-                }
-
+            $article = Article::find($data->id);
+            $images = Image::findImages($article['id']);
+            if (Mail::sendArticle($data->email, $article, $images)) {
+                echo json_encode(array('success' => 'Inzerát byl odeslán na Váš email'));
+            } else {
+                echo json_encode(array('errors' => 'Inzerát nebylo možno poslat.'));
+            }
         }
     }
 
@@ -269,7 +286,7 @@ class ArticleController
             }
         }
         if (filter_var($data['Email'], FILTER_VALIDATE_EMAIL) === false) {
-            $errors['Email'] ='Email není ve správném formátu';
+            $errors['Email'] = 'Email není ve správném formátu';
         }
         if (!is_null($errors)) {
             \Tracy\Debugger::barDump($errors);
@@ -279,7 +296,7 @@ class ArticleController
 
         $article = Article::find($id);
         $data['reservationID'] = Article::saveResevation($article['id'], $data);
-        if($data['reservationID']) {
+        if ($data['reservationID']) {
             if (Mail::sendReservation($article, $data)) {
                 $msg = array('success' => 'Vaše rezervace byla přijate ke zpracování.');
                 echo json_encode($msg);
@@ -293,8 +310,7 @@ class ArticleController
     {
         $article = Article::find($request['articleId']);
         $article['reservationID'] = $request['reservation'];
-        if($article['reservation'] == 0)
-        {
+        if ($article['reservation'] == 0) {
             Article::book($article);
             echo 'Vaše rezervace byla potrvrzena.';
         } else {

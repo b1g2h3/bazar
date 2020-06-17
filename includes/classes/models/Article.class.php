@@ -125,6 +125,15 @@ class Article
 
     public static function create($data, $images)
     {
+
+        $editor = "";
+        $editor2 = "";
+
+        if ($_SESSION['isEditor']) {
+            $editor = "user_id,";
+            $editor2 = ":user_id,";
+        }
+
         $pdo = DB::init();
         $conn = $pdo->conn;
         $sql = "insert articles
@@ -133,17 +142,20 @@ class Article
                      price,
                      location,
                      email,
-                     user_id,
-                     created_at) values (:title, :description, :price, :location, :email, :userID, :created_at)";
+                     " . $editor . "
+                     created_at) values (:title, :description, :price, :location, :email," . $editor2 . ":created_at)";
         $args = array(
             ':title' => $data['Název'],
             ':description' => $data['Popis'],
             ':price' => $data['Cena'],
             ':location' => $data['Lokalita'],
             ':email' => $data['Email'],
-            ':created_at' => date ("Y-m-d H:i:s"),
-            ':userID' => $_SESSION['id']
+            ':created_at' => date("Y-m-d H:i:s"),
         );
+
+        if ($_SESSION['isEditor']) {
+            $args[':user_id'] = $_SESSION['id'];
+        }
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
@@ -158,6 +170,17 @@ class Article
 
     public static function update($data, $images)
     {
+        $reservation = '';
+        $editor = '';
+        if ($data['rezervace'] != 0) {
+            unset($data['rezervace']);
+        } else {
+            $reservation =  " reservation = :reservation,";
+        }
+
+        if ($_SESSION['isEditor']) {
+            $editor = "user_id = :userID,";
+        }
         $pdo = DB::init();
         $conn = $pdo->conn;
         $sql = "UPDATE articles 
@@ -166,8 +189,8 @@ class Article
                     price = :price, 
                     location = :location, 
                     email = :email,
-                    reservation = :reservation,
-                    user_id = :userID                  
+                    " . $reservation . "
+                    " . $editor . "                  
                     updated_at = :updated_at                    
                 WHERE id = :id";
         $args = array(
@@ -176,15 +199,38 @@ class Article
             ':price' => $data['Cena'],
             ':location' => $data['Lokalita'],
             ':email' => $data['Email'],
-            ':reservation' => $data['rezervace'],
-            ':updated_at' => date ("Y-m-d H:i:s"),
+            ':updated_at' => date("Y-m-d H:i:s"),
             ':id' => $data['id'],
-            ':userID' => $_SESSION['id']
         );
+
+
+        if ($_SESSION['isEditor']) {
+            $args[':userID'] = $_SESSION['id'];
+        }
+
+        if (isset($data['rezervace']) && $data['rezervace'] == 0) {
+            $args[':reservation'] = $data['rezervace'];
+        }
+
         try {
             $sth = $conn->prepare($sql);
             $sth->execute($args);
             is_null($images) ?: Image::create($images, $data['id']);
+            return true;
+        } catch (Exception $e) {
+            \Tracy\Debugger::barDump($e->getMessage());
+        }
+    }
+
+    public static function delete($id)
+    {
+        $pdo = DB::init();
+        $conn = $pdo->conn;
+        $sql = "DELETE FROM articles WHERE id = ?";
+
+        try {
+            $sth = $conn->prepare($sql);
+            $sth->execute(array($id));
             return true;
         } catch (Exception $e) {
             \Tracy\Debugger::barDump($e->getMessage());
@@ -200,7 +246,7 @@ class Article
                 WHERE id = :id";
         $args = array(
             ':reservationID' => $article['reservationID'],
-            ':updated_at' => date ("Y-m-d H:i:s"),
+            ':updated_at' => date("Y-m-d H:i:s"),
             ':id' => $article['id']
         );
         try {
@@ -222,7 +268,7 @@ class Article
             ':email' => $data['Email'],
             ':message' => $data['Zpráva'],
             ':articleID' => $id,
-            ':created_at' => date ("Y-m-d H:i:s"),
+            ':created_at' => date("Y-m-d H:i:s"),
         );
         try {
             $sth = $conn->prepare($sql);
