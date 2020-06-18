@@ -87,7 +87,7 @@
                     <td><?php echo $user['email'] ?></td>
                     <td><?php echo $user['roles_id'] == 1 ? 'Admin' : 'Editor' ?></td>
                     <td>
-                        <div style="cursor:pointer" class="editUserEvent">
+                        <div id="<?php echo $user['id'] ?>" style="cursor:pointer" class="editUserEvent">
                             <i class="fas fa-edit"></i>
                         </div>
                     </td>

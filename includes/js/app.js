@@ -113,72 +113,32 @@ $overlay.click(function() {
 
 // When next button is clicked
 $nextButton.click(function(event) {
-  // Hide the current image
   $("#overlay img").hide();
-  // Overlay image location
   var $currentImgSrc = $("#overlay img").attr("src");
-  // Image with matching location of the overlay image
   var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
-  // Finds the next image
   var $nextImg = $($currentImg.closest(".image").next().find("img"));
-  // All of the images in the gallery
   var $images = $("#image-gallery img");
-  // If there is a next image
   if ($nextImg.length > 0) {
-    // Fade in the next image
     $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
   } else {
-    // Otherwise fade in the first image
     $("#overlay img").attr("src", $($images[0]).attr("src")).fadeIn(800);
   }
-  // Prevents overlay from being hidden
   event.stopPropagation();
 });
 
-// When previous button is clicked
 $prevButton.click(function(event) {
-  // Hide the current image
   $("#overlay img").hide();
-  // Overlay image location
   var $currentImgSrc = $("#overlay img").attr("src");
-  // Image with matching location of the overlay image
   var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
-  // Finds the next image
   var $nextImg = $($currentImg.closest(".image").prev().find("img"));
-  // Fade in the next image
   $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
-  // Prevents overlay from being hidden
   event.stopPropagation();
 });
 
-// When the exit button is clicked
 $exitButton.click(function() {
-  // Fade out the overlay
   $("#overlay").fadeOut("slow");
 });
 
-// $(document).ready(function () {
-//   $(".lightBox").on("click", function () {
-//     $(".backDrop").animate({ opacity: ".70" }, 500);
-//     $(".box").animate({ opacity: "1.0" }, 500);
-//     $(".backDrop, .box").css("display", "block");
-//   });
-//
-//   $(".thumb").on("click", function () {
-//     var largeImage = $(this).attr("src");
-//     $(".largeImage").attr({ src: largeImage });
-//   });
-//
-//   $(".close, .backDrop").on("click", function () {
-//     closeBox();
-//   });
-//
-//   function closeBox() {
-//     $(".backDrop, .box").animate({ opacity: "0" }, 500, function () {
-//       $(".backDrop, .box").css("display", "none");
-//     });
-//   }
-// });
 
 $(".sendArticleEmail").click(function (e) {
   let email = $(".sendArticleToEmail #Email").val();
@@ -193,101 +153,105 @@ $(document).ready(function () {
       url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json",
     },
   });
-  $(".alert").hide();
-  $("#users tbody").on("click", "tr", function () {
-    var data = table.row(this).data();
-    $(".editUserEvent").on("click", function () {
-      $(".editUser").unbind("click");
-      $(".deleteUser").unbind("click");
-      $("#updateUser").modal("show");
-      $(".error").hide();
-      $(".edit #Jméno").val(data[1]);
-      $(".edit #Email").val(data[2]);
-      $(`.edit #role option[value=${data[3]}]`).attr("selected", "selected");
+});
 
-      $(".editUser").click(function () {
-        let user = {
-          id: data[0],
-          name: $(".edit #Jméno").val(),
-          email: $(".edit #Email").val(),
-          password: $(".edit #Heslo").val(),
-          role_id: $(".edit #role").val(),
-        };
-        saveUser(user);
-      });
-      $(".deleteUser").click(function () {
-        let user = {
-          id: data[0],
-          name: $(".edit #Jméno").val(),
-          email: $(".edit #Email").val(),
-          password: $(".edit #Heslo").val(),
-          role_id: $(".edit #role").val(),
-        };
-        deleteUser(user);
-      });
-    });
+$(".editUserEvent").on("click", function () {
+  $(".alert").hide();
+  var t = $("#users").DataTable();
+  let rowId = $("#users")
+      .dataTable()
+      .fnFindCellRowIndexes(this.id, 0);
+  let data = t.row(rowId).data()
+  $(".alert").hide();
+  $(".editUser").unbind("click");
+  $(".deleteUser").unbind("click");
+  $("#updateUser").modal("show");
+  $(".error").hide();
+  $(".edit #Jméno").val(data[1]);
+  $(".edit #Email").val(data[2]);
+  $(`.edit #role option[value=${data[3]}]`).attr("selected", "selected");
+
+  $(".editUser").click(function () {
+    let user = {
+      id: data[0],
+      name: $(".edit #Jméno").val(),
+      email: $(".edit #Email").val(),
+      password: $(".edit #Heslo").val(),
+      role_id: $(".edit #role").val(),
+    };
+    saveUser(user);
+  });
+  $(".deleteUser").click(function () {
+    let user = {
+      id: data[0],
+      name: $(".edit #Jméno").val(),
+      email: $(".edit #Email").val(),
+      password: $(".edit #Heslo").val(),
+      role_id: $(".edit #role").val(),
+    };
+    deleteUser(user);
   });
 });
 
+$('.editArticleEvent').on('click', function (e) {
+  $(".alert").hide();
+  var t = $("#articles").DataTable();
+  let rowId = $("#articles")
+      .dataTable()
+      .fnFindCellRowIndexes(this.id, 0);
+  let data = t.row(rowId).data()
+  $(".updateArticle").unbind("click");
+  $(".deleteArticle").unbind("click");
+  $(".alert").hide();
+  $("#editArticle").modal("show");
+  $(".error").hide();
+  let isCheck = data[6] !== "Není";
+  let price = data[3];
+  let resPrice = price.replace('Kč', '',).split(' ').join('');
+  let result = resPrice.replaceAll('&nbsp;', '');
+  $(".editArticle #Název").val(data[1]);
+  $(".editArticle #Popis").val(data[2]);
+  $(".editArticle #Email").val(data[5]);
+  $(".editArticle #Cena").val(result);
+  $(".editArticle #Lokalita").val(data[4]);
+  if(isCheck) {
+    $("#rezervace").show();
+    $("#rezervaceCheck").prop("checked", true);
+  } else {
+    $("#rezervace").hide();
+
+  }
+  getArticleImages(data["0"]);
+  $(".deleteArticle").click(function () {
+    $(".error").hide();
+    $(".alert").hide();
+    let article = {
+      id: data[0],
+    };
+    deleteArticle(article);
+  });
+  $(".updateArticle").click(function () {
+    $(".error").hide();
+    $(".alert").hide();
+    let isCheck = $(".editArticle #rezervace").is(":checked") ? "1" : "0";
+    let article = {
+      id: data[0],
+      Název: $(".editArticle #Název").val(),
+      Popis: $(".editArticle #Popis").val(),
+      Email: $(".editArticle #Email").val(),
+      Lokalita: $(".editArticle #Lokalita").val(),
+      Cena: $(".editArticle #Cena").val(),
+      rezervace: isCheck,
+    };
+    article.files = allFilesEdit;
+    saveArticle(article);
+  });
+})
 $(document).ready(function () {
   var table = $("#articles").DataTable({
     language: {
       url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Czech.json",
     },
-  });
-  $(".alert").hide();
-  $("#articles tbody").on("click", "tr", function () {
-    var data = table.row(this).data();
-    allFilesEdit = [];
-    $(".editArticleEvent").on("click", function () {
-      $(".updateArticle").unbind("click");
-      $(".deleteArticle").unbind("click");
-      $(".alert").hide();
-      $("#editArticle").modal("show");
-      // .draggable({ handle: ".modal-header" });
-      $(".error").hide();
-      let isCheck = data[6] !== "Není";
-      let price = data[3];
-      let resPrice = price.replace('Kč', '',).split(' ').join('');
-      let result = resPrice.replaceAll('&nbsp;', '');
-      $(".editArticle #Název").val(data[1]);
-      $(".editArticle #Popis").val(data[2]);
-      $(".editArticle #Email").val(data[5]);
-      $(".editArticle #Cena").val(result);
-      $(".editArticle #Lokalita").val(data[4]);
-      if(isCheck) {
-        $("#rezervace").show();
-        $("#rezervaceCheck").prop("checked", true);
-      } else {
-        $("#rezervace").hide();
-
-      }
-      getArticleImages(data["0"]);
-      $(".deleteArticle").click(function () {
-        $(".error").hide();
-        $(".alert").hide();
-        let article = {
-          id: data[0],
-        };
-        deleteArticle(article);
-      });
-      $(".updateArticle").click(function () {
-        $(".error").hide();
-        $(".alert").hide();
-        let isCheck = $(".editArticle #rezervace").is(":checked") ? "1" : "0";
-        let article = {
-          id: data[0],
-          Název: $(".editArticle #Název").val(),
-          Popis: $(".editArticle #Popis").val(),
-          Email: $(".editArticle #Email").val(),
-          Lokalita: $(".editArticle #Lokalita").val(),
-          Cena: $(".editArticle #Cena").val(),
-          rezervace: isCheck,
-        };
-        article.files = allFilesEdit;
-        saveArticle(article);
-      });
-    });
   });
 });
 

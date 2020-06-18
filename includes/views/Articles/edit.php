@@ -128,7 +128,7 @@
                         <td><?php echo $article['email'] ?></td>
                         <td><?php echo $article['reservation'] ? 'Již rezervován' : 'Není' ?></td>
                         <td style="text-align: center">
-                            <div style="cursor:pointer" class="editArticleEvent">
+                            <div id="<?php echo $article['id'] ?>" style="cursor:pointer" class="editArticleEvent">
                                 <i class="fas fa-edit"></i>
                             </div>
                         </td>
