@@ -86,7 +86,6 @@ class Article
                     ON a.id = i.articles_id
                 WHERE price
                 BETWEEN :priceOd AND :priceDo
-                GROUP BY a.id
                 ORDER BY ' . $name . ' ' . $orderBy;
         try {
             $sth = $conn->prepare($sql);

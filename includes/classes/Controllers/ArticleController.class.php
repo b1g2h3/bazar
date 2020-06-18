@@ -15,19 +15,21 @@ class ArticleController
      */
     public static function index()
     {
-        $request = $_REQUEST;;
+        $request = $_REQUEST;
         if (isset($request['orderBy']) && !is_null($request['orderBy'])) {
             if ($request['orderBy'] === "1") {
                 $orderBy = 'DESC';
             } elseif ($request['orderBy'] === "2") {
                 $orderBy = 'ASC';
+            } elseif($request['orderBy'] === "price") {
+                $orderBy = 'price';
             }
         } else {
             $orderBy = 'DESC';
         }
 
         $cenaOd = 0;
-        $cenaDo = 1000000;
+        $cenaDo = 1000000000000000000;
         if (isset($request['cenaOd'])) {
             if (!is_null($request['cenaOd']) && is_numeric($request['cenaOd'])) {
                 $cenaOd = $request['cenaOd'];
@@ -68,12 +70,12 @@ class ArticleController
      */
     public static function edit()
     {
-        if (!isset($_SESSION['isEditor']) or !isset($_SESSION['isAdmin']))
+        if (!is_bool($_SESSION['isEditor']) || !is_bool($_SESSION['isAdmin']))
             Redirect::to('/');
 
-        if (isset($_SESSION['isEditor']))
+        if ($_SESSION['isEditor'])
             $allArticles = Article::getAllArticlesWithoutImages();
-        if (isset($_SESSION['isAdmin']))
+        if ($_SESSION['isAdmin'])
             $allArticles = Article::getAllArticles();
         include('./includes/views/Articles/edit.php');
     }

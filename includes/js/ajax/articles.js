@@ -31,17 +31,22 @@ function createArticle(article) {
             article.id,
             article.Název,
             article.Popis,
-            article.Cena,
+            formatter.format(article.Cena),
             article.Lokalita,
             article.Email,
             (article.rezervace = "Není"),
-            "<div style='cursor:pointer' class='editArticleEvent'>Upravit</div>",
+            "<div style='cursor:pointer' class='editArticleEvent'><i class=\"fas fa-edit\"></i></div>",
           ])
           .draw(false);
       }
     },
   });
 }
+const formatter = new Intl.NumberFormat('cs', {
+  style: 'currency',
+  currency: 'czk',
+  minimumFractionDigits: 0,
+})
 
 function updateArticle(article) {
   let fd = new FormData();
@@ -78,11 +83,11 @@ function updateArticle(article) {
             article.id,
             article.Název,
             article.Popis,
-            article.Cena,
+            formatter.format(article.Cena),
             article.Lokalita,
             article.Email,
             article.rezervace == 0 ? "Není" : "Již rezervován",
-            "<div style='cursor:pointer' class='editArticleEvent'>Upravit</div>",
+            "<div style='cursor:pointer' class='editArticleEvent'><i class=\"fas fa-edit\"></i></div>",
           ])
           .invalidate();
         article = res.article;

@@ -65,7 +65,9 @@
                             }
                             ?>
                         </div>
-                <span>Cena <?php echo $article['price'] ?> </span>
+                <div style="font-size: 1.3rem">
+                    <span><strong>Cena:</strong> <?php echo number_format(($article['price'] ), 0, '.', ' ') ?> Kč</span>
+                </div>
                     </a>
             </div>
         <?php

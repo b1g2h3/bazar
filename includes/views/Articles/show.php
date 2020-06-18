@@ -63,14 +63,15 @@
             <h3>
                 <?php echo $article['title']; ?>
             </h3>
-            <div>Cena: <strong><?php echo $article['price'] ?></strong> kč</div>
+            <div>Cena: <strong><?php
+                    echo number_format(($article['price'] ), 0, '.', ' ') ?></strong> Kč</div>
             <div>Lokalita: <strong><?php echo $article['location'] ?></strong></div>
             <?php if(!empty($article['reservation'])) {?>
             <div><h3>Inzerát již byl rezervován</h3></div>
                 <div style="font-weight: bold">
                     Byla rezervována od
                     <?php
-                       echo $article['reservation']['name'].' dne '.date('d, m, Y ', strtotime($article['reservation']['created_at']));
+                       echo $article['reservation']['name'].' dne '.date('d. m. Y ', strtotime($article['reservation']['created_at']));
                     ?>
                 </div>
             <?php  } ?>
@@ -84,35 +85,40 @@
             </div>
 
         </div>
+</div>
+    <section id="gallery">
         <div class="container">
-
-            <?php
-            if($article['images']) {
-            foreach ($article['images'] as $image) { ?>
-                <?php echo '<a href="#" class="lightBox"><img class="thumb" src="data:image/jpg;base64,' . base64_encode($image['image']) . '" /> </a>'; ?>
-            <?php   }    ?>
-                <div class="backDrop"></div>
-
-                <div class="box">
-                    <div class="close">Zavřít</div>
-                    <img class="largeImage" src=""/>
-                </div>
-
-                <div class="clear"></div>
-            <?php
-                } else {
-            ?>
-
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-                    <div class="img-wrapper">
-                        <?php echo '<img class="w-100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/No_image_available_cs.svg/768px-No_image_available_cs.svg.png" />'; ?>
-                        <div class="img-overlay">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            <div id="image-gallery">
+                <div class="row">
+                    <?php
+                    if($article['images']) {
+                        foreach ($article['images'] as $image) { ?>
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 image">
+                        <div class="img-wrapper">
+                            <?php echo '<a href="data:image/jpg;base64,' . base64_encode($image['image']) . '" ><img class="img-responsive" src="data:image/jpg;base64,' . base64_encode($image['image']) . '" /> </a>'; ?>
+                            <div class="img-overlay">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </div>
                         </div>
                     </div>
+                <?php   }    ?>
+
+                <?php
+                     } else {
+                        ?>
+
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+                            <div class="img-wrapper">
+                                <?php echo '<img class="w-100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/No_image_available_cs.svg/768px-No_image_available_cs.svg.png" />'; ?>
+                                <div class="img-overlay">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
-         <?php
-            }
-            ?>
-    </div>
-</div>
+            </div>
+        </div>
+    </section>

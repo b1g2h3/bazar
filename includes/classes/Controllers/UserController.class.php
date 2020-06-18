@@ -137,17 +137,20 @@ class UserController
 
     public static function destroy($data)
     {
-        if (empty($_SESSION['isAdmin']))
+        if (is_bool($_SESSION['isAdmin']) && !$_SESSION['isAdmin'])
             Redirect::to('/');
 
         $data = json_decode($data, true);
         $user = User::find($data['id']);
-        if ($user) {
+
+        if ($user && $user['id'] !== $_SESSION['id'] ) {
             if (User::delete($user['id'])) {
                 echo json_encode(array('success' => 'Uživatel byl odstraněn.'));
             } else {
                 echo json_encode(array('errors' => 'Uživatel nebyl odstraněn.'));
             }
+        } else {
+            echo json_encode(array('errors2' => 'Nelze odstranit sám sebe.'));
         }
     }
 }

@@ -36,7 +36,7 @@ function createUser(user) {
             user.name,
             user.email,
             user.roles_id == 1 ? "Admin" : "Editor",
-            '<div style="cursor:pointer" class="editUserEvent">Upravit</div>',
+            '<div style="cursor:pointer" class="editUserEvent"><i class="fas fa-edit"></i></div>',
           ])
           .draw(false);
       }
@@ -79,7 +79,7 @@ function updateUser(user) {
             user.name,
             user.email,
             user.role_id == 1 ? "Admin" : "Editor",
-            '<div style="cursor:pointer" class="editUserEvent">Upravit</div>',
+            '<div style="cursor:pointer" class="editUserEvent"><i class="fas fa-edit"></i></div>',
           ])
           .invalidate();
       }
@@ -109,6 +109,9 @@ function deleteUser(user) {
           $(".error").show();
           $(`#err${name}`).text(msg);
         }
+      } else if(res['errors2']) {
+        $(".error").show();
+        $(`#errJméno`).text(res.errors2);
       }
       if (res["success"]) {
         $("#updateUser").modal("hide");

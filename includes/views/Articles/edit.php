@@ -12,19 +12,23 @@
                 <form method="post" action="ajax.php" enctype="multipart/form-data" data-form-output="form-output-global" data-form-type="forms">
                     <div class="modal-body createArticle">
                         <h2>Vytvořit inzerát</h2>
-                        <?php
-                        \App\Services\Input::create('Název', 'text', false);
-                        ?>
+                        <div class="d-flex two-inputs justify-content-between">
+                            <?php
+                            \App\Services\Input::create('Název', 'text', false);
+                            \App\Services\Input::create('Email', 'email', false);
+                            ?>
+                        </div>
+                        <div class="d-flex two-inputs justify-content-between">
+                            <?php
+                            \App\Services\Input::create('Lokalita', 'text', false);
+                            \App\Services\Input::create('Cena', 'text', false);
+                            ?>
+                        </div>
                         <div class="form-group">
                             <label for="Popis">Popis:</label>
                             <textarea name="Popis" required class="form-control" placeholder="Popis" id="Popis" cols="30" rows="2"></textarea>
                             <div id="errPopis" class="hidden error text-danger"></div>
                         </div>
-                        <?php
-                        \App\Services\Input::create('Email', 'email', false);
-                        \App\Services\Input::create('Lokalita', 'text', false);
-                        \App\Services\Input::create('Cena', 'text', false);
-                        ?>
                         <div id="errObrázky" class="hidden error text-danger"></div>
                         <div id="drop_file_zone" class="w-100 dropArticleImages">
                             <div id="drag_upload_file">
@@ -55,21 +59,25 @@
                     <div class="modal-body editArticle">
 
                         <h2>Upravit inzerát</h2>
+                        <div class="d-flex two-inputs justify-content-between">
                         <?php
                         \App\Services\Input::create('Název', 'text', false);
+                        \App\Services\Input::create('Email', 'email', false);
                         ?>
+                        </div>
+                        <div class="d-flex two-inputs justify-content-between">
+                            <?php
+                            \App\Services\Input::create('Lokalita', 'text', false);
+                            \App\Services\Input::create('Cena', 'text', false);
+                            ?>
+                        </div>
                         <div class="form-group">
                             <label for="Popis">Popis:</label>
                             <textarea name="Popis" required class="form-control" placeholder="Popis" id="Popis" cols="30" rows="2"></textarea>
                             <div id="errPopis" class="hidden error text-danger"></div>
                         </div>
-                        <?php
-                        \App\Services\Input::create('Email', 'email', false);
-                        \App\Services\Input::create('Lokalita', 'text', false);
-                        \App\Services\Input::create('Cena', 'text', false);
-                        ?>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="rezervace">
+                        <div id="rezervace" class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rezervaceCheck">
                             <label class="form-check-label" for="rezervace">Rezervace</label>
                         </div>
                         <div class="hidden alert editalert-success font-weight-bold" role="alert"></div>
@@ -106,7 +114,7 @@
                     <th>Lokalita</th>
                     <th>Email</th>
                     <th>Rezervováno</th>
-                    <th>Možnost</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -115,12 +123,14 @@
                         <td><?php echo $article['id'] ?></td>
                         <td><?php echo $article['title'] ?></td>
                         <td><?php echo $article['description'] ?></td>
-                        <td><?php echo $article['price'] ?></td>
+                        <td><?php echo number_format(($article['price'] ), 0, '.', ' ') ?> Kč</td>
                         <td><?php echo $article['location'] ?></td>
                         <td><?php echo $article['email'] ?></td>
                         <td><?php echo $article['reservation'] ? 'Již rezervován' : 'Není' ?></td>
-                        <td>
-                            <div style="cursor:pointer" class="editArticleEvent">Upravit</div>
+                        <td style="text-align: center">
+                            <div style="cursor:pointer" class="editArticleEvent">
+                                <i class="fas fa-edit"></i>
+                            </div>
                         </td>
                     </tr>
                 <?php } ?>

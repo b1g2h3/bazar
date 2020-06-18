@@ -1,7 +1,4 @@
-require("bootstrap/dist/js/bootstrap");
-require("popper.js")
-// import * as jQuery from 'jquery';
-// import dt from 'datatables.net';
+
 const { createUser, updateUser, deleteUser } = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
 const {
@@ -65,7 +62,7 @@ $(".sendReservation").click(function (e) {
   let name = $(".sendReservationToEmail #Jméno").val();
   e.preventDefault();
   e.stopPropagation();
-  data = {
+  let data = {
     Email: email,
     Zpráva: msg,
     Jméno: name,
@@ -73,28 +70,115 @@ $(".sendReservation").click(function (e) {
   sendReservationToEmail(data);
 });
 
-$(document).ready(function () {
-  $(".lightBox").on("click", function () {
-    $(".backDrop").animate({ opacity: ".70" }, 500);
-    $(".box").animate({ opacity: "1.0" }, 500);
-    $(".backDrop, .box").css("display", "block");
-  });
+// Gallery image hover
+$( ".img-wrapper" ).hover(
+    function() {
+      $(this).find(".img-overlay").animate({opacity: 1}, 600);
+    }, function() {
+      $(this).find(".img-overlay").animate({opacity: 0}, 600);
+    }
+);
 
-  $(".thumb").on("click", function () {
-    var largeImage = $(this).attr("src");
-    $(".largeImage").attr({ src: largeImage });
-  });
+// Lightbox
+var $overlay = $('<div id="overlay"></div>');
+var $image = $("<img>");
+var $prevButton = $('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>');
+var $nextButton = $('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>');
+var $exitButton = $('<div id="exitButton"><i class="fa fa-times"></i></div>');
 
-  $(".close, .backDrop").on("click", function () {
-    closeBox();
-  });
+// Add overlay
+$overlay.append($image).prepend($prevButton).append($nextButton).append($exitButton);
+$("#gallery").append($overlay);
 
-  function closeBox() {
-    $(".backDrop, .box").animate({ opacity: "0" }, 500, function () {
-      $(".backDrop, .box").css("display", "none");
-    });
-  }
+// Hide overlay on default
+$overlay.hide();
+
+// When an image is clicked
+$(".img-overlay").click(function(event) {
+  // Prevents default behavior
+  event.preventDefault();
+  // Adds href attribute to variable
+  var imageLocation = $(this).prev().attr("href");
+  // Add the image src to $image
+  $image.attr("src", imageLocation);
+  // Fade in the overlay
+  $overlay.fadeIn("slow");
 });
+
+// When the overlay is clicked
+$overlay.click(function() {
+  // Fade out the overlay
+  $(this).fadeOut("slow");
+});
+
+// When next button is clicked
+$nextButton.click(function(event) {
+  // Hide the current image
+  $("#overlay img").hide();
+  // Overlay image location
+  var $currentImgSrc = $("#overlay img").attr("src");
+  // Image with matching location of the overlay image
+  var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
+  // Finds the next image
+  var $nextImg = $($currentImg.closest(".image").next().find("img"));
+  // All of the images in the gallery
+  var $images = $("#image-gallery img");
+  // If there is a next image
+  if ($nextImg.length > 0) {
+    // Fade in the next image
+    $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
+  } else {
+    // Otherwise fade in the first image
+    $("#overlay img").attr("src", $($images[0]).attr("src")).fadeIn(800);
+  }
+  // Prevents overlay from being hidden
+  event.stopPropagation();
+});
+
+// When previous button is clicked
+$prevButton.click(function(event) {
+  // Hide the current image
+  $("#overlay img").hide();
+  // Overlay image location
+  var $currentImgSrc = $("#overlay img").attr("src");
+  // Image with matching location of the overlay image
+  var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
+  // Finds the next image
+  var $nextImg = $($currentImg.closest(".image").prev().find("img"));
+  // Fade in the next image
+  $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
+  // Prevents overlay from being hidden
+  event.stopPropagation();
+});
+
+// When the exit button is clicked
+$exitButton.click(function() {
+  // Fade out the overlay
+  $("#overlay").fadeOut("slow");
+});
+
+// $(document).ready(function () {
+//   $(".lightBox").on("click", function () {
+//     $(".backDrop").animate({ opacity: ".70" }, 500);
+//     $(".box").animate({ opacity: "1.0" }, 500);
+//     $(".backDrop, .box").css("display", "block");
+//   });
+//
+//   $(".thumb").on("click", function () {
+//     var largeImage = $(this).attr("src");
+//     $(".largeImage").attr({ src: largeImage });
+//   });
+//
+//   $(".close, .backDrop").on("click", function () {
+//     closeBox();
+//   });
+//
+//   function closeBox() {
+//     $(".backDrop, .box").animate({ opacity: "0" }, 500, function () {
+//       $(".backDrop, .box").css("display", "none");
+//     });
+//   }
+// });
 
 $(".sendArticleEmail").click(function (e) {
   let email = $(".sendArticleToEmail #Email").val();
@@ -163,13 +247,21 @@ $(document).ready(function () {
       // .draggable({ handle: ".modal-header" });
       $(".error").hide();
       let isCheck = data[6] !== "Není";
+      let price = data[3];
+      let resPrice = price.replace('Kč', '',).split(' ').join('');
+      let result = resPrice.replaceAll('&nbsp;', '');
       $(".editArticle #Název").val(data[1]);
       $(".editArticle #Popis").val(data[2]);
       $(".editArticle #Email").val(data[5]);
-      $(".editArticle #Cena").val(data[3]);
+      $(".editArticle #Cena").val(result);
       $(".editArticle #Lokalita").val(data[4]);
-      $("#rezervace").prop("checked", isCheck);
+      if(isCheck) {
+        $("#rezervace").show();
+        $("#rezervaceCheck").prop("checked", true);
+      } else {
+        $("#rezervace").hide();
 
+      }
       getArticleImages(data["0"]);
       $(".deleteArticle").click(function () {
         $(".error").hide();
@@ -278,53 +370,77 @@ function handleFilesEdit(files) {
 function renderImages(files) {
   console.log(files);
   for (let [index, file] of Object.entries(files)) {
-    var url = URL.createObjectURL(file);
-    var img = new Image();
-    img.className = "previewImage";
-    img.onerror = function () {
-      alert("Pravděpodobně nepodporovaný typ obrázku.");
-    };
-    img.src = url;
+    let ext = getExt(file.name);
+    if(validExtensions.includes(ext)) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.className = "previewImage";
+      img.onerror = function () {
+        alert("Pravděpodobně nepodporovaný typ obrázku.");
+      };
+      img.src = url;
 
-    var number = Math.random();
-    number.toString(36);
-    var id = number.toString(36).substr(2, 9);
-    img.id = id;
-    file.id = id;
-    $(".dropArticlePreview").append(img);
-    $(".previewImage").click(function () {
-      let id = $(this).attr("id");
-      index = allFiles.findIndex((file) => file.id === id);
-      allFiles.splice(index, 1);
-      $(`#${id}`).remove();
-    });
+      var number = Math.random();
+      number.toString(36);
+      var id = number.toString(36).substr(2, 9);
+      img.id = id;
+      file.id = id;
+      $(".dropArticlePreview").append(img);
+      $(".previewImage").click(function () {
+        let id = $(this).attr("id");
+        index = allFiles.findIndex((file) => file.id === id);
+        allFiles.splice(index, 1);
+        $(`#${id}`).remove();
+      });
+    } else {
+      alert("Pravděpodobně nepodporovaný typ obrázku.");
+      files = 0;
+      return files;
+    }
+  }
+  return files;
+}
+var validExtensions = ['jpg','png','jpeg'];
+
+function renderImagesEdit(files) {
+  for (let [index, file] of Object.entries(files)) {
+    let ext = getExt(file.name);
+    console.log(ext)
+    console.log(validExtensions.includes(ext));
+    if(validExtensions.includes(ext)) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.className = "previewImageEdit";
+      img.onerror = function () {
+        alert("Pravděpodobně nepodporovaný typ obrázku.");
+      };
+
+      img.src = url;
+
+      var number = Math.random();
+      number.toString(36);
+      var id = number.toString(36).substr(2, 9);
+      img.id = id;
+      file.id = id;
+      $(".dropArticlePreviewImages").append(img);
+      $(".previewImageEdit").click(function () {
+        let id = $(this).attr("id");
+        index = allFilesEdit.findIndex((file) => file.id === id);
+        allFilesEdit.splice(index, 1);
+        $(`#${id}`).remove();
+      });
+    } else {
+      alert("Pravděpodobně nepodporovaný typ obrázku.");
+      files = 0;
+      return files;
+    }
   }
   return files;
 }
 
-function renderImagesEdit(files) {
-  console.log(files);
-  for (let [index, file] of Object.entries(files)) {
-    var url = URL.createObjectURL(file);
-    var img = new Image();
-    img.className = "previewImageEdit";
-    img.onerror = function () {
-      alert("Pravděpodobně nepodporovaný typ obrázku.");
-    };
-    img.src = url;
-
-    var number = Math.random();
-    number.toString(36);
-    var id = number.toString(36).substr(2, 9);
-    img.id = id;
-    file.id = id;
-    $(".dropArticlePreviewImages").append(img);
-    $(".previewImageEdit").click(function () {
-      let id = $(this).attr("id");
-      index = allFilesEdit.findIndex((file) => file.id === id);
-      allFilesEdit.splice(index, 1);
-      $(`#${id}`).remove();
-    });
-  }
-  return files;
+function getExt(filename)
+{
+  var ext = filename.split('.').pop();
+  if(ext == filename) return "";
+  return ext;
 }
