@@ -155,12 +155,15 @@ $(document).ready(function () {
   });
 });
 
-$(".editUserEvent").on("click", function () {
+$(document).on("click", ".editUserEvent",   function (event) {
+  let $obj = $(event.currentTarget);
+  let $row = $obj.closest('tr');
+  let id =  $('.userID', $row).text();
   $(".alert").hide();
   var t = $("#users").DataTable();
   let rowId = $("#users")
       .dataTable()
-      .fnFindCellRowIndexes(this.id, 0);
+      .fnFindCellRowIndexes(id, 0);
   let data = t.row(rowId).data()
   $(".alert").hide();
   $(".editUser").unbind("click");
@@ -193,7 +196,7 @@ $(".editUserEvent").on("click", function () {
   });
 });
 
-$('.editArticleEvent').on('click', function (e) {
+$(document).on('click', '.editArticleEvent', function (e) {
   $(".alert").hide();
   var t = $("#articles").DataTable();
   let rowId = $("#articles")
@@ -205,7 +208,7 @@ $('.editArticleEvent').on('click', function (e) {
   $(".alert").hide();
   $("#editArticle").modal("show");
   $(".error").hide();
-  let isCheck = data[6] !== "Není";
+  let isCheck = data[6] != "Není";
   let price = data[3];
   let resPrice = price.replace('Kč', '',).split(' ').join('');
   let result = resPrice.replaceAll('&nbsp;', '');

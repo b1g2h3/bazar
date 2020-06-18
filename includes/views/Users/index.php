@@ -82,12 +82,12 @@
         <tbody>
             <?php foreach ($allUsers as $user) { ?>
                 <tr>
-                    <td><?php echo $user['id'] ?></td>
+                    <td class="userID"><?php echo $user['id'] ?></td>
                     <td><?php echo $user['name'] ?></td>
                     <td><?php echo $user['email'] ?></td>
                     <td><?php echo $user['roles_id'] == 1 ? 'Admin' : 'Editor' ?></td>
                     <td>
-                        <div id="<?php echo $user['id'] ?>" style="cursor:pointer" class="editUserEvent">
+                        <div style="cursor:pointer" class="editUserEvent">
                             <i class="fas fa-edit"></i>
                         </div>
                     </td>
