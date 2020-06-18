@@ -16,6 +16,9 @@ class Mail
         $port = "25";
     public $mail;
 
+    /**
+     * @return SmtpMailer
+     */
     protected static function init()
     {
         return new SmtpMailer([
@@ -27,6 +30,12 @@ class Mail
     ]);
     }
 
+    /**
+     * @param $email
+     * @param $article
+     * @param $images
+     * @return bool
+     */
     public static function sendArticle($email, $article, $images)
     {
         $showImages = null;
@@ -79,6 +88,11 @@ class Mail
         }
     }
 
+    /**
+     * @param $article
+     * @param $data
+     * @return bool
+     */
     public static function sendReservation($article, $data)
     {
 

@@ -10,12 +10,12 @@
                         <?php
                         echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === '1' ? 'selected' : '';
                         ?>
-                    >Vzestupně</option>
+                    >Nejnovější</option>
                     <option value="2"
                         <?php
                         echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === '2' ? 'selected' : '';
                         ?>
-                    >Sestupně</option>
+                    >Nejstarší</option>
                     <option value="price"
                         <?php
                         echo isset($_REQUEST['orderBy']) && $_REQUEST['orderBy'] === 'price' ? 'selected' : '';
@@ -46,7 +46,12 @@
         </form>
     </div>
     <div class="row">
-        <?php foreach ($allArticles as $article) { ?>
+        <?php
+            if(empty($allArticles)) {
+                echo "Momentálně nejsou dostupné žádné inzeráty";
+            } else {
+
+            foreach ($allArticles as $article) { ?>
             <div class="col-4 mt-2">
                     <a style="text-decoration: none; color: black;" href="?page=articleDetail&id=<?php echo $article['id'] ?>">
 
@@ -63,7 +68,11 @@
                 <span>Cena <?php echo $article['price'] ?> </span>
                     </a>
             </div>
-        <?php } ?>
+        <?php
+                }
+
+            }
+            ?>
 
     </div>
 </div>

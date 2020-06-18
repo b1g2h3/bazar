@@ -8,6 +8,10 @@ use App\Database\DB;
 class Image
 {
 
+    /**
+     * @param $aticleID
+     * @return array
+     */
     public static function findImages($aticleID)
     {
         $pdo = DB::init();
@@ -26,6 +30,10 @@ class Image
         }
     }
 
+    /**
+     * @param $imageID
+     * @return mixed
+     */
     public static function find($imageID)
     {
         $pdo = DB::init();
@@ -44,6 +52,10 @@ class Image
         }
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function delete($id)
     {
         $pdo = DB::init();
@@ -60,6 +72,11 @@ class Image
     }
 
 
+    /**
+     * @param $images
+     * @param $articleId
+     * @return bool
+     */
     public static function create($images, $articleId)
     {
         $pdo = DB::init();

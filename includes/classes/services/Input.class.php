@@ -5,6 +5,11 @@ namespace App\Services;
 class Input
 {
 
+    /**
+     * @param $name
+     * @param $type
+     * @param $required
+     */
     public static function create($name, $type, $required)
     {
         $required = $required ? 'required' : '';

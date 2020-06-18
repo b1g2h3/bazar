@@ -10,8 +10,9 @@ use App\Services\Redirect;
 
 class ArticleController
 {
-
-
+    /**
+     *  return all articles with filters
+     */
     public static function index()
     {
         $request = $_REQUEST;;
@@ -20,9 +21,9 @@ class ArticleController
                 $orderBy = 'DESC';
             } elseif ($request['orderBy'] === "2") {
                 $orderBy = 'ASC';
-            } else {
-                $orderBy = 'DESC';
             }
+        } else {
+            $orderBy = 'DESC';
         }
 
         $cenaOd = 0;
@@ -48,6 +49,9 @@ class ArticleController
         include('./includes/views/Articles/index.php');
     }
 
+    /**
+     * @param $articleID
+     */
     public static function getArticleImages($articleID)
     {
         $images = Image::findImages($articleID);
@@ -59,6 +63,9 @@ class ArticleController
         echo json_encode($msg);
     }
 
+    /**
+     *  return view for articles
+     */
     public static function edit()
     {
         if (!isset($_SESSION['isEditor']) or !isset($_SESSION['isAdmin']))
@@ -71,6 +78,9 @@ class ArticleController
         include('./includes/views/Articles/edit.php');
     }
 
+    /**
+     * @param $id
+     */
     public static function show($id)
     {
         $article = Article::find($id);
@@ -84,10 +94,16 @@ class ArticleController
         include('./includes/views/Articles/show.php');
     }
 
+    /**
+     * @param $request
+     * @param $files
+     */
     public static function create($request, $files)
     {
-        if (empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
-            Redirect::to('/');
+        if (empty($_SESSION['isEditor']) && empty($_SESSION['isAdmin'])) {
+            echo json_encode(array('errors' => 'Neopravněný přístup.'));
+            return;
+        }
 
         $data = json_decode($request['data'], true);
         $errors = null;
@@ -153,11 +169,17 @@ class ArticleController
         }
     }
 
+    /**
+     * @param $request
+     * @param $files
+     */
     public static function update($request, $files)
     {
 
-        if (empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin'])))
-            Redirect::to('/');
+        if (empty($_SESSION['isEditor']) && empty($_SESSION['isAdmin'])) {
+            echo json_encode(array('errors' => 'Neopravněný přístup.'));
+            return;
+        }
 
         $data = json_decode($request['data'], true);
 
@@ -218,6 +240,7 @@ class ArticleController
             }
         }
 
+
         if (!is_null($errors)) {
             echo json_encode(array('errors' => $errors));
             return;
@@ -232,9 +255,12 @@ class ArticleController
         }
     }
 
+    /**
+     * @param $request
+     */
     public static function destroy($request)
     {
-        if (empty($_SESSION['isEditor'] || empty($_SESSION['isAdmin']))) {
+        if (empty($_SESSION['isEditor']) && empty($_SESSION['isAdmin'])) {
             echo json_encode(array('errors' => 'Neopravněný přístup.'));
             return;
         }
@@ -250,6 +276,9 @@ class ArticleController
         }
     }
 
+    /**
+     * @param $request
+     */
     public static function sendArticleToEmail($request)
     {
         $errors = null;
@@ -269,6 +298,9 @@ class ArticleController
         }
     }
 
+    /**
+     * @param $request
+     */
     public static function sendReservationToOwner($request)
     {
         $errors = null;
@@ -306,6 +338,9 @@ class ArticleController
         }
     }
 
+    /**
+     * @param $request
+     */
     public static function bookArticle($request)
     {
         $article = Article::find($request['articleId']);

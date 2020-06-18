@@ -8,6 +8,9 @@ use App\Database\DB;
 
 class User
 {
+    /**
+     * @return array
+     */
     public static function getAllUsers()
     {
         $pdo = DB::init();
@@ -18,6 +21,10 @@ class User
         return $sth->fetchAll();
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public static function create($data)
     {
         $pdo = DB::init();
@@ -40,6 +47,10 @@ class User
     }
 
 
+    /**
+     * @param $param
+     * @return mixed
+     */
     public static function find($param)
     {
         $pdo = DB::init();
@@ -55,6 +66,10 @@ class User
         }
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public static function update($data)
     {
         $args = array(
@@ -82,6 +97,10 @@ class User
         }
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function delete($id)
     {
         $pdo = DB::init();
@@ -114,15 +133,4 @@ class User
         return false;
     }
 
-    /**
-     *
-     */
-    public function logout()
-    {
-
-        //        $this->_db->deleteSession('user_session', $this->data()->id);
-        //
-        //        Session::delete($this->_sessionName);
-        //        Cookie::delete($this->_cookieName);
-    }
 }

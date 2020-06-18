@@ -1,5 +1,7 @@
-// require("bootstrap/dist/js/bootstrap");
-// require("popper.js");
+require("bootstrap/dist/js/bootstrap");
+require("popper.js")
+// import * as jQuery from 'jquery';
+// import dt from 'datatables.net';
 const { createUser, updateUser, deleteUser } = require("./ajax/users");
 const { handleLogin } = require("./ajax/auth");
 const {

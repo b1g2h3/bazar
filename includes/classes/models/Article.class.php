@@ -9,6 +9,9 @@ use Tracy\Debugger;
 class Article
 {
 
+    /**
+     * @return array
+     */
     public static function getAllArticles()
     {
         $pdo = DB::init();
@@ -35,6 +38,9 @@ class Article
         }
     }
 
+    /**
+     * @return array
+     */
     public static function getAllArticlesWithoutImages()
     {
         $pdo = DB::init();
@@ -51,12 +57,19 @@ class Article
             \Tracy\Debugger::barDump($e->getMessage());
         }
     }
+
+    /**
+     * @param $orderBy
+     * @param $cenaOd
+     * @param $cenaDo
+     * @return array
+     */
     public static function getArticleByFilter($orderBy, $cenaOd, $cenaDo)
     {
 
         $pdo = DB::init();
         $conn = $pdo->conn;
-        $name = 'a.title';
+        $name = 'a.created_at';
         if ($orderBy == 'price') {
             $orderBy = 'DESC';
             $name = 'a.price';
@@ -85,6 +98,10 @@ class Article
         }
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function find($id)
     {
         $pdo = DB::init();
@@ -104,6 +121,10 @@ class Article
         }
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function findReservation($id)
     {
         $pdo = DB::init();
@@ -123,6 +144,11 @@ class Article
         }
     }
 
+    /**
+     * @param $data
+     * @param $images
+     * @return string
+     */
     public static function create($data, $images)
     {
 
@@ -168,6 +194,11 @@ class Article
         }
     }
 
+    /**
+     * @param $data
+     * @param $images
+     * @return bool
+     */
     public static function update($data, $images)
     {
         $reservation = '';
@@ -222,6 +253,10 @@ class Article
         }
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function delete($id)
     {
         $pdo = DB::init();
@@ -237,6 +272,10 @@ class Article
         }
     }
 
+    /**
+     * @param $article
+     * @return bool
+     */
     public static function book($article)
     {
         $pdo = DB::init();
@@ -258,6 +297,11 @@ class Article
         }
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return string
+     */
     public static function saveResevation($id, $data)
     {
         $pdo = DB::init();
